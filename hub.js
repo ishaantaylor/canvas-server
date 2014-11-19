@@ -1,58 +1,50 @@
 
-re('http');
-var qs = require('querystring');
+var http = require('http'),
+	url = require('url'),
+	qs = require('querystring'),
+	exec = require('child_process').exec,
+	Db = require('mongodb').Db,
+	MongoClient = require('mongodb').MongoClient,
+	ObjectID = require('mongodb').ObjectID,
+	assert = require('assert');
 
 var outward_ip = '127.0.0.1';
 var outward_port = 1337;
+
 // var outward_ip = '129.22.50.175';
 // var outward_port = 8080;
 // var sql_ip = '';
 
-/*
-// make a connection to sql
-var connection =  mysql.createConnection({
-	host : “hostName”,
-	user : “username”,
-	password: “password”
-});
-console.log("Successfully connected");
-*/
+var database_ip = "mongodb://localhost:27017/test";
 
 
-// console.log(ALL_DATA.canvases);
 
-var ALL_HTTP_REQUESTS = [];
-var ALL_DATA = {
-	"canvases": []
-};
+
 /** 
  * A sample of an object that would be in ALL_DATA.canvases is below.
 
 {
-	name:'canvas of meh',
-	bitmap:'some string representing bitmap, this doesn't care what it is'
+	name:"canvas of meh",
+	bitmap:"some string representing bitmap, this doesn't care what it is"
 		// few random other pieces of data. name and bitmap only things this needs right now (query by name)
 }
 */
 
 // create a server 
 http.createServer(function (incoming_request, our_response) {
-	ALL_HTTP_REQUESTS.push(incoming_request);		// keep track of all requests per session
+	insertRequest({
+			"method"    : incoming_request.method,
+			"headers"   : incoming_request.headers,
+			"url"       : url.parse(incoming_request.url),
+		}); 		// keep track of all requests
 	
-	// console.log(JSON.stringify(incoming_request.body));
-
 	// handle each case - TODO: eventually change to switch-case
+	/*
 	if (incoming_request.method == 'GET') {
 		handleGETrequest(incoming_request, our_response);
-	
-	} else if (incoming_request.method == 'POST') {
+	} else */
+	if (incoming_request.method == 'POST') {
 		handlePOSTrequest(incoming_request, our_response);
-	
-	/** No need to support PUT
-	} else if (incoming_request.method == 'PUT') {
-		handlePUTrequest(incoming_request, our_response);
-	*/
-
 	} else {
 		our_response.writeHead(405, {'Content-Type': 'text/plain'});
 		our_response.end("Whatchu tryna do?");
@@ -63,8 +55,20 @@ console.log('Server running at http://' + outward_ip + ":" + outward_port + '/')
 // console.log();
 
 // subfunctions
+function insertRequest(request) {
+	MongoClient.connect(database_ip, function(err, db){
+		db.collection('requests', function(err, col){
+			console.log(err);
+			col.insert(request, function(err, inserted) {
+				console.log("inserted: " + inserted);
+			});
+		});
+	});
+}
+
+/*
 function handleGETrequest(request, response) {
-	if (request.url != "/canvas") {
+	if (request.url != "/canvases") {
 		var json = {
 		    "name": "Ishaan",
 		    "occupation": "Software Engineer",
@@ -85,37 +89,102 @@ function handleGETrequest(request, response) {
 		response.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin":"*" })
 		response.write( JSON.stringify( json, 0, 4 ));
 		response.end();
-	} else if (request.url == "/canvas") {
-		response.setHeader('Content-Type', 'application/json');
-		response.write( JSON.stringify( ALL_DATA.canvases, 0, 4 ));
-		response.end();
+	} else if (request.url == "/canvases") {
+		// query for canvases
+		MongoClient.connect(database_ip, function(err, db){
+			assert.equal(null, err);
+			
+			// get querystring from url
+			var theURL = url.parse(request.url);
+			var queryJSON = qs.parse(theURL.query);
+
+			// query canvases
+			var user = queryJSON['user_id'];
+			var activeFlag = queryJSON['active'];
+			var query = {};
+			if(activeFlag === undefined)
+				query = {users:user};
+			else
+				query = {users:user, active:activeFlag};
+			db.collection('canvases', function(err, col){
+				col.find(query).toArray(function(err, docs){
+					console.log(docs.length);
+					c = docs.length;
+					res.writeHead(200, {'Content-Type':'application/json'});
+					var responseContent = JSON.stringify(docs, 0, 4);
+					res.write(responseContent);
+					res.end(); 
+					db.close();
+				});
+			});
+		});
+
 	} else {
 		response.writeHead(405, {'Content-Type': 'text/plain'});
 		response.end("Invalid path.");
 	}
 }
+*/
 
 function handlePOSTrequest(request, response) {
-	if (request.url == '/canvas') {
+	var payload = {};
+	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
-			var payload = JSON.parse(chunk);
-			ALL_DATA.canvases.push(payload);			// push JSON to database
+			payload = JSON.parse(chunk);
 														// then write response
 			response.writeHead(201, {'Content-Type' : 'application/json'});		
 			response.end(JSON.stringify(ALL_DATA.canvases));
 			console.log("Canvases: %j", ALL_DATA.canvases);
 	    });		
+	} else {
+		payload.event = "null";
+	}
 
-	    /** Prints POST data
-		console.log((request.pipe(process.stdout)));
-		response.end();
-		*/
+	var server_event = payload.event;
+	// TODO: switch few if statements to switch-case
+	if (server_event == "insert_canvas") {
+		// query for canvases
+		MongoClient.connect(database_ip, function(err, db){
+			assert.equal(null, err);
+			
+			// get querystring from url
+			var theURL = url.parse(request.url);
+			var queryJSON = qs.parse(theURL.query);
+
+			// query canvases
+			var user = queryJSON['user_id'];
+			var activeFlag = queryJSON['active'];
+			var query = {};
+			if(activeFlag === undefined)
+				query = {users:user};
+			else
+				query = {users:user, active:activeFlag};
+			db.collection('canvases', function(err, col){
+				col.find(query).toArray(function(err, docs){
+					console.log(docs.length);
+					c = docs.length;
+					res.writeHead(200, {'Content-Type':'application/json'});
+					var responseContent = JSON.stringify(docs, 0, 4);
+					res.write(responseContent);
+					res.end(); 
+					db.close();
+				});
+			});
+		});
+	} else if (server_event == "update_canvas") {
+		//
+	} else if (server_event == "register_user") {
+
+	} else if (server_event == "login") {	
+
+	} else if (server_event == "query") {
+		// payload.query, payload.projection
 	}
 }
 
 /** No need to support this.
 function handlePUTrequest(request, response) {
-	if (request.url == '/canvas') {
+	if (request.url == '/canvases') {
 		var incoming_canvas_name = 1;
 		for (var i = 0; i < ALL_DATA.canvases.length; i++) {
 			if (ALL_DATA.canvases[i].name == getPayloadFromRequest(request)) {			// if the name in the request exists in the 'database'
