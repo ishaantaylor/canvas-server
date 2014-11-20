@@ -155,18 +155,20 @@ function handlePOSTrequest(request, response) {
 	} else if (server_event == "login") {	
 		MongoClient.connect(databaseURL, function(err, db){
 			assert.equal(null, err);
+
 			var user = payload['user_id'],
 				pass = paylod['password'],
 				query = {user_id:user, password:pass};
+
 			db.collection('users', function(err, col){
 				col.find(query).toArray(function(err, docs){
-					console.log(docs.length);
-					if(docs.length > 0 || err !== null){
-						res.writeHead(200, {'Content-Type':'text/plain'});
-					} else {
-						res.writeHead(401, {'Content-Type':'text/plain'});
-					}
-					res.end(); 
+					//console.log(docs.length);
+					if (docs.length > 0 || err !== null)
+						response.writeHead(200, {'Content-Type':'text/plain'});
+					else
+						response.writeHead(401, {'Content-Type':'text/plain'});
+					
+					response.end(); 
 					db.close();
 				});
 			});
@@ -185,6 +187,7 @@ function handlePOSTrequest(request, response) {
 			var user = queryJSON['user_id'],
 				activeFlag = queryJSON['active'];
 			var query = {};
+			// activeFlag determines if we search for active canvases or inactive.. in progress or completed
 			if(activeFlag === null)
 				query = {users:user};
 			else
@@ -196,6 +199,7 @@ function handlePOSTrequest(request, response) {
 					// c = docs.length;
 					response.writeHead(200, {'Content-Type':'application/json'});
 					response.write(JSON.stringify(docs, 0, 4));
+					
 					response.end(); 
 					db.close();
 				});
