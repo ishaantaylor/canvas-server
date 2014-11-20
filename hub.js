@@ -66,8 +66,8 @@ function handlePOSTrequest(request, response) {
 
 // helper subfunctions
 function insertRequest(request) {
-	MongoClient.connect(database_ip, function(err, db){
-		db.collection('requests', function(err, col){
+	MongoClient.connect(database_ip, function(err, db) {
+		db.collection('requests', function(err, col) {
 			console.log(err);
 			col.insert(request, function(err, inserted) {
 				if (err) {
@@ -112,7 +112,7 @@ function update_canvas(request, response, payload) {
 // TODO: implement hashing here
 function register_user(request, response, payload) {
 	// TODO: create objcet with simply username:hash(password) (is there anything else, Chris?)
-	MongoClient.connect(database_ip, function(err, db){
+	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, col){
 			// TODO: check if user exists already
 			col.insert(payload, function(err, inserted) {
@@ -130,15 +130,15 @@ function register_user(request, response, payload) {
 
 // TODO: implement hashing here to check against hash in db
 function login(request, response, payload) {
-	MongoClient.connect(databaseURL, function(err, db){
+	MongoClient.connect(databaseURL, function(err, db) {
 		assert.equal(null, err);
 
 		var user = payload['user_id'],
 			pass = paylod['password'],
 			query = {user_id:user, password:pass};
 
-		db.collection('users', function(err, col){
-			col.find(query).toArray(function(err, docs){
+		db.collection('users', function(err, col) {
+			col.find(query).toArray(function(err, docs) {
 				//console.log(docs.length);
 				if (docs.length > 0 || !err)
 					response.writeHead(200, {'Content-Type':'text/plain'});
@@ -155,7 +155,7 @@ function login(request, response, payload) {
 function query(request, response, payload) {
 	// TODO: change implementation to accept payload.query, payload.projection
 	// query for canvases
-	MongoClient.connect(database_ip, function(err, db){
+	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		
 		// get querystring from url
@@ -171,9 +171,9 @@ function query(request, response, payload) {
 			query = {users:user};
 		else
 			query = {users:user, active:activeFlag};
-		db.collection('canvases', function(err, col){
+		db.collection('canvases', function(err, col) {
 			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-			col.find(query).toArray(function(err, docs){
+			col.find(query).toArray(function(err, docs) {
 				// console.log(docs.length);
 				// c = docs.length;
 				response.writeHead(200, {'Content-Type':'application/json'});
