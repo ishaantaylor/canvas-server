@@ -52,9 +52,40 @@ http.createServer(function (incoming_request, our_response) {
 }).listen(outward_port, outward_ip);
 
 console.log('Server running at http://' + outward_ip + ":" + outward_port + '/');
-// console.log();
 
-// subfunctions
+// main flow subfunctions
+function handlePOSTrequest(request, response) {
+	var payload = {};
+	if (request.url == '/canvases') {
+		request.on('data', function(chunk) {			// using library to read POST payload (json)
+			payload = JSON.parse(chunk);
+			proceedWithServerAction(request, response, payload);
+	    });		
+	} 
+}
+
+function proceedWithServerAction(request, response, payload) {
+	var server_event = payload.event;
+	// TODO: switch few if statements to switch-case
+	switch (server_event) {
+		case "insert_canvas":
+			insert_canvas(request, response, payload);
+			break;		
+		case "update_canvas":
+			update_canvas(request, response, payload);
+			break;
+		case "register_user":
+			register_user(request, response, payload);
+			break;
+		case "login":
+			login(request, response, payload);
+			break;
+		case "query":
+			query(request, response, payload);
+			break;
+}
+
+// helper subfunctions
 function insertRequest(request) {
 	MongoClient.connect(database_ip, function(err, db){
 		db.collection('requests', function(err, col){
@@ -66,6 +97,7 @@ function insertRequest(request) {
 	});
 }
 
+// TODO: implement hashing here to check against hash in db
 function login(request, response, payload) {
 	MongoClient.connect(databaseURL, function(err, db){
 		assert.equal(null, err);
@@ -123,6 +155,7 @@ function query(request, response, payload) {
 	});
 }
 
+// TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
 function insert_canvas(request, response, payload) {
 
 }
@@ -131,40 +164,12 @@ function update_canvas(request, response, payload) {
 
 }
 
+// TODO: implement hashing here
 function register_user(request, response, payload) {
 
 }
 
-function handlePOSTrequest(request, response) {
-	var payload = {};
-	if (request.url == '/canvases') {
-		request.on('data', function(chunk) {			// using library to read POST payload (json)
-			payload = JSON.parse(chunk);
-			proceedWithServerAction(request, response, payload);
-	    });		
-	} 
-}
 
-function proceedWithServerAction(request, response, payload) {
-	var server_event = payload.event;
-	// TODO: switch few if statements to switch-case
-	switch (server_event) {
-		case "insert_canvas":
-			insert_canvas(request, response, payload);
-			break;		
-		case "update_canvas":
-			update_canvas(request, response, payload);
-			break;
-		case "register_user":
-			register_user(request, response, payload);
-			break;
-		case "login":
-			login(request, response, payload);
-			break;
-		case "query":
-			query(request, response, payload);
-			break;
-}
 
 
 	
