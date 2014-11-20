@@ -99,7 +99,7 @@ function proceedWithServerAction(request, response, payload) {
 			query(request, response, payload);
 			break;
 		default:
-			response.writeHead(422, [reasonPhrase], [headers])
+			response.writeHead(422, {'Content-Type':'text/plain'});
 			response.write("Unknown event directive", {'Content-Type':'text/plain'})
 			break;
 }
@@ -219,31 +219,7 @@ function query(request, response, payload) {
 	});
 }
 
-
-/** No need to support this.
-function handlePUTrequest(request, response) {
-	if (request.url == '/canvases') {
-		var incoming_canvas_name = 1;
-		for (var i = 0; i < ALL_DATA.canvases.length; i++) {
-			if (ALL_DATA.canvases[i].name == getPayloadFromRequest(request)) {			// if the name in the request exists in the 'database'
-				ALL_DATA.canvases[i].name = getPayloadFromRequest(request);
-				console.log("success");
-			}
-		}
-		// TODO: do stuff here
-	}
-}
-*/
-
-/* TODO: fix race condition (bypassed for now)
-function getPayloadFromRequest(request) {
-	request.on('data', function(chunk) {
-    	return JSON.parse(chunk);
-    });
-}
-*/
-
-
+/*
 String.prototype.escapeSpecialChars = function() {
     return this.replace(/\\n/g, "\\n")
                .replace(/\\'/g, "\\'")
@@ -253,16 +229,4 @@ String.prototype.escapeSpecialChars = function() {
                .replace(/\\t/g, "\\t")
                .replace(/\\b/g, "\\b")
                .replace(/\\f/g, "\\f");
-};
-
-
-
-
-
-
-
-
-
-
-
-
+};*/
