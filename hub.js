@@ -128,6 +128,10 @@ function handleGETrequest(request, response) {
 
 function handlePOSTrequest(request, response) {
 	var payload = {};
+	.addListener('data', function(postDataChunk) {
+				postData += postDataChunk;
+				console.log("Received POST data chunk '" + postDataChunk +"'.");		
+			});
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			payload = JSON.parse(chunk);
@@ -151,14 +155,13 @@ function handlePOSTrequest(request, response) {
 	} else if (server_event == "login") {	
 		MongoClient.connect(databaseURL, function(err, db){
 			assert.equal(null, err);
-			var creds = JSON.parse(data),
-				user = creds['user_id'],
-				pass = creds['password'],
+			var user = payload['user_id'],
+				pass = paylod['password'],
 				query = {user_id:user, password:pass};
 			db.collection('users', function(err, col){
 				col.find(query).toArray(function(err, docs){
 					console.log(docs.length);
-					if(docs.length > 0){
+					if(docs.length > 0 || err !== null){
 						res.writeHead(200, {'Content-Type':'text/plain'});
 					} else {
 						res.writeHead(401, {'Content-Type':'text/plain'});
@@ -179,20 +182,20 @@ function handlePOSTrequest(request, response) {
 			var queryJSON = qs.parse(theURL.query);
 
 			// query canvases
-			var user = queryJSON['user_id'];
-			var activeFlag = queryJSON['active'];
+			var user = queryJSON['user_id'],
+				activeFlag = queryJSON['active'];
 			var query = {};
 			if(activeFlag === undefined)
 				query = {users:user};
 			else
 				query = {users:user, active:activeFlag};
 			db.collection('canvases', function(err, col){
+				// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 				col.find(query).toArray(function(err, docs){
-					console.log(docs.length);
+					// console.log(docs.length);
 					// c = docs.length;
 					response.writeHead(200, {'Content-Type':'application/json'});
-					var responseContent = JSON.stringify(docs, 0, 4);
-					response.write(responseContent);
+					response.write(JSON.stringify(docs, 0, 4));
 					response.end(); 
 					db.close();
 				});
