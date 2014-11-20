@@ -60,7 +60,7 @@ function handlePOSTrequest(request, response) {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			payload = JSON.parse(chunk);
 			proceedWithServerAction(request, response, payload);
-	    });		
+		});		
 	} 
 }
 
@@ -100,8 +100,9 @@ function proceedWithServerAction(request, response, payload) {
 			break;
 		default:
 			response.writeHead(422, {'Content-Type':'text/plain'});
-			response.write("Unknown event directive", {'Content-Type':'text/plain'})
+			response.write("Unknown event directive", {'Content-Type':'text/plain'});
 			break;
+	}
 }
 
 // TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
@@ -218,15 +219,3 @@ function query(request, response, payload) {
 		});
 	});
 }
-
-/*
-String.prototype.escapeSpecialChars = function() {
-    return this.replace(/\\n/g, "\\n")
-               .replace(/\\'/g, "\\'")
-               .replace(/\\"/g, '\\"')
-               .replace(/\\&/g, "\\&")
-               .replace(/\\r/g, "\\r")
-               .replace(/\\t/g, "\\t")
-               .replace(/\\b/g, "\\b")
-               .replace(/\\f/g, "\\f");
-};*/
