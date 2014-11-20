@@ -128,10 +128,6 @@ function handleGETrequest(request, response) {
 
 function handlePOSTrequest(request, response) {
 	var payload = {};
-	.addListener('data', function(postDataChunk) {
-				postData += postDataChunk;
-				console.log("Received POST data chunk '" + postDataChunk +"'.");		
-			});
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			payload = JSON.parse(chunk);
