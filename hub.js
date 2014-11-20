@@ -66,143 +66,108 @@ function insertRequest(request) {
 	});
 }
 
-/*
-function handleGETrequest(request, response) {
-	if (request.url != "/canvases") {
-		var json = {
-		    "name": "Ishaan",
-		    "occupation": "Software Engineer",
-		    "interests": [
-		        "Bhangra",
-		        "Life",
-		        "Music"
-		    ],
-		    "groups": {
-		        "nsteak": [
-		            "pshant",
-		            "zach",
-		            "sagar",
-		            "shouvik"
-		        ]
-		    }
-		};
-		response.writeHead(200, { 'Content-Type': 'application/json', "Access-Control-Allow-Origin":"*" })
-		response.write( JSON.stringify( json, 0, 4 ));
-		response.end();
-	} else if (request.url == "/canvases") {
-		// query for canvases
-		MongoClient.connect(database_ip, function(err, db){
-			assert.equal(null, err);
-			
-			// get querystring from url
-			var theURL = url.parse(request.url);
-			var queryJSON = qs.parse(theURL.query);
+function login(request, response, payload) {
+	MongoClient.connect(databaseURL, function(err, db){
+		assert.equal(null, err);
 
-			// query canvases
-			var user = queryJSON['user_id'];
-			var activeFlag = queryJSON['active'];
-			var query = {};
-			if(activeFlag === undefined)
-				query = {users:user};
-			else
-				query = {users:user, active:activeFlag};
-			db.collection('canvases', function(err, col){
-				col.find(query).toArray(function(err, docs){
-					console.log(docs.length);
-					c = docs.length;
-					res.writeHead(200, {'Content-Type':'application/json'});
-					var responseContent = JSON.stringify(docs, 0, 4);
-					res.write(responseContent);
-					res.end(); 
-					db.close();
-				});
+		var user = payload['user_id'],
+			pass = paylod['password'],
+			query = {user_id:user, password:pass};
+
+		db.collection('users', function(err, col){
+			col.find(query).toArray(function(err, docs){
+				//console.log(docs.length);
+				if (docs.length > 0 || err !== null)
+					response.writeHead(200, {'Content-Type':'text/plain'});
+				else
+					response.writeHead(401, {'Content-Type':'text/plain'});
+				
+				response.end(); 
+				db.close();
 			});
 		});
-
-	} else {
-		response.writeHead(405, {'Content-Type': 'text/plain'});
-		response.end("Invalid path.");
-	}
+	});
 }
-*/
+
+function query(request, response, payload) {
+	// TODO: change implementation to accept payload.query, payload.projection
+	// query for canvases
+	MongoClient.connect(database_ip, function(err, db){
+		assert.equal(null, err);
+		
+		// get querystring from url
+		var theURL = url.parse(request.url);
+		var queryJSON = qs.parse(theURL.query);
+
+		// query canvases
+		var user = queryJSON['user_id'],
+			activeFlag = queryJSON['active'];
+		var query = {};
+		// activeFlag determines if we search for active canvases or inactive.. in progress or completed
+		if(activeFlag === null)
+			query = {users:user};
+		else
+			query = {users:user, active:activeFlag};
+		db.collection('canvases', function(err, col){
+			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
+			col.find(query).toArray(function(err, docs){
+				// console.log(docs.length);
+				// c = docs.length;
+				response.writeHead(200, {'Content-Type':'application/json'});
+				response.write(JSON.stringify(docs, 0, 4));
+				
+				response.end(); 
+				db.close();
+			});
+		});
+	});
+}
+
+function insert_canvas(request, response, payload) {
+
+}
+
+function update_canvas(request, response, payload) {
+
+}
+
+function register_user(request, response, payload) {
+
+}
 
 function handlePOSTrequest(request, response) {
 	var payload = {};
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			payload = JSON.parse(chunk);
-														// then write response
-			response.writeHead(201, {'Content-Type' : 'application/json'});		
-			response.end(JSON.stringify(ALL_DATA.canvases));
-			console.log("Canvases: %j", ALL_DATA.canvases);
+			proceedWithServerAction(request, response, payload);
 	    });		
-	} else {
-		payload.event = "null";
-	}
+	} 
+}
 
+function proceedWithServerAction(request, response, payload) {
 	var server_event = payload.event;
 	// TODO: switch few if statements to switch-case
-	if (server_event == "insert_canvas") {
-		
-	} else if (server_event == "update_canvas") {
-		//
-	} else if (server_event == "register_user") {
-
-	} else if (server_event == "login") {	
-		MongoClient.connect(databaseURL, function(err, db){
-			assert.equal(null, err);
-
-			var user = payload['user_id'],
-				pass = paylod['password'],
-				query = {user_id:user, password:pass};
-
-			db.collection('users', function(err, col){
-				col.find(query).toArray(function(err, docs){
-					//console.log(docs.length);
-					if (docs.length > 0 || err !== null)
-						response.writeHead(200, {'Content-Type':'text/plain'});
-					else
-						response.writeHead(401, {'Content-Type':'text/plain'});
-					
-					response.end(); 
-					db.close();
-				});
-			});
-		});
-	} else if (server_event == "query") {
-		// TODO: change implementation to accept payload.query, payload.projection
-		// query for canvases
-		MongoClient.connect(database_ip, function(err, db){
-			assert.equal(null, err);
-			
-			// get querystring from url
-			var theURL = url.parse(request.url);
-			var queryJSON = qs.parse(theURL.query);
-
-			// query canvases
-			var user = queryJSON['user_id'],
-				activeFlag = queryJSON['active'];
-			var query = {};
-			// activeFlag determines if we search for active canvases or inactive.. in progress or completed
-			if(activeFlag === null)
-				query = {users:user};
-			else
-				query = {users:user, active:activeFlag};
-			db.collection('canvases', function(err, col){
-				// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-				col.find(query).toArray(function(err, docs){
-					// console.log(docs.length);
-					// c = docs.length;
-					response.writeHead(200, {'Content-Type':'application/json'});
-					response.write(JSON.stringify(docs, 0, 4));
-					
-					response.end(); 
-					db.close();
-				});
-			});
-		});
-	}
+	switch (server_event) {
+		case "insert_canvas":
+			insert_canvas(request, response, payload);
+			break;		
+		case "update_canvas":
+			update_canvas(request, response, payload);
+			break;
+		case "register_user":
+			register_user(request, response, payload);
+			break;
+		case "login":
+			login(request, response, payload);
+			break;
+		case "query":
+			query(request, response, payload);
+			break;
 }
+
+
+	
 
 /** No need to support this.
 function handlePUTrequest(request, response) {
