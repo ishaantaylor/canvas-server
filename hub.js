@@ -162,11 +162,11 @@ function handlePOSTrequest(request, response) {
 			db.collection('canvases', function(err, col){
 				col.find(query).toArray(function(err, docs){
 					console.log(docs.length);
-					c = docs.length;
-					res.writeHead(200, {'Content-Type':'application/json'});
+					// c = docs.length;
+					response.writeHead(200, {'Content-Type':'application/json'});
 					var responseContent = JSON.stringify(docs, 0, 4);
-					res.write(responseContent);
-					res.end(); 
+					response.write(responseContent);
+					response.end(); 
 					db.close();
 				});
 			});
