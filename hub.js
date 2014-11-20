@@ -70,7 +70,10 @@ function insertRequest(request) {
 		db.collection('requests', function(err, col){
 			console.log(err);
 			col.insert(request, function(err, inserted) {
-				console.log("inserted: " + inserted);
+				if (err) {
+					// TODO: setup error log in db
+				}
+				db.close();
 			});
 		});
 	});
@@ -108,7 +111,21 @@ function update_canvas(request, response, payload) {
 
 // TODO: implement hashing here
 function register_user(request, response, payload) {
-
+	// TODO: create objcet with simply username:hash(password) (is there anything else, Chris?)
+	MongoClient.connect(database_ip, function(err, db){
+		db.collection('users', function(err, col){
+			// TODO: check if user exists already
+			col.insert(payload, function(err, inserted) {
+				if (!err)
+					response.writeHead(201, {'Content-Type':'text/plain'});
+				else 
+					response.writeHead(418, {'Content-Type':'text/plain'});
+				
+				response.end();
+				db.close();
+			});
+		});
+	});
 }
 
 // TODO: implement hashing here to check against hash in db
@@ -123,7 +140,7 @@ function login(request, response, payload) {
 		db.collection('users', function(err, col){
 			col.find(query).toArray(function(err, docs){
 				//console.log(docs.length);
-				if (docs.length > 0 || err !== null)
+				if (docs.length > 0 || !err)
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				else
 					response.writeHead(401, {'Content-Type':'text/plain'});
