@@ -185,7 +185,7 @@ function handlePOSTrequest(request, response) {
 			var user = queryJSON['user_id'],
 				activeFlag = queryJSON['active'];
 			var query = {};
-			if(activeFlag === undefined)
+			if(activeFlag === null)
 				query = {users:user};
 			else
 				query = {users:user, active:activeFlag};
