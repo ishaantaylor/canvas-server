@@ -176,7 +176,25 @@ function handlePOSTrequest(request, response) {
 	} else if (server_event == "register_user") {
 
 	} else if (server_event == "login") {	
-
+		MongoClient.connect(databaseURL, function(err, db){
+			assert.equal(null, err);
+			var creds = JSON.parse(data),
+				user = creds['user_id'],
+				pass = creds['password'],
+				query = {user_id:user, password:pass};
+			db.collection('users', function(err, col){
+				col.find(query).toArray(function(err, docs){
+					console.log(docs.length);
+					if(docs.length > 0){
+						res.writeHead(200, {'Content-Type':'text/plain'});
+					} else {
+						res.writeHead(401, {'Content-Type':'text/plain'});
+					}
+					res.end(); 
+					db.close();
+				});
+			});
+		});
 	} else if (server_event == "query") {
 		// payload.query, payload.projection
 	}
