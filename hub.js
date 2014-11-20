@@ -98,6 +98,10 @@ function proceedWithServerAction(request, response, payload) {
 		case "query":
 			query(request, response, payload);
 			break;
+		default:
+			response.writeHead(422, [reasonPhrase], [headers])
+			response.write("Unknown event directive", {'Content-Type':'text/plain'})
+			break;
 }
 
 // TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
@@ -114,11 +118,28 @@ function insert_canvas(request, response, payload) {
 				db.close();
 			});
 		});
-	})
+	});
 }
 
 function update_canvas(request, response, payload) {
+	MongoClient.connect(database_ip, function(err, db) {
+		db.collection('canvases', function(err, col) {
+			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
+			col.find(query).toArray(function(err, docs) {
+				// console.log(docs.length);
+				// c = docs.length;
+				if (!err && docs) {
+					docs.update(payload["canvas"]);
+					response.writeHead(200, {'Content-Type':'text/plain'});
+				} else {
+					response.writeHead(404, {'Content-Type':'text/plain'});
+				}
 
+				response.end(); 
+				db.close();
+			});
+		});
+	});
 }
 
 // TODO: implement hashing here
