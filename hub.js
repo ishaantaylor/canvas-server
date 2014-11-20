@@ -64,6 +64,18 @@ function handlePOSTrequest(request, response) {
 	} 
 }
 
+// helper subfunctions
+function insertRequest(request) {
+	MongoClient.connect(database_ip, function(err, db){
+		db.collection('requests', function(err, col){
+			console.log(err);
+			col.insert(request, function(err, inserted) {
+				console.log("inserted: " + inserted);
+			});
+		});
+	});
+}
+
 function proceedWithServerAction(request, response, payload) {
 	var server_event = payload.event;
 	// TODO: switch few if statements to switch-case
@@ -85,16 +97,18 @@ function proceedWithServerAction(request, response, payload) {
 			break;
 }
 
-// helper subfunctions
-function insertRequest(request) {
-	MongoClient.connect(database_ip, function(err, db){
-		db.collection('requests', function(err, col){
-			console.log(err);
-			col.insert(request, function(err, inserted) {
-				console.log("inserted: " + inserted);
-			});
-		});
-	});
+// TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
+function insert_canvas(request, response, payload) {
+
+}
+
+function update_canvas(request, response, payload) {
+
+}
+
+// TODO: implement hashing here
+function register_user(request, response, payload) {
+
 }
 
 // TODO: implement hashing here to check against hash in db
@@ -155,24 +169,6 @@ function query(request, response, payload) {
 	});
 }
 
-// TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
-function insert_canvas(request, response, payload) {
-
-}
-
-function update_canvas(request, response, payload) {
-
-}
-
-// TODO: implement hashing here
-function register_user(request, response, payload) {
-
-}
-
-
-
-
-	
 
 /** No need to support this.
 function handlePUTrequest(request, response) {
