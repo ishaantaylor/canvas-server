@@ -34,11 +34,14 @@ var database_ip = "mongodb://localhost:27017/test";
 
 // create a server 
 http.createServer(function (incoming_request, our_response) {
-	insertRequest({
+	request.on('data', function(chunk) {
+		insertRequest({
 			"method"    : incoming_request.method,
 			"headers"   : incoming_request.headers,
 			"url"       : url.parse(incoming_request.url),
+			"payload"   : chunk
 		}); 		// keep track of all requests
+	}
 	
 	// handle each case - TODO: eventually change to switch-case
 	/*
