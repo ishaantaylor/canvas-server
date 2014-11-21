@@ -55,17 +55,34 @@ console.log('Server running at http://' + outward_ip + ":" + outward_port + '/')
 
 // main flow subfunctions
 function handlePOSTrequest(request, response) {
+	// TODO: refactor this the make it flow.. first parse body, then decide where to route it 
 	var payload = {};
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
-			payload = JSON.parse(chunk);
-			// TODO: validate payload exists
+			try {
+				payload = JSON.parse(chunk);
+			} catch (err) {
+				console.log("Error: " + err);
+			}
 			proceedWithCanvasServerAction(request, response, payload);
 		});		
 	} else if (request.url == '/users') {
 		request.on('data', function(chunk) {
-			payload = JSON.parse(chunk);
+			try {
+				payload = JSON.parse(chunk);
+			} catch (err) {
+				console.log("Error: " + err);
+			}
 			proceedWithUserAction(request, response, payload);
+		});
+	} else if (request.url == '/login') {
+		request.on('data', function(chunk) {
+			try {
+				payload = JSON.parse(chunk);
+			} catch (err) {
+				console.log("Error: " + err);
+			}
+			login(request, response, payload);
 		});
 	}
 }
@@ -110,6 +127,7 @@ function proceedWithUserAction(request, response, payload) {
 		case "register_user":
 			register_user(request, response, payload);
 			break;
+		// TODO: decide which login uri to use
 		case "login":
 			login(request, response, payload);
 			break;
