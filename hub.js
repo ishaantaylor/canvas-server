@@ -34,7 +34,7 @@ var database_ip = "mongodb://localhost:27017/test";
 
 // create a server 
 http.createServer(function (incoming_request, our_response) {
-	request.on('data', function(chunk) {
+	incoming_request.on('data', function(chunk) {
 		insertRequest({
 			"method"    : incoming_request.method,
 			"headers"   : incoming_request.headers,
