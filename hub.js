@@ -8,11 +8,13 @@ var http = require('http'),
 	ObjectID = require('mongodb').ObjectID,
 	assert = require('assert');
 
+/*
 var outward_ip = '127.0.0.1';
 var outward_port = 1337;
+*/ 
+var outward_ip = '129.22.50.175';
+var outward_port = 8080;
 
-// var outward_ip = '129.22.50.175';
-// var outward_port = 8080;
 // var sql_ip = '';
 
 var database_ip = "mongodb://localhost:27017/test";
