@@ -59,16 +59,22 @@ function handlePOSTrequest(request, response) {
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			payload = JSON.parse(chunk);
-			proceedWithServerAction(request, response, payload);
+			// TODO: validate payload exists
+			proceedWithCanvasServerAction(request, response, payload);
 		});		
-	} 
+	} else if (request.url == '/users') {
+		request.on('data', function(chunk) {
+			payload = JSON.parse(chunk);
+			proceedWithUserAction(request, response, payload);
+		});
+	}
 }
 
 // helper subfunctions
 function insertRequest(request) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('requests', function(err, col) {
-			console.log(err);
+			// console.log(err);
 			col.insert(request, function(err, inserted) {
 				if (err) {
 					// TODO: setup error log in db
@@ -79,7 +85,7 @@ function insertRequest(request) {
 	});
 }
 
-function proceedWithServerAction(request, response, payload) {
+function proceedWithCanvasServerAction(request, response, payload) {
 	var server_event = payload.event;
 	// TODO: switch few if statements to switch-case
 	switch (server_event) {
@@ -89,19 +95,27 @@ function proceedWithServerAction(request, response, payload) {
 		case "update_canvas":
 			update_canvas(request, response, payload);
 			break;
+		case "query":
+			query(request, response, payload);
+			break;
+		default:
+			response.writeHead(422, {'Content-Type':'text/plain'});
+			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
+			break;
+	}
+}
+
+function proceedWithUserAction(request, response, payload) {
+	switch (payload.event) {
 		case "register_user":
 			register_user(request, response, payload);
 			break;
 		case "login":
 			login(request, response, payload);
 			break;
-		case "query":
-			query(request, response, payload);
-			break;
 		default:
 			response.writeHead(422, {'Content-Type':'text/plain'});
-			response.write("Unknown event directive", {'Content-Type':'text/plain'});
-			break;
+			response.end();
 	}
 }
 
@@ -164,11 +178,11 @@ function register_user(request, response, payload) {
 
 // TODO: implement hashing here to check against hash in db
 function login(request, response, payload) {
-	MongoClient.connect(databaseURL, function(err, db) {
+	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 
 		var user = payload['user_id'],
-			pass = paylod['password'],
+			pass = payload['password'],
 			query = {user_id:user, password:pass};
 
 		db.collection('users', function(err, col) {
