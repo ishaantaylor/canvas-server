@@ -34,40 +34,50 @@ var database_ip = "mongodb://localhost:27017/test";
 
 // create a server 
 http.createServer(function (incoming_request, our_response) {
+	var post_data = "";
 	incoming_request.on('data', function(chunk) {
+		post_data += chunk;
+	});
+	incoming_request.on('end', function() {
 		insertRequest({
 			"method"    : incoming_request.method,
 			"headers"   : incoming_request.headers,
 			"url"       : url.parse(incoming_request.url),
-			"payload"   : chunk
+			"payload"   : JSON.parse(post_data)
 		}); 		// keep track of all requests
+		if (incoming_request.method == 'POST') {
+			handlePOSTrequest(incoming_request, our_response, post_data);
+		} else {
+			our_response.writeHead(405, {'Content-Type': 'text/plain'});
+			our_response.end();
+		}
 	});
-	
+	if (incoming_request.method != 'POST') {
+		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
+		our_response.end();
+	}
+
 	// handle each case - TODO: eventually change to switch-case
 	/*
 	if (incoming_request.method == 'GET') {
 		handleGETrequest(incoming_request, our_response);
 	} else */
-	if (incoming_request.method == 'POST') {
-		handlePOSTrequest(incoming_request, our_response);
-	} else {
-		our_response.writeHead(405, {'Content-Type': 'text/plain'});
-		our_response.end("Whatchu tryna do?");
-	}
 }).listen(outward_port, outward_ip);
 
 console.log('Server running at http://' + outward_ip + ":" + outward_port + '/');
 
 // main flow subfunctions
-function handlePOSTrequest(request, response) {
+function handlePOSTrequest(request, response, post_data) {
 	// TODO: refactor this the make it flow.. first parse body, then decide where to route it 
-	var payload = {};
+	var payload = JSON.parse(post_data);
 	if (request.url == '/canvases') {
 		request.on('data', function(chunk) {			// using library to read POST payload (json)
 			try {
 				payload = JSON.parse(chunk);
 			} catch (err) {
 				console.log("Error: " + err);
+				response.writeHead(422, {'Content-Type': 'text/plain'});
+				response.end();
 			}
 			proceedWithCanvasServerAction(request, response, payload);
 		});		
@@ -77,6 +87,8 @@ function handlePOSTrequest(request, response) {
 				payload = JSON.parse(chunk);
 			} catch (err) {
 				console.log("Error: " + err);
+				response.writeHead(422, {'Content-Type': 'text/plain'});
+				response.end();
 			}
 			proceedWithUserAction(request, response, payload);
 		});
@@ -86,9 +98,14 @@ function handlePOSTrequest(request, response) {
 				payload = JSON.parse(chunk);
 			} catch (err) {
 				console.log("Error: " + err);
+				response.writeHead(422, {'Content-Type': 'text/plain'});
+				response.end();
 			}
 			login(request, response, payload);
 		});
+	} else {
+		response.writeHead(420, {'Content-Type': 'text/plain'});
+		response.end();
 	}
 }
 
