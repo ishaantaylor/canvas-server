@@ -141,17 +141,20 @@ function insert_canvas(request, response, payload) {
 }
 
 function update_canvas(request, response, payload) {
+	console.log("payload: " + JSON.stringify(payload, 0, 4));
+	var query = payload.query;
+	var value = payload.update;
+	console.log(" query: " + JSON.stringify(query, 0, 4));
+	// TODO: validate query
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, col) {
 			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-			col.find(query).toArray(function(err, docs) {
-				// console.log(docs.length);
-				// c = docs.length;
-				if (!err && docs) {
-					docs.update(payload["canvas"]);
+			col.update(query, value, function(err) {
+				if (!err) {
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				} else {
 					response.writeHead(404, {'Content-Type':'text/plain'});
+					console.log(err);
 				}
 
 				response.end(); 
@@ -192,10 +195,10 @@ function login(request, response, payload) {
 		db.collection('users', function(err, col) {
 			col.find(query).toArray(function(err, docs) {
 				//console.log(docs.length);
-				if (docs.length > 0 || !err)
-					response.writeHead(200, {'Content-Type':'text/plain'});
-				else
+				if (docs.length == 0)
 					response.writeHead(401, {'Content-Type':'text/plain'});
+				else if (!err)
+					response.writeHead(200, {'Content-Type':'text/plain'});
 				
 				response.end(); 
 				db.close();
@@ -207,6 +210,8 @@ function login(request, response, payload) {
 function query(request, response, payload) {
 	// TODO: change implementation to accept payload.query, payload.projection
 	// query for canvases
+	
+	
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		
