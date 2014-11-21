@@ -41,7 +41,7 @@ http.createServer(function (incoming_request, our_response) {
 			"url"       : url.parse(incoming_request.url),
 			"payload"   : chunk
 		}); 		// keep track of all requests
-	}
+	});
 	
 	// handle each case - TODO: eventually change to switch-case
 	/*
