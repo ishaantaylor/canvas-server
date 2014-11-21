@@ -43,20 +43,15 @@ http.createServer(function (incoming_request, our_response) {
 			"method"    : incoming_request.method,
 			"headers"   : incoming_request.headers,
 			"url"       : url.parse(incoming_request.url),
-			"payload"   : JSON.parse(post_data)
+			"payload"   : post_data
 		}); 		// keep track of all requests
-		if (incoming_request.method == 'POST') {
+		if (incoming_request.method == "POST")
 			handlePOSTrequest(incoming_request, our_response, post_data);
-		} else {
-			our_response.writeHead(405, {'Content-Type': 'text/plain'});
-			our_response.end();
-		}
 	});
-	if (incoming_request.method != 'POST') {
+	if (incoming_request.method != "POST") {
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
 	}
-
 	// handle each case - TODO: eventually change to switch-case
 	/*
 	if (incoming_request.method == 'GET') {
@@ -69,40 +64,21 @@ console.log('Server running at http://' + outward_ip + ":" + outward_port + '/')
 // main flow subfunctions
 function handlePOSTrequest(request, response, post_data) {
 	// TODO: refactor this the make it flow.. first parse body, then decide where to route it 
-	var payload = JSON.parse(post_data);
+	var payload = {};
+	try {
+		payload = JSON.parse(post_data);
+	} catch (err) {
+		console.log("Error: " + err);
+		response.writeHead(422, {'Content-Type': 'text/plain'});
+		response.end();
+	}
 	if (request.url == '/canvases') {
-		request.on('data', function(chunk) {			// using library to read POST payload (json)
-			try {
-				payload = JSON.parse(chunk);
-			} catch (err) {
-				console.log("Error: " + err);
-				response.writeHead(422, {'Content-Type': 'text/plain'});
-				response.end();
-			}
-			proceedWithCanvasServerAction(request, response, payload);
-		});		
+		proceedWithCanvasServerAction(request, response, payload);
 	} else if (request.url == '/users') {
-		request.on('data', function(chunk) {
-			try {
-				payload = JSON.parse(chunk);
-			} catch (err) {
-				console.log("Error: " + err);
-				response.writeHead(422, {'Content-Type': 'text/plain'});
-				response.end();
-			}
-			proceedWithUserAction(request, response, payload);
-		});
+		proceedWithUserAction(request, response, payload);
 	} else if (request.url == '/login') {
-		request.on('data', function(chunk) {
-			try {
-				payload = JSON.parse(chunk);
-			} catch (err) {
-				console.log("Error: " + err);
-				response.writeHead(422, {'Content-Type': 'text/plain'});
-				response.end();
-			}
-			login(request, response, payload);
-		});
+		login(request, response, payload);
+
 	} else {
 		response.writeHead(420, {'Content-Type': 'text/plain'});
 		response.end();
