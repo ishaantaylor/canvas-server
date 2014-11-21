@@ -120,6 +120,7 @@ function proceedWithUserAction(request, response, payload) {
 }
 
 // TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
+// supported
 function insert_canvas(request, response, payload) {
 	console.log(payload);
 	MongoClient.connect(database_ip, function(err, db) {
@@ -140,6 +141,7 @@ function insert_canvas(request, response, payload) {
 	});
 }
 
+// supported
 function update_canvas(request, response, payload) {
 	console.log("payload: " + JSON.stringify(payload, 0, 4));
 	var query = payload.query;
@@ -164,6 +166,7 @@ function update_canvas(request, response, payload) {
 	});
 }
 
+// supported
 function register_user(request, response, payload) {
 	// TODO: validate payload object such that it has both user_id and password fields
 	// TODO: hash password
@@ -183,6 +186,7 @@ function register_user(request, response, payload) {
 	});
 }
 
+// supported
 function login(request, response, payload) {
 	// TODO: implement hashing here to check against hash in db
 	MongoClient.connect(database_ip, function(err, db) {
@@ -207,11 +211,12 @@ function login(request, response, payload) {
 	});
 }
 
+// not yet supported
 function query(request, response, payload) {
 	// TODO: change implementation to accept payload.query, payload.projection
 	// query for canvases
 	
-	
+
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		
