@@ -121,13 +121,17 @@ function proceedWithUserAction(request, response, payload) {
 
 // TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
 function insert_canvas(request, response, payload) {
+	console.log(payload);
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, col) {
-			col.insert(payload['canvas'], function(err, inserted) {
-				if (!err)
+			col.insert(payload, function(err, inserted) {
+				console.log("inserted: " + inserted);
+				if (!err) {
 					response.writeHead(201, {'Content-Type':'text/plain'});
-				else
+				} else {
 					response.writeHead(418, {'Content-Type':'text/plain'});
+					console.log(err);
+				}
 				
 				response.end();
 				db.close();
@@ -157,9 +161,9 @@ function update_canvas(request, response, payload) {
 	});
 }
 
-// TODO: implement hashing here
 function register_user(request, response, payload) {
-	// TODO: create objcet with simply username:hash(password) (is there anything else, Chris?)
+	// TODO: validate payload object such that it has both user_id and password fields
+	// TODO: hash password
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, col) {
 			// TODO: check if user exists already
@@ -176,8 +180,8 @@ function register_user(request, response, payload) {
 	});
 }
 
-// TODO: implement hashing here to check against hash in db
 function login(request, response, payload) {
+	// TODO: implement hashing here to check against hash in db
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 
