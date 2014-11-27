@@ -8,12 +8,12 @@ var http = require('http'),
 	ObjectID = require('mongodb').ObjectID,
 	assert = require('assert');
 
-/*
 var outward_ip = '127.0.0.1';
 var outward_port = 1337;
-*/ 
+/*
 var outward_ip = '129.22.50.175';
 var outward_port = 8080;
+*/
 
 // var sql_ip = '';
 
@@ -35,22 +35,26 @@ var database_ip = "mongodb://localhost:27017/test";
 // create a server 
 http.createServer(function (incoming_request, our_response) {
 	var post_data = "";
-	incoming_request.on('data', function(chunk) {
-		post_data += chunk;
-	});
-	incoming_request.on('end', function() {
-		insertRequest({
-			"method"    : incoming_request.method,
-			"headers"   : incoming_request.headers,
-			"url"       : url.parse(incoming_request.url),
-			"payload"   : post_data
-		}); 		// keep track of all requests
-		if (incoming_request.method == "POST")
-			handlePOSTrequest(incoming_request, our_response, post_data);
-	});
 	if (incoming_request.method != "POST") {
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
+	} else if (incoming_request.url == '/') {
+		response.writeHead(420, {'Content-Type': 'text/plain'});
+		response.end();
+	} else {
+		incoming_request.on('data', function(chunk) {
+			post_data += chunk;
+		});
+		incoming_request.on('end', function() {
+			insertRequest({
+				"method"    : incoming_request.method,
+				"headers"   : incoming_request.headers,
+				"url"       : url.parse(incoming_request.url),
+				"payload"   : post_data
+			}); 		// keep track of all requests
+			if (incoming_request.method == "POST")
+				handlePOSTrequest(incoming_request, our_response, post_data);
+		});
 	}
 	// handle each case - TODO: eventually change to switch-case
 	/*
@@ -78,7 +82,6 @@ function handlePOSTrequest(request, response, post_data) {
 		proceedWithUserAction(request, response, payload);
 	} else if (request.url == '/login') {
 		login(request, response, payload);
-
 	} else {
 		response.writeHead(420, {'Content-Type': 'text/plain'});
 		response.end();
@@ -231,24 +234,10 @@ function login(request, response, payload) {
 function query(request, response, payload) {
 	// TODO: change implementation to accept payload.query, payload.projection
 	// query for canvases
-	
+	var query = payload.query;
 
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
-		
-		// get querystring from url
-		var theURL = url.parse(request.url);
-		var queryJSON = qs.parse(theURL.query);
-
-		// query canvases
-		var user = queryJSON['user_id'],
-			activeFlag = queryJSON['active'];
-		var query = {};
-		// activeFlag determines if we search for active canvases or inactive.. in progress or completed
-		if(activeFlag === null)
-			query = {users:user};
-		else
-			query = {users:user, active:activeFlag};
 		db.collection('canvases', function(err, col) {
 			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 			col.find(query).toArray(function(err, docs) {
