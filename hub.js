@@ -6,7 +6,8 @@ var http = require('http'),
 	Db = require('mongodb').Db,
 	MongoClient = require('mongodb').MongoClient,
 	ObjectID = require('mongodb').ObjectID,
-	assert = require('assert');
+	assert = require('assert'),
+	bcrypt = require('bcrypt-nodejs');	// some weird problem intalling normal bcrypt on 32bit ubuntu 14.04 
 
 var outward_ip = '127.0.0.1';
 var outward_port = 1337;
@@ -130,8 +131,9 @@ function proceedWithUserAction(request, response, payload) {
 	} else {
 		// TODO: hash password
 		var user = payload['user_id'],
-			pass = payload['password'],
+			pass = bcrypt.hashSync(payload['password']),
 			query = {user_id:user, password:pass};
+		payload.password = pass;		// changes original password to hashed password
 		switch (payload.event) {
 			case "register_user":
 				register_user(request, response, payload, query);
@@ -226,9 +228,10 @@ function login(request, response, payload, query) {
 	// TODO: implement hashing here to check against hash in db
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
-
+		console.log(query);
 		db.collection('users', function(err, col) {
 			col.find(query).toArray(function(err, docs) {
+				console.log(docs);
 				if (docs.length == 0)
 					response.writeHead(401, {'Content-Type':'text/plain'});
 				else if (!err)
