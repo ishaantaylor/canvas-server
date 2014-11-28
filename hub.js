@@ -78,10 +78,8 @@ function handlePOSTrequest(request, response, post_data) {
 	}
 	if (request.url == '/canvases') {
 		proceedWithCanvasServerAction(request, response, payload);
-	} else if (request.url == '/users') {
+	} else if (request.url == '/users' || request.url == '/login') {
 		proceedWithUserAction(request, response, payload);
-	} else if (request.url == '/login') {
-		login(request, response, payload);
 	} else {
 		response.writeHead(420, {'Content-Type': 'text/plain'});
 		response.end();
@@ -124,17 +122,26 @@ function proceedWithCanvasServerAction(request, response, payload) {
 }
 
 function proceedWithUserAction(request, response, payload) {
-	switch (payload.event) {
-		case "register_user":
-			register_user(request, response, payload);
-			break;
-		// TODO: decide which login uri to use
-		case "login":
-			login(request, response, payload);
-			break;
-		default:
-			response.writeHead(422, {'Content-Type':'text/plain'});
-			response.end();
+	if (payload.user_id == "" || payload.password == "") {
+		response.writeHead(400, {'Content-Type':'text/plain'});
+		response.end();
+	} else {
+		// TODO: hash password
+		var user = payload['user_id'],
+			pass = payload['password'],
+			query = {user_id:user, password:pass};
+		switch (payload.event) {
+			case "register_user":
+				register_user(request, response, payload, query);
+				break;
+			// TODO: decide which login uri to use
+			case "login":
+				login(request, response, payload, query);
+				break;
+			default:
+				response.writeHead(422, {'Content-Type':'text/plain'});
+				response.end();
+		}
 	}
 }
 
@@ -175,7 +182,7 @@ function update_canvas(request, response, payload) {
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				} else {
 					response.writeHead(404, {'Content-Type':'text/plain'});
-					console.log(err);
+					// console.log(err);
 				}
 
 				response.end(); 
@@ -186,38 +193,40 @@ function update_canvas(request, response, payload) {
 }
 
 // supported
-function register_user(request, response, payload) {
-	// TODO: validate payload object such that it has both user_id and password fields
-	// TODO: hash password
+function register_user(request, response, payload, query) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, col) {
 			// TODO: check if user exists already
-			col.insert(payload, function(err, inserted) {
-				if (!err)
-					response.writeHead(201, {'Content-Type':'text/plain'});
-				else 
-					response.writeHead(418, {'Content-Type':'text/plain'});
+			col.find({"user_id" : query.user_id}).toArray(function(err, docs) {	// search for existing user with user_id
 				
-				response.end();
-				db.close();
+				if (!err && docs.length == 0) {				// if no error and user doesn't exist
+					col.insert(payload, function(err, inserted) {
+						if (!err)
+							response.writeHead(201, {'Content-Type':'text/plain'});
+						else 
+							response.writeHead(418, {'Content-Type':'text/plain'});
+						
+						response.end();
+						db.close();
+					});
+				} else {
+					response.writeHead(409, {'Content-Type':'text/plain'});		// User exists
+					response.end();
+					db.close();		
+				}
 			});
 		});
 	});
 }
 
 // supported
-function login(request, response, payload) {
+function login(request, response, payload, query) {
 	// TODO: implement hashing here to check against hash in db
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 
-		var user = payload['user_id'],
-			pass = payload['password'],
-			query = {user_id:user, password:pass};
-
 		db.collection('users', function(err, col) {
 			col.find(query).toArray(function(err, docs) {
-				//console.log(docs.length);
 				if (docs.length == 0)
 					response.writeHead(401, {'Content-Type':'text/plain'});
 				else if (!err)
