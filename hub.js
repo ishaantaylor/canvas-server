@@ -230,11 +230,12 @@ function login(request, response, payload) {
 	});
 }
 
-// not yet supported
+// supported
 function query(request, response, payload) {
 	// TODO: change implementation to accept payload.query, payload.projection
 	// query for canvases
 	var query = payload.query;
+	var projection = payload.projection;
 
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
