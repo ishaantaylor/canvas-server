@@ -101,6 +101,8 @@ function insertRequest(request) {
 	});
 }
 
+// TODO: add an error log () in db (anytime theres err push)
+
 function proceedWithCanvasServerAction(request, response, payload) {
 	var server_event = payload.event;
 	// TODO: switch few if statements to switch-case
