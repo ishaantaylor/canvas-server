@@ -319,7 +319,7 @@ function getCanvasImage(request, response, payload) {
 						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {});
 					}
 				}
-				createCanvasImage(docs[0], fileNames);
+				xtras.createCanvasImage(docs[0], fileNames);
 
 				response.writeHead(200, {'Content-Type':'application/json'});
 				response.write(JSON.stringify(docs, 0, 4));
