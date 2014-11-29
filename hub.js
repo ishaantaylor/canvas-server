@@ -316,7 +316,10 @@ function getCanvasImage(request, response, payload) {
 					var file = location + filePrefix + "_" + i + ".png";
 					fileNames.push(file);
 					if(!(fs.existsSync("/home/thugz/images" + filePrefix + "_" + i + ".png"))){
-						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {});
+
+						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {
+							console.log("HALP::::::::::::" + err);
+						});
 					}
 				}
 				createCanvasImage(response, docs[0], fileNames);
@@ -444,7 +447,7 @@ function createCanvasImage(response, canvasRecord, filenames){
 					"posArray" : posArray
 				});
 
-				fs.writeFile("home/thugs/images" + "/" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
+				fs.writeFile("home/thugz/images" + "/" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
 							html, function(err){
 								console.log("HALP::::" + err);
 							});
