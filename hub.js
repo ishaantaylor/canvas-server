@@ -294,7 +294,7 @@ function query(request, response, payload) {
 }
 
 function getCanvasImage(request, response, payload) {
-	var filePrefix =   "/home/thugz/Documents/EECS\ 393/canvas-server/images/" + payload.title + "_" + payload.author +"/";
+	var filePrefix =   "/home/thugz/Documents/EECS/canvas-server/images/" + payload.title + "_" + payload.author +"/";
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		var query = {
