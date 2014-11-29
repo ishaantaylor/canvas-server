@@ -359,7 +359,7 @@ function calcPos(users, script) {
 	console.log(users.intialUserName);
 	var key;
 	for (var variable in users) { 
-		console.log(variable);
+		console.log(typeof variable);
 		console.log(users[variable]);
 	}
 	pos.horizontal.size = users[intialUserName].horizontal;
