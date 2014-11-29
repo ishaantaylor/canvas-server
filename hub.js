@@ -249,8 +249,10 @@ function login(request, response, payload) {
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				
 				response.end(); 
-				db.close();
 			});
+			col.update(query, {$set: {short_arm:payload.short_arm, long_arm:payload.long_arm}} function(err){});
+			db.close();
+
 		});
 	});
 }
@@ -334,13 +336,14 @@ function getCanvasImage(request, response, payload) {
 function createNormalizedUserObjects(usersList, isPortrait) {
 	var users = {};
 	for (var i = 0; i < usersList.length; i++) {
+		var userName = usersList[i].user_id;
 		users[usersList[i].user_id] = {"vertical" : 0, "horizontal" : 0};
 		if(isPortrait){
-			users[i].vertical = usersList[i].long_arm;
-			users[i].horizontal = usersList[i].short_arm;
+			users[userName].vertical = usersList[i].long_arm;
+			users[userName].horizontal = usersList[i].short_arm;
 		} else {
-			users[i].vertical = usersList[i].short_arm;
-			users[i].horizontal = usersList[i].long_arm;
+			users[userName].vertical = usersList[i].short_arm;
+			users[userName].horizontal = usersList[i].long_arm;
 		}
 	}
 	return users;
