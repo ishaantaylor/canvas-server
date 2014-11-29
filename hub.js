@@ -309,7 +309,7 @@ function getCanvasImage(request, response, payload) {
 				var fileNames = [];
 				fs.readdir("/home/thugz/images" + filePrefix, function(err, dirs) {
 					if(err){
-						fs.mkdir("/home/thugz/images" + filePrefix, 0666, function(err){});
+						fs.mkdir("/home/thugz/images" + filePrefix, 777, function(err){});
 					}
 				});
 				for (var i = 0; i < images.length; i++) {
