@@ -334,10 +334,11 @@ function getCanvasImage(request, response, payload) {
 
 function createNormalizedUserObjects(usersList, isPortrait) {
 	console.log(usersList);
+	console.log(isPortrait);
 	var users = {};
 	for (var i = 0; i < usersList.length; i++) {
 		var userName = usersList[i].user_id;
-		users[usersList[i].user_id] = {"vertical" : 0, "horizontal" : 0};
+		users[userName] = {"vertical" : 0, "horizontal" : 0};
 		if(isPortrait){
 			users[userName].vertical = usersList[i].long_arm;
 			users[userName].horizontal = usersList[i].short_arm;
@@ -350,16 +351,17 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 function calcPos(users, script) {
+	var intialUserName = script[0].split(" ")[0];
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
-	pos.horizontal.size = users[0].horizontal;
-	pos.vertical.size = users[0].vertical;
+	pos.horizontal.size = users[intialUserName].horizontal;
+	pos.vertical.size = users[intialUserName].vertical;
 	pos.vertical.off = 0;
 	pos.horizontal.off = 0;
 	
 	pos[0].vertical = 0;
 	pos[0].horizontal = 0;
-	pos[0].user = users[script[0].split(" ")[0]];
-	for (var i = 0; i < script.length; i++) {
+	pos[0].user = users[intialUserName];
+	for (var i = 1; i < script.length; i++) {
 		var userDirAlign = script[i].split(" ");
 		var major = "", minor = "";
 		pos[i].user = users[userDirAlign[0]];
