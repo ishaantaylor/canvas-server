@@ -444,7 +444,7 @@ function createCanvasImage(canvasRecord, filenames){
 					"posArray" : posArray
 				});
 
-				fs.writeFile("home/thugs/images" + canvasRecord.title + "_" + payload.author + "/" + "canvas.html",
+				fs.writeFile("home/thugs/images" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
 							html, function(err){});
 				
 				response.writeHead(200, {'Content-Type':'application/json'});
