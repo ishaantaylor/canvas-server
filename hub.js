@@ -353,6 +353,8 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 function calcPos(users, script) {
 	var intialUserName = script[0].split(" ")[0];
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
+	console.log(intialUserName);
+	console.log(users);
 	pos.horizontal.size = users[intialUserName].horizontal;
 	pos.vertical.size = users[intialUserName].vertical;
 	pos.vertical.off = 0;
@@ -430,7 +432,6 @@ function createCanvasImage(canvasRecord, filenames){
 				if(err)
 					console.log(err);
 				var users = createNormalizedUserObjects(docs, canvasRecord.portrait);
-				console.log(users);
 				var pos = calcPos(users, canvasRecord.script);
 				var posArray = [];
 				for(var i = 0; i < canvasRecord.script.length; i++) {
