@@ -1,12 +1,14 @@
 
 var http = require('http'),
-	url = require('url'),
-	qs = require('querystring'),
-	exec = require('child_process').exec,
-	Db = require('mongodb').Db,
-	MongoClient = require('mongodb').MongoClient,
-	ObjectID = require('mongodb').ObjectID,
-	assert = require('assert');
+url = require('url'),
+qs = require('querystring'),
+exec = require('child_process').exec,
+Db = require('mongodb').Db,
+MongoClient = require('mongodb').MongoClient,
+ObjectID = require('mongodb').ObjectID,
+assert = require('assert'),
+fs = require('fs'),
+xtras = require('xtras');
 
 /*
 var outward_ip = '127.0.0.1';
@@ -14,7 +16,7 @@ var outward_port = 1337;
 */ 
 var outward_ip = '129.22.50.175';
 var outward_port = 8080;
-
+var location = '129.22.59.175:8080/home/thugz/images'
 // var sql_ip = '';
 
 var database_ip = "mongodb://localhost:27017/test";
@@ -105,33 +107,36 @@ function proceedWithCanvasServerAction(request, response, payload) {
 	// TODO: switch few if statements to switch-case
 	switch (server_event) {
 		case "insert_canvas":
-			insert_canvas(request, response, payload);
-			break;		
+		insert_canvas(request, response, payload);
+		break;		
 		case "update_canvas":
-			update_canvas(request, response, payload);
-			break;
+		update_canvas(request, response, payload);
+		break;
 		case "query":
-			query(request, response, payload);
-			break;
+		query(request, response, payload);
+		break;
+		case "create":
+		getCanvasImage(request, response, payload);
+		break;
 		default:
-			response.writeHead(422, {'Content-Type':'text/plain'});
+		response.writeHead(422, {'Content-Type':'text/plain'});
 			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 			break;
+		}
 	}
-}
 
-function proceedWithUserAction(request, response, payload) {
-	switch (payload.event) {
-		case "register_user":
+	function proceedWithUserAction(request, response, payload) {
+		switch (payload.event) {
+			case "register_user":
 			register_user(request, response, payload);
 			break;
 		// TODO: decide which login uri to use
 		case "login":
-			login(request, response, payload);
-			break;
+		login(request, response, payload);
+		break;
 		default:
-			response.writeHead(422, {'Content-Type':'text/plain'});
-			response.end();
+		response.writeHead(422, {'Content-Type':'text/plain'});
+		response.end();
 	}
 }
 
@@ -139,6 +144,8 @@ function proceedWithUserAction(request, response, payload) {
 // supported
 function insert_canvas(request, response, payload) {
 	console.log(payload);
+	payload.script = [payload.author + " I i"];
+	payload.active = true;
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, col) {
 			col.insert(payload, function(err, inserted) {
@@ -160,14 +167,35 @@ function insert_canvas(request, response, payload) {
 // supported
 function update_canvas(request, response, payload) {
 	console.log("payload: " + JSON.stringify(payload, 0, 4));
-	var query = payload.query;
-	var value = payload.update;
+	var query = { 	title 	: payload.title, 
+		author 	: payload.author 
+	};
+	var nextScript = "" + payload.current_user + " " 
+	+ payload.next_direction + " " 
+	+ payload.next_align;
+	payload.users.push(payload.current_user);
+	payload.active = !((payload.current_turn + 1) == payload.max_turns);
+
+	var updateStatement = {
+		$push : {
+			script : nextScript,
+			image_data : payload.image_data
+		}, 
+		$set : {
+			current_user		: payload.users.pop(),
+			current_direction 	: payload.next_direction,
+			current_align		: payload.next_align,
+			current_turn		: payload.current_turn + 1,
+			users				: payload.users,
+			active 				: payload.active
+		}
+	};
 	console.log(" query: " + JSON.stringify(query, 0, 4));
 	// TODO: validate query
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, col) {
 			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-			col.update(query, value, function(err) {
+			col.update(query, updateStatement, function(err) {
 				if (!err) {
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				} else {
@@ -209,8 +237,8 @@ function login(request, response, payload) {
 		assert.equal(null, err);
 
 		var user = payload['user_id'],
-			pass = payload['password'],
-			query = {user_id:user, password:pass};
+		pass = payload['password'],
+		query = {user_id:user, password:pass};
 
 		db.collection('users', function(err, col) {
 			col.find(query).toArray(function(err, docs) {
@@ -242,7 +270,7 @@ function query(request, response, payload) {
 
 		// query canvases
 		var user = queryJSON['user_id'],
-			activeFlag = queryJSON['active'];
+		activeFlag = queryJSON['active'];
 		var query = {};
 		// activeFlag determines if we search for active canvases or inactive.. in progress or completed
 		if(activeFlag === null)
@@ -259,6 +287,45 @@ function query(request, response, payload) {
 				
 				response.end(); 
 				db.close();
+			});
+		});
+	});
+}
+
+function getCanvasImage(request, response, payload) {
+	var filePrefix =   "/" + payload.title + "_" + payload.author +"/";
+	MongoClient.connect(database_ip, function(err, db) {
+		assert.equal(null, err);
+		var query = {
+			title 	: payload.title,
+			author 	: payload.author			
+		};
+		db.collection('canvases', function(err, canvases) {
+			// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
+			canvases.find(query).toArray(function(err, docs) {
+				var users = docs[0].users;
+				var images = docs[0].image_data;
+				var fileNames = [];
+				fs.readdir("/home/thugz/images" + filePrefix, function(err, dirs) {
+					if(err){
+						fs.mkdir("/home/thugz/images" + filePrefix, 0666, function(err){});
+					}
+				});
+				for (var i = 0; i < images.length; i++) {
+					var file = location + filePrefix + "_" + i + ".png";
+					fileNames.push(file);
+					if(!(fs.existsSync("/home/thugz/images" + filePrefix + "_" + i + ".png"))){
+						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {});
+					}
+				}
+				createCanvasImage(docs[0], fileNames);
+
+				response.writeHead(200, {'Content-Type':'application/json'});
+				response.write(JSON.stringify(docs, 0, 4));
+
+				response.end(); 
+				db.close();
+				
 			});
 		});
 	});
