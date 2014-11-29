@@ -170,8 +170,8 @@ function update_canvas(request, response, payload) {
 	var query = { 	title 	: payload.title, 
 		author 	: payload.author 
 	};
-	var nextScript = "" + payload.current_user + " " 
-	+ payload.current_direction + " " 
+	var nextScript = "" + payload.current_user + "," 
+	+ payload.current_direction + "," 
 	+ payload.current_align;
 	payload.users.push(payload.current_user);
 	payload.active = !((payload.current_turn + 1) == payload.max_turns);
@@ -351,7 +351,7 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 function calcPos(users, script) {
-	var intialUserName = script[0].split(" ")[0];
+	var intialUserName = script[0].split(",")[0];
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
 	console.log(intialUserName);
 	console.log(users);
