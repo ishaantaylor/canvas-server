@@ -353,24 +353,19 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 function calcPos(users, script) {
 	var intialUserName = script[0].split(",")[0];
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
-	console.log(intialUserName);
-	console.log(users);
+	// console.log(intialUserName);
+	// console.log(users);
 	console.log(users[intialUserName]);
-	console.log(users.intialUserName);
-	var key;
-	for (var variable in users) { 
-		console.log(typeof variable);
-		console.log(users[variable]);
-	}
 	pos.horizontal.size = users[intialUserName].horizontal;
 	pos.vertical.size = users[intialUserName].vertical;
 	pos.vertical.off = 0;
 	pos.horizontal.off = 0;
-	
+	pos[0] = {};
 	pos[0].vertical = 0;
 	pos[0].horizontal = 0;
 	pos[0].user = users[intialUserName];
 	for (var i = 1; i < script.length; i++) {
+		pos[i] = {};
 		var userDirAlign = script[i].split(" ");
 		var major = "", minor = "";
 		pos[i].user = users[userDirAlign[0]];
