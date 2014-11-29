@@ -1,4 +1,4 @@
-var MongoClient = require('mondodb').MongoClient,
+var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator');
 
 function openCanvasesDB(response, payload) {
