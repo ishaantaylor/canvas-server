@@ -11,8 +11,8 @@ function openUsersDB(res, data) {
 					register(res, data, users, db);
 					break;
 			}
-		}
-	}
+		});
+	});
 }
 function loginUser(res, data, users, db) {
 	users.find({
@@ -46,8 +46,7 @@ function insertUser(res, data, users, db) {
 				res.writeHead(418, {'Content-Type':'text/plain'});
 			res.end();
 			db.close();
-		}
-	);
+		});
 }
 
 exports.open 	= openUsersDB;
