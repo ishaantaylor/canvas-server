@@ -107,36 +107,36 @@ function proceedWithCanvasServerAction(request, response, payload) {
 	// TODO: switch few if statements to switch-case
 	switch (server_event) {
 		case "insert_canvas":
-		insert_canvas(request, response, payload);
-		break;		
+			insert_canvas(request, response, payload);
+			break;		
 		case "update_canvas":
-		update_canvas(request, response, payload);
-		break;
+			update_canvas(request, response, payload);
+			break;
 		case "query":
-		query(request, response, payload);
-		break;
+			query(request, response, payload);
+			break;
 		case "create":
-		getCanvasImage(request, response, payload);
-		break;
+			getCanvasImage(request, response, payload);
+			break;
 		default:
-		response.writeHead(422, {'Content-Type':'text/plain'});
+			response.writeHead(422, {'Content-Type':'text/plain'});
 			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 			break;
-		}
 	}
+}
 
-	function proceedWithUserAction(request, response, payload) {
-		switch (payload.event) {
-			case "register_user":
+function proceedWithUserAction(request, response, payload) {
+	switch (payload.event) {
+		case "register_user":
 			register_user(request, response, payload);
 			break;
-		// TODO: decide which login uri to use
+	// TODO: decide which login uri to use
 		case "login":
-		login(request, response, payload);
-		break;
+			login(request, response, payload);
+			break;
 		default:
-		response.writeHead(422, {'Content-Type':'text/plain'});
-		response.end();
+			response.writeHead(422, {'Content-Type':'text/plain'});
+			response.end();
 	}
 }
 
@@ -144,7 +144,8 @@ function proceedWithCanvasServerAction(request, response, payload) {
 // supported
 function insert_canvas(request, response, payload) {
 	console.log(payload);
-	payload.script = [payload.author + " I i"];
+	payload.script = [];
+	payload.image_data = [];
 	payload.active = true;
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, col) {
@@ -171,8 +172,8 @@ function update_canvas(request, response, payload) {
 		author 	: payload.author 
 	};
 	var nextScript = "" + payload.current_user + " " 
-	+ payload.next_direction + " " 
-	+ payload.next_align;
+	+ payload.current_direction + " " 
+	+ payload.current_align;
 	payload.users.push(payload.current_user);
 	payload.active = !((payload.current_turn + 1) == payload.max_turns);
 
