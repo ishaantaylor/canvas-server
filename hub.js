@@ -15,7 +15,7 @@ var outward_port = 1337;
 */ 
 var outward_ip = '129.22.50.175';
 var outward_port = 8080;
-var location = '129.22.59.175:8080/home/thugz/images'
+var location = '129.22.59.175:';
 // var sql_ip = '';
 
 var database_ip = "mongodb://localhost:27017/test";
@@ -294,7 +294,7 @@ function query(request, response, payload) {
 }
 
 function getCanvasImage(request, response, payload) {
-	var filePrefix =   "/" + payload.title + "_" + payload.author +"/";
+	var filePrefix =   "/home/thugz/images/" + payload.title + "_" + payload.author +"/";
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		var query = {
@@ -307,19 +307,23 @@ function getCanvasImage(request, response, payload) {
 				var users = docs[0].users;
 				var images = docs[0].image_data;
 				var fileNames = [];
-				fs.readdir("/home/thugz/images" + filePrefix, function(err, dirs) {
+				fs.readdir(filePrefix, function(err, dirs) {
 					if(err){
-						fs.mkdir("/home/thugz/images" + filePrefix, 777, function(err){});
+						fs.mkdir(filePrefix, 777, function(err){});
 					}
 				});
 				for (var i = 0; i < images.length; i++) {
-					var file = location + filePrefix + "_" + i + ".png";
-					fileNames.push(file);
-					if(!(fs.existsSync("/home/thugz/images" + filePrefix + "_" + i + ".png"))){
-						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {});
+					var insideFile = filePrefix + "_" + i + ".png";
+					var outsideFile = location + insideFile;
+					fileNames.push(outsideFile);
+					if(!(fs.existsSync(insideFile))){
+
+						fs.writeFile(insideFile, new Buffer(images[i], "base64"), function(err) {
+							console.log("HALP::::::::::::" + err);
+						});
 					}
 				}
-				createCanvasImage(response, docs[0], fileNames);
+				createCanvasImage(response, docs[0], fileNames, filePrefix);
 
 				response.writeHead(200, {'Content-Type':'application/json'});
 				response.write(JSON.stringify(docs, 0, 4));
@@ -422,7 +426,7 @@ function updateCurrentPositions(pos, size) {
 	pos.vertical.off = 0;
 }
 
-function createCanvasImage(response, canvasRecord, filenames){
+function createCanvasImage(response, canvasRecord, filenames, folder){
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		db.collection('users', function(err, col) {
@@ -444,8 +448,10 @@ function createCanvasImage(response, canvasRecord, filenames){
 					"posArray" : posArray
 				});
 
-				fs.writeFile("home/thugs/images" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
-							html, function(err){});
+				fs.writeFile(folder + "canvas.html",
+							html, function(err){
+								console.log("HALP::::" + err);
+							});
 				
 				response.writeHead(200, {'Content-Type':'application/json'});
 				response.write(JSON.stringify(docs, 0, 4));
