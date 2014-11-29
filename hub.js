@@ -73,9 +73,9 @@ function handlePOSTrequest(request, response, post_data) {
 		response.end();
 	}
 	if(payload.db == "users")
-		users.open(res, payload);
+		users.open(response, payload);
 	else if(payload.db == "canvases")
-		canvases.open(res, payload);
+		canvases.open(response, payload);
 	else {
 		response.writeHead(420, {'Content-Type': 'text/plain'});
 		response.end();
