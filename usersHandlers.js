@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 
-function openUsersDB(res, data) {
+function openUsersDB(res, data, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, users) {
 			switch(data.event) {

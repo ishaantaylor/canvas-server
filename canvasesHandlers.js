@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator');
 
-function openCanvasesDB(response, payload) {
+function openCanvasesDB(response, payload, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('canvases', function(err, canvases) {
 			switch (payload.event) {
