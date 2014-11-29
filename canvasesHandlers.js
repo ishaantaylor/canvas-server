@@ -33,7 +33,7 @@ function insertCanvas(response, payload, canvases, db) {
 	payload.script = [];
 	payload.image_data = [];
 	payload.active = true;
-	col.insert(payload, function(err, inserted) {
+	canvases.insert(payload, function(err, inserted) {
 		console.log("inserted: " + inserted);
 		if (!err) {
 			response.writeHead(201, {'Content-Type':'text/plain'});
