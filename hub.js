@@ -309,7 +309,7 @@ function getCanvasImage(request, response, payload) {
 				var fileNames = [];
 				fs.readdir(filePrefix, function(err, dirs) {
 					if(err){
-						fs.mkdir(filePrefix, 777, function(err){
+						fs.mkdir(filePrefix, function(err){
 							console.log("HAAAALP:::::"+err);
 						});
 					}
