@@ -250,7 +250,7 @@ function login(request, response, payload) {
 				
 				response.end(); 
 			});
-			col.update(query, {$set: {short_arm:payload.short_arm, long_arm:payload.long_arm}} function(err){});
+			col.update(query, {$set: {short_arm:payload.short_arm, long_arm:payload.long_arm}} , function(err){});
 			db.close();
 
 		});
