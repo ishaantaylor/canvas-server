@@ -444,8 +444,10 @@ function createCanvasImage(response, canvasRecord, filenames){
 					"posArray" : posArray
 				});
 
-				fs.writeFile("home/thugs/images" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
-							html, function(err){});
+				fs.writeFile("home/thugs/images" + "/" + canvasRecord.title + "_" + canvasRecord.author + "/" + "canvas.html",
+							html, function(err){
+								console.log("HALP::::" + err);
+							});
 				
 				response.writeHead(200, {'Content-Type':'application/json'});
 				response.write(JSON.stringify(docs, 0, 4));
