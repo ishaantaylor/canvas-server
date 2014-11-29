@@ -239,7 +239,6 @@ function login(request, response, payload) {
 		var user = payload['user_id'],
 		pass = payload['password'],
 		query = {user_id:user, password:pass};
-
 		db.collection('users', function(err, col) {
 			col.find(query).toArray(function(err, docs) {
 				//console.log(docs.length);
@@ -249,10 +248,10 @@ function login(request, response, payload) {
 					response.writeHead(200, {'Content-Type':'text/plain'});
 				
 				response.end(); 
+				col.update(query, {$set: {short_arm:payload.short_arm, long_arm:payload.long_arm}} , function(err){
+					db.close();
+				});
 			});
-			col.update(query, {$set: {short_arm:payload.short_arm, long_arm:payload.long_arm}} , function(err){});
-			db.close();
-
 		});
 	});
 }
