@@ -15,10 +15,11 @@ function openUsersDB(res, data, database_ip) {
 	});
 }
 function loginUser(res, data, users, db) {
-	users.find({
+	var query = {
 		user_id 	: data.user_id,
 		password	: data.password
-	}).toArray(function(err, docs) {
+	};
+	users.find(query).toArray(function(err, docs) {
 			if (docs.length == 0)
 				res.writeHead(401, {'Content-Type':'text/plain'});
 			else if (!err)
