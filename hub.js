@@ -319,7 +319,7 @@ function getCanvasImage(request, response, payload) {
 						fs.writeFile(file, new Buffer(images[i], "base64"), function(err) {});
 					}
 				}
-				createCanvasImage(docs[0], fileNames);
+				createCanvasImage(response, docs[0], fileNames);
 
 				response.writeHead(200, {'Content-Type':'application/json'});
 				response.write(JSON.stringify(docs, 0, 4));
@@ -422,7 +422,7 @@ function updateCurrentPositions(pos, size) {
 	pos.vertical.off = 0;
 }
 
-function createCanvasImage(canvasRecord, filenames){
+function createCanvasImage(response, canvasRecord, filenames){
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		db.collection('users', function(err, col) {
