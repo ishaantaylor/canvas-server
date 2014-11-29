@@ -430,6 +430,7 @@ function createCanvasImage(canvasRecord, filenames){
 				if(err)
 					console.log(err);
 				var users = createNormalizedUserObjects(docs, canvasRecord.portrait);
+				console.log(users);
 				var pos = calcPos(users, canvasRecord.script);
 				var posArray = [];
 				for(var i = 0; i < canvasRecord.script.length; i++) {
