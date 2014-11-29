@@ -1,0 +1,7 @@
+doctype html
+html
+  head
+    title Canvas 		
+    body
+      each val in posArray
+        img(src=val.filename, style='left:#{val.horizontal}px;top:#{val.vertical}px;position:absolute;width:#{val.user.horizontal}px;height:#{val.user.vertical}px')
