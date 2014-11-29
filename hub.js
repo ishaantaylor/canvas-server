@@ -355,6 +355,8 @@ function calcPos(users, script) {
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
 	console.log(intialUserName);
 	console.log(users);
+	console.log(users[intialUserName]);
+	console.log(users.intialUserName);
 	pos.horizontal.size = users[intialUserName].horizontal;
 	pos.vertical.size = users[intialUserName].vertical;
 	pos.vertical.off = 0;
