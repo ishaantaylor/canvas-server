@@ -8,7 +8,7 @@ MongoClient = require('mongodb').MongoClient,
 ObjectID = require('mongodb').ObjectID,
 assert = require('assert'),
 fs = require('fs'),
-xtras = require('xtras');
+xtras = require('./xtras');
 
 /*
 var outward_ip = '127.0.0.1';
