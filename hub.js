@@ -333,6 +333,7 @@ function getCanvasImage(request, response, payload) {
 }
 
 function createNormalizedUserObjects(usersList, isPortrait) {
+	console.log(usersList);
 	var users = {};
 	for (var i = 0; i < usersList.length; i++) {
 		var userName = usersList[i].user_id;
