@@ -350,7 +350,7 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 function calcPos(users, script) {
-	var pos = {};
+	var pos = {}; pos.horizontal = {}; pos.vertical = {};
 	pos.horizontal.size = users[0].horizontal;
 	pos.vertical.size = users[0].vertical;
 	pos.vertical.off = 0;
