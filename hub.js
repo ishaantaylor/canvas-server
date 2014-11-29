@@ -358,7 +358,7 @@ function calcPos(users, script) {
 	console.log(users[intialUserName]);
 	console.log(users.intialUserName);
 	var key;
-	for each (var variable in users) { 
+	for (var variable in users) { 
 		console.log(variable);
 		console.log(users[variable]);
 	}
