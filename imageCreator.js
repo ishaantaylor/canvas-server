@@ -9,7 +9,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 	//TODO:: Make this a call to fs for current working directory (cwd).
 	var canvasFolder = payload.title + "_" + payload.author;
 	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
-	var hardString = process.cwd();
+	var hardString = process.cwd() + "/images";
 	var hardPath =  hardString + "/" + canvasFolder;
 	var query = {
 		title 	: payload.title,
