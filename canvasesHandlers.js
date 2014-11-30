@@ -57,6 +57,7 @@ function updateCanvas(response, payload, canvases, db) {
 						+ payload.current_direction + "," 
 						+ payload.current_align;
 	payload.users.push(payload.current_user);
+	console.log("AFTER PUSH " + payload.users);
 	payload.active = !((payload.current_turn + 1) == payload.max_turns);
 	var updateStatement = {
 		$push : {
