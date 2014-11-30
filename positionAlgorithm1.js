@@ -1,8 +1,8 @@
 function calcPos(users, script) {
 	var intialUserName = script[0].split(",")[0];
 	var pos = {}; pos.horizontal = {}; pos.vertical = {};
-	// console.log(intialUserName);
-	// console.log(users);
+	console.log(intialUserName);
+	console.log(users);
 	console.log(users[intialUserName]);
 	pos.horizontal.size = users[intialUserName].horizontal;
 	pos.vertical.size = users[intialUserName].vertical;

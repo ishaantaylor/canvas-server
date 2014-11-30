@@ -15,7 +15,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 		title 	: payload.title,
 		author 	: payload.author			
 	};
-	console.log(query);
+	console.log("In prepare ::: " + query);
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query).toArray(function(err, docs) {
