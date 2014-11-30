@@ -91,7 +91,7 @@ function getNextScript(data) {
 }
 
 function isCanvasComplete(data) {
-	return !((payload.current_turn + 1) >= payload.max_turns);
+	return !((data.current_turn + 1) >= data.max_turns);
 }
 
 
