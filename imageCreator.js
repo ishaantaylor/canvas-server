@@ -20,6 +20,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query).toArray(function(err, docs) {
 		var users = docs[0].users;
+		users.push(docs[0].current_user)
 		var images = docs[0].image_data;
 		var relativePaths = [];
 		makeDirectory(hardPath);
