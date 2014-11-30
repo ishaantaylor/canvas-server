@@ -57,12 +57,13 @@ function updateCanvas(response, payload, canvases, db) {
 	payload.active 	= !((payload.current_turn + 1) >= payload.max_turns);
 	var nextScript 	= " , , ";
 	var nextTurn 	= payload.max_turns;
-	var nextPlayer 	= payload.current_user + 1 % payload.users.length;
+	var nextUser 	= payload.current_user + 1 % payload.users.length;
 	if(payload.active) {
 		nextScript 	= payload.current_user + "," 
 						+ payload.next_direction + "," 
 						+ payload.next_align;
 		nextTurn 	= payload.current_turn + 1;
+		nextUser 	= -1;
 	}
 	var updateStatement = {
 		$push : {
@@ -70,7 +71,7 @@ function updateCanvas(response, payload, canvases, db) {
 			image_data : payload.image_data
 		}, 
 		$set : {
-			current_user		: nextPlayer
+			current_user		: nextUser,
 			current_direction 	: payload.next_direction,
 			current_align		: payload.next_align,
 			current_turn		: nextTurn,
