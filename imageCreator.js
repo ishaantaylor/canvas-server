@@ -30,7 +30,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 			var relativeFile = "_" + i + ".png";
 			var hardFile = hardPath + "/" + relativeFile;
 			relativePaths.push(relativeFile);
-			makeFile(hardFile, images[i]);
+			makeFile(hardFile, images[i], true);
 		}
 
 		calculateCanvasImagePositions(database_ip, response, users, docs[0].portrait, docs[0].script, relativePaths, hardPath);
@@ -59,7 +59,7 @@ function calculateCanvasImagePositions(database_ip, response, users, isPortrait,
 						var html  		= jade.renderFile('canvas.jade', {
 							"posArray" : posArray
 						});
-						makeFile(folder + "/" +"canvas.html", html);
+						makeFile(folder + "/" +"canvas.html", html, false);
 						console.log("Here's the html \n\n\t\t" + html);
 						
 						response.writeHead(200, {'Content-Type':'application/json'});
@@ -106,9 +106,14 @@ function makeDirectory(filePrefix) {
 	});
 }
 
-function makeFile(hardFile, data) {
+function makeFile(hardFile, data, isBase64) {
 	if(!(fs.existsSync(hardFile))){
-		fs.writeFile(hardFile, new Buffer(data, "base64"), function(err) {
+		var text;
+		if(isBase64)
+			text = new Buffer(data, "base64");
+		else
+			text = data;
+		fs.writeFile(hardFile, text, function(err) {
 			if(err)
 				console.log("HALP::::::::::::" + err);
 		});
