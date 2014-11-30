@@ -41,7 +41,6 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 
 function calculateCanvasImagePositions(database_ip, response, users, isPortrait, script, filenames, folder){
 	MongoClient.connect(database_ip, function(err, db) {
-		assert.equal(null, err);
 		db.collection('users', function(err, col) {
 			col.find(
 				{user_id : 
