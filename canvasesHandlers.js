@@ -53,26 +53,31 @@ function updateCanvas(response, payload, canvases, db) {
 		title 	: payload.title, 
 		author 	: payload.author 
 	};
-	var nextScript = "" + payload.current_user + "," 
-						+ payload.current_direction + "," 
-						+ payload.current_align;
-	payload.users.unshift(payload.current_user);
 	console.log("AFTER PUSH " + payload.users);
-	payload.active = !((payload.current_turn + 1) == payload.max_turns);
+	payload.active 	= !((payload.current_turn + 1) >= payload.max_turns);
+	var nextScript 	= " , , ";
+	var nextTurn 	= payload.max_turns;
+	var nextPlayer 	= payload.current_user + 1 % payload.users.length;
+	if(payload.active) {
+		nextScript 	= payload.current_user + "," 
+						+ payload.next_direction + "," 
+						+ payload.next_align;
+		nextTurn 	= payload.current_turn + 1;
+	}
 	var updateStatement = {
 		$push : {
 			script : nextScript,
 			image_data : payload.image_data
 		}, 
 		$set : {
-			current_user		: payload.users.pop(),
+			current_user		: nextPlayer
 			current_direction 	: payload.next_direction,
 			current_align		: payload.next_align,
-			current_turn		: payload.current_turn + 1,
-			users				: payload.users,
+			current_turn		: nextTurn,
 			active 				: payload.active
 		}
 	};
+	
 	console.log("UPDATE STATEMENT : " + JSON.stringify(updateStatement, 0, 4));
 	//console.log(" query: " + JSON.stringify(query, 0, 4));
 	// TODO: validate query
