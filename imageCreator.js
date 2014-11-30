@@ -27,7 +27,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 
 		for (var i = 0; i < images.length; i++) {
 			var relativeFile = "_" + i + ".png";
-			var hardFile = hardPath + relativeFile;
+			var hardFile = hardPath + "/" + relativeFile;
 			relativePaths.push(relativeFile);
 			makeFile(hardFile, images[i]);
 		}
@@ -58,7 +58,7 @@ function calculateCanvasImagePositions(database_ip, response, users, isPortrait,
 						var html  		= jade.renderFile('canvas.jade', {
 							"posArray" : posArray
 						});
-						makeFile(folder + "canvas.html", html);
+						makeFile(folder + "/" +"canvas.html", html);
 						
 						response.writeHead(200, {'Content-Type':'application/json'});
 						response.write(JSON.stringify(docs, 0, 4));
