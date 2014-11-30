@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
-	image 		= require('./imageCreator');
+	image 		= require('./imageCreator'),
+	gameLogic	= require('./positionAlgorithms1');
 
 function openCanvasesDB(response, payload, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
@@ -49,22 +50,23 @@ function insertCanvas(response, payload, canvases, db) {
 }
 // supported
 function updateCanvas(response, payload, canvases, db) {
-	//console.log("payload: " + JSON.stringify(payload, 0, 4));
 	var query = { 	
 		title 	: payload.title, 
 		author 	: payload.author 
 	};
 	console.log("AFTER PUSH " + payload.users);
-	payload.active 	= !((payload.current_turn + 1) >= payload.max_turns);
-	var nextScript 	= " , , ";
-	var nextTurn 	= payload.max_turns;
-	var nextUser 	= payload.current_user + 1 % payload.users.length;
-	if(!payload.active) {
-		nextScript 	= payload.current_user + "," 
-						+ payload.next_direction + "," 
-						+ payload.next_align;
-		nextTurn 	= payload.current_turn + 1;
-		nextUser 	= -1;
+	var active 			= gameLogic.isGameActive(payload),
+		nextScript 		= gameLogic.nextScript(payload),
+		nextUser 		= gameLogic.nextUser(payload),
+		nextDirection 	= gameLogic.nextDirection(payload),
+		nextAlign 		= gameLogic.nextAlign(payload),
+		nextTurn 		= payload.current_turn + 1;
+	if(!active) {
+		nextScript 		= " , , ";
+		nextUser 		= -1;
+		nextDirection 	= " ";
+		nextAlign 		= " ";
+		nextTurn 		= payload.max_turns;
 	}
 	var updateStatement = {
 		$push : {
@@ -73,10 +75,10 @@ function updateCanvas(response, payload, canvases, db) {
 		}, 
 		$set : {
 			current_user		: nextUser,
-			current_direction 	: payload.next_direction,
-			current_align		: payload.next_align,
+			current_direction 	: nextDirection,
+			current_align		: nextAlign,
 			current_turn		: nextTurn,
-			active 				: payload.active
+			active 				: active
 		}
 	};
 	

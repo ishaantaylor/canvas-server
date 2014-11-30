@@ -106,12 +106,23 @@ function makeDirectory(filePrefix) {
 	});
 }
 
+function makeImage(fileName, data){
+	makeFile(fileName, data, true);
+}
+
+function makeTextFile(fileName, data){
+	makeFile(fileName, data, false);
+}
+
 function makeFile(hardFile, data, isBase64) {
 	var text;
-	if(isBase64)
+	if(isBase64) {
 		text = new Buffer(data, "base64");
-	else
+		if(fs.exists())
+	}
+	else {
 		text = data;
+	}
 	fs.writeFile(hardFile, text, function(err) {
 		if(err)
 			console.log("HALP::::::::::::" + err);

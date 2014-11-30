@@ -71,4 +71,33 @@ function updateCurrentPositions(pos, size) {
 	pos.vertical.off = 0;
 }
 
-exports.getPositionJSON = calcPos;
+
+function getNextUser(data) {
+	return (data.current_user + 1) % data.users.length;
+}
+
+function getNextDirection(data) {
+	return data.next_direction;
+}
+
+function getNextAlign(data) {
+	return data.next_align;
+}
+
+function getNextScript(data) {
+	return data.current_user + "," 
+			+ data.next_direction + "," 
+			+ data.next_align;
+}
+
+function isCanvasComplete(data) {
+	return !((payload.current_turn + 1) >= payload.max_turns);
+}
+
+
+exports.getPositionJSON = 	calcPos;
+exports.nextUser 		=	getNextUser;
+exports.nextDirection 	=	getNextDirection;
+exports.nextAlign 		= 	getNextAlign;
+exports.nextScript 		=	getNextScript;
+exports.isGameActive 	= 	isCanvasComplete;
