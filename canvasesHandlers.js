@@ -58,7 +58,7 @@ function updateCanvas(response, payload, canvases, db) {
 	var nextScript 	= " , , ";
 	var nextTurn 	= payload.max_turns;
 	var nextUser 	= payload.current_user + 1 % payload.users.length;
-	if(payload.active) {
+	if(!payload.active) {
 		nextScript 	= payload.current_user + "," 
 						+ payload.next_direction + "," 
 						+ payload.next_align;
