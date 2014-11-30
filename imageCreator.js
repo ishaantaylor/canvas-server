@@ -30,10 +30,17 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 			var relativeFile = "_" + i + ".png";
 			var hardFile = hardPath + "/" + relativeFile;
 			relativePaths.push(relativeFile);
-			makeImage(hardFile, images[i], true);
+			makeImage(hardFile, images[i]);
 		}
 
-		calculateCanvasImagePositions(database_ip, response, users, docs[0].portrait, docs[0].script, relativePaths, hardPath);
+		calculateCanvasImagePositions(
+			database_ip, 
+			response, 
+			users, 
+			docs[0].portrait, 
+			docs[0].script, 
+			relativePaths, 
+			hardPath);
 
 		db.close();
 	});
@@ -59,7 +66,7 @@ function calculateCanvasImagePositions(database_ip, response, users, isPortrait,
 						var html  		= jade.renderFile('canvas.jade', {
 							"posArray" : posArray
 						});
-						makeTextFile(folder + "/" +"canvas.html", html, false);
+						makeTextFile(folder + "/" +"canvas.html", html);
 						console.log("Here's the html \n\n\t\t" + html);
 						
 						response.writeHead(200, {'Content-Type':'application/json'});
@@ -117,8 +124,9 @@ function makeTextFile(fileName, data){
 function makeFile(hardFile, data, isBase64) {
 	if(isBase64) {
 		var text = new Buffer(data, "base64");
-		if(!fs.existsSync(hardFile)) 
+		fs.exists(hardFile, function(exists){
 			fs.writeFileSync(hardFile, text);
+		});
 	}
 	else {
 		fs.writeFile(hardFile, data, function(err) {if(err)console.log("HALP::::::::::::" + err);});
