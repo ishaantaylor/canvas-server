@@ -12,6 +12,7 @@ function calcPos(users, script) {
 	pos[0].vertical = 0;
 	pos[0].horizontal = 0;
 	pos[0].user = users[intialUserName];
+	console.log("About to calculate positions \n" + JSON.stringify(pos, 0,4) + "\n\n\n\tAnd with users as \n" + JSON.stringify(users, 0,4));
 	for (var i = 1; i < script.length; i++) {
 		pos[i] = {};
 		var userDirAlign = script[i].split(" ");
