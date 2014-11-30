@@ -71,7 +71,7 @@ function calculateCanvasImagePositions(database_ip, response, users, isPortrait,
 	});
 }
 
-function convertPositionsToArray(usersNormed, script) {
+function convertPositionsToArray(pos, script, filenames) {
 	var posArray = [];
 	for(var i = 0; i < script.length; i++) {
 		pos[i].filename = filenames[i];
