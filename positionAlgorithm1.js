@@ -15,7 +15,7 @@ function calcPos(users, script) {
 	console.log("About to calculate positions \n" + JSON.stringify(pos, 0,4) + "\n\n\n\tAnd with users as \n" + JSON.stringify(users, 0,4));
 	for (var i = 1; i < script.length; i++) {
 		pos[i] = {};
-		var userDirAlign = script[i].split(" ");
+		var userDirAlign = script[i].split(",");
 		var major = "", minor = "";
 		pos[i].user = users[userDirAlign[0]];
 		if (userDirAlign[1] == "U" || userDirAlign[1] == "D") {
