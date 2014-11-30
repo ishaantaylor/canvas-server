@@ -15,7 +15,7 @@ function openCanvasesDB(response, payload, database_ip) {
 					queryCanvas(response, payload.body, canvases, db);
 					break;
 				case "generate":
-					image.create(response, payload.body, canvases, db);
+					image.create(database_ip, response, payload.body, canvases, db);
 					break;
 				default:
 					response.writeHead(422, {'Content-Type':'text/plain'});

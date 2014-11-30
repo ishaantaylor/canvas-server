@@ -5,7 +5,7 @@ var jade = require('jade'),
 
 
 
-function prepareCanvasForCreation(response, payload, canvases, db) {
+function prepareCanvasForCreation(database_ip, response, payload, canvases, db) {
 	//TODO:: Make this a call to fs for current working directory (cwd).
 	var canvasFolder = payload.title + "_" + payload.author;
 	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
@@ -15,6 +15,7 @@ function prepareCanvasForCreation(response, payload, canvases, db) {
 		title 	: payload.title,
 		author 	: payload.author			
 	};
+	console.log(query);
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query).toArray(function(err, docs) {
@@ -31,14 +32,14 @@ function prepareCanvasForCreation(response, payload, canvases, db) {
 			makeFile(hardFile, images[i]);
 		}
 
-		calculateCanvasImagePositions(response, users, docs[0].portrait, docs[0].script, relativePaths, hardPath);
+		calculateCanvasImagePositions(database_ip, response, users, docs[0].portrait, docs[0].script, relativePaths, hardPath);
 
 		db.close();
 	});
 		
 }
 
-function calculateCanvasImagePositions(response, users, isPortrait, script, filenames, folder){
+function calculateCanvasImagePositions(database_ip, response, users, isPortrait, script, filenames, folder){
 	MongoClient.connect(database_ip, function(err, db) {
 		assert.equal(null, err);
 		db.collection('users', function(err, col) {
