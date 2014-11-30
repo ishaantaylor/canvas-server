@@ -33,6 +33,7 @@ function insertCanvas(response, payload, canvases, db) {
 	payload.script = [];
 	payload.image_data = [];
 	payload.active = true;
+	payload.users.unshift(payload.author);
 	canvases.insert(payload, function(err, inserted) {
 		console.log("inserted: " + inserted);
 		if (!err) {
