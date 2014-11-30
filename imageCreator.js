@@ -80,8 +80,8 @@ function convertPositionsToArray(usersNormed, script) {
 }
 
 function createNormalizedUserObjects(usersList, isPortrait) {
-	console.log(usersList);
-	console.log(isPortrait);
+	console.log("Normalizing(usersList)" + usersList);
+	console.log("Normalizing(isPortrait)" + isPortrait);
 	var users = {};
 	for (var i = 0; i < usersList.length; i++) {
 		var userName = usersList[i].user_id;
@@ -100,14 +100,15 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 function makeDirectory(filePrefix) {
 	fs.readdir(filePrefix, function(err, dirs) {
 		if(err)
-			fs.mkdir(filePrefix, function(err){ console.log("HAAAALP:::::"+err); });	
+			fs.mkdir(filePrefix, function(err){ if(err) console.log("HAAAALP:::::"+err); });	
 	});
 }
 
 function makeFile(hardFile, data) {
 	if(!(fs.existsSync(hardFile))){
 		fs.writeFile(hardFile, new Buffer(data, "base64"), function(err) {
-			console.log("HALP::::::::::::" + err);
+			if(err)
+				console.log("HALP::::::::::::" + err);
 		});
 	}
 }
