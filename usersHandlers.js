@@ -5,10 +5,10 @@ function openUsersDB(res, data, database_ip) {
 		db.collection('users', function(err, users) {
 			switch(data.event) {
 				case "login":
-					loginUser(res, data, users, db);
+					loginUser(res, data.body, users, db);
 					break;
 				case "register": 
-					insertUser(res, data, users, db);
+					insertUser(res, data.body, users, db);
 					break;
 			}
 		});

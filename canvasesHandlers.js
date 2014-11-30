@@ -6,16 +6,16 @@ function openCanvasesDB(response, payload, database_ip) {
 		db.collection('canvases', function(err, canvases) {
 			switch (payload.event) {
 				case "insert":
-					insertCanvas(response, payload, canvases, db);
+					insertCanvas(response, payload.body, canvases, db);
 					break; 		
 				case "update":
-					updateCanvas(response, payload, canvases, db);
+					updateCanvas(response, payload.body, canvases, db);
 					break;
 				case "query":
-					queryCanvas(response, payload, canvases, db);
+					queryCanvas(response, payload.body, canvases, db);
 					break;
 				case "generate":
-					image.create(response, payload, canvases, db);
+					image.create(response, payload.body, canvases, db);
 					break;
 				default:
 					response.writeHead(422, {'Content-Type':'text/plain'});
@@ -92,9 +92,9 @@ function updateCanvas(response, payload, canvases, db) {
 function queryCanvas(response, payload, canvases, db) {
 	var query = 		payload.query;
 	var projection =	payload.projection;
-
+	
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-	canvases.find(query).toArray(function(err, docs) {
+	canvases.find(query, projection).toArray(function(err, docs) {
 		// console.log(docs.length);
 		// c = docs.length;
 		response.writeHead(200, {'Content-Type':'application/json'});
