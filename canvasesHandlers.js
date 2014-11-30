@@ -1,6 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator'),
-	gameLogic	= require('./positionAlgorithms1');
+	gameLogic	= require('./positionAlgorithm1');
 
 function openCanvasesDB(response, payload, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
