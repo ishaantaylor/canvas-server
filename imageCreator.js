@@ -107,17 +107,15 @@ function makeDirectory(filePrefix) {
 }
 
 function makeFile(hardFile, data, isBase64) {
-	if(!(fs.existsSync(hardFile))){
-		var text;
-		if(isBase64)
-			text = new Buffer(data, "base64");
-		else
-			text = data;
-		fs.writeFile(hardFile, text, function(err) {
-			if(err)
-				console.log("HALP::::::::::::" + err);
-		});
-	}
+	var text;
+	if(isBase64)
+		text = new Buffer(data, "base64");
+	else
+		text = data;
+	fs.writeFile(hardFile, text, function(err) {
+		if(err)
+			console.log("HALP::::::::::::" + err);
+	});
 }
 
 exports.create = prepareCanvasForCreation;
