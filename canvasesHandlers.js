@@ -73,7 +73,7 @@ function updateCanvas(response, payload, canvases, db) {
 			active 				: payload.active
 		}
 	};
-	console.log("UPDATE STATEMENT : " + updateStatement);
+	console.log("UPDATE STATEMENT : " + JSON.stringify(updateStatement, 0, 4));
 	//console.log(" query: " + JSON.stringify(query, 0, 4));
 	// TODO: validate query
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
