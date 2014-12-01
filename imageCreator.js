@@ -51,8 +51,9 @@ function calculateCanvasImagePositions(database_ip, response, canvas) {
 	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
 	var html  		= jade.renderFile('canvas.jade', {
-		"posArray" : pos.arr,
-		"rotation" : (canvas.portrait ? 0 : 270)
+		"posArray" 	: pos.arr,
+		"rotation" 	: (canvas.portrait ? 0 : 270),
+		"pretty"	: true
 	});
 	fs.writeFileSync(hardString + "/" + canvas.title + "/" + canvas.current_turn +".html", html);
 
