@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
-	image 		= require('./imageCreator'),
-	gameLogic	= require('./positionAlgorithm1'),
-	fs 			= require('fs-extra');
+image 		= require('./imageCreator'),
+gameLogic	= require('./positionAlgorithm1'),
+fs 			= require('fs-extra');
 
 var hardString = process.cwd() + "/images";
 
@@ -10,23 +10,23 @@ function openCanvasesDB(response, payload, database_ip) {
 		db.collection('canvases', function(err, canvases) {
 			switch (payload.event) {
 				case "insert":
-					insertCanvas(response, payload.body, canvases, db);
-					break; 		
+				insertCanvas(response, payload.body, canvases, db);
+				break; 		
 				case "update":
-					updateCanvas(response, payload.body, canvases, db);
-					break;
+				updateCanvas(response, payload.body, canvases, db);
+				break;
 				case "query":
-					queryCanvas(response, payload.body, canvases, db);
-					break;
+				queryCanvas(response, payload.body, canvases, db);
+				break;
 				case "get_image":
-					getImage(response, payload.body, canvases, db);
-					break;
+				getImage(response, payload.body, canvases, db);
+				break;
 				default:
-					response.writeHead(422, {'Content-Type':'text/plain'});
+				response.writeHead(422, {'Content-Type':'text/plain'});
 					response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 					break;
-			}
-		});
+				}
+			});
 	});
 }
 
@@ -59,11 +59,11 @@ function updateCanvas(response, payload, canvases, db) {
 	};
 	console.log("AFTER PUSH " + payload.users);
 	var active 			= gameLogic.isGameActive(payload),
-		nextScript 		= gameLogic.nextScript(payload),
-		nextUser 		= gameLogic.nextUser(payload),
-		nextDirection 	= gameLogic.nextDirection(payload),
-		nextAlign 		= gameLogic.nextAlign(payload),
-		nextTurn 		= payload.current_turn + 1;
+	nextScript 		= gameLogic.nextScript(payload),
+	nextUser 		= gameLogic.nextUser(payload),
+	nextDirection 	= gameLogic.nextDirection(payload),
+	nextAlign 		= gameLogic.nextAlign(payload),
+	nextTurn 		= payload.current_turn + 1;
 	if(!active) {
 		nextScript 		= " , , ";
 		nextUser 		= 0;
@@ -139,11 +139,18 @@ function getImage(response, payload, canvases, db) {
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
 		fs.readFile(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", function(err, fd){
-			response.writeHead(200, {'Content-Type':'application/json'});	
-			console.log(fd);	
-			response.write(fd);
-			response.end(); 
-			db.close();
+			if(err){
+				response.writeHead(404, {'Content-Type':'text/plain'});
+				console.log(err);
+				response.end(); 
+				db.close();
+			} else {
+				response.writeHead(200, {'Content-Type':'application/json'});	
+				console.log("I GOT THIS HTML" + fd);	
+				response.write(fd);
+				response.end(); 
+				db.close(); 
+			}
 		});
 
 	});
