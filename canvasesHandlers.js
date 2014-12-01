@@ -145,7 +145,6 @@ function getImage(response, payload, canvases, db) {
 				db.close(); 
 			}
 		});
-
 	});
 }
 
