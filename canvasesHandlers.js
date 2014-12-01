@@ -98,14 +98,15 @@ function updateCanvas(response, payload, canvases, db) {
 		}
 	};
 	
-	canvases.update(query, updateStatement, function(err) {
+	canvases.findAndModify(query, [['_id','asc']], updateStatement, function(err, updatedCanvas) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
-					image.create(response, payload, canvases, db);
+					image.create(response, updatedCanvas);
+					db.close();
 				} else {
 					//TODO Resource already exists
 					response.writeHead(404, {'Content-Type':'text/plain'});
@@ -142,7 +143,7 @@ function getImage(response, payload, canvases, db) {
 		author 	: payload.author 
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		fs.readFile(hardString + "/" + payload.title + "/" + (docs[0].current_turn - 1) + ".html", function(err, fd) {
+		fs.readFile(hardString + "/" + payload.title + "/" + "image.html", function(err, fd) {
 			if (err) {
 				response.writeHead(404, {'Content-Type':'text/plain'});
 				console.log(err);
@@ -150,7 +151,7 @@ function getImage(response, payload, canvases, db) {
 				db.close();
 			} else {
 				response.writeHead(200, {'Content-Type':'application/json'});	
-				console.log("I GOT THIS HTML" + fd);	
+				console.log("I GOT THIS HTML \n\t" + fd);	
 				response.write(fd);
 				response.end(); 
 				db.close(); 

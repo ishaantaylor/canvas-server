@@ -23,15 +23,10 @@ var example = {
 var hardString = process.cwd() + "/images";
 
 
-function prepareCanvasForCreation(response, payload, canvases, db) {
-	//TODO:: Make this a call to fs for current working directory (cwd).
-	var canvasFolder = payload.title + "_" + payload.author;
-	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
-	var hardPath =  hardString + "/" + canvasFolder;
-
-	calculateCanvasImagePositions(response, docs[0]);
-	db.close();
-
+function prepareCanvasForCreation(response, canvas, db) {
+	var canvasFolder = canvas.title + "_" + canvas.author;
+	var hardPath 	 = hardString + "/" + canvasFolder;
+	calculateCanvasImagePositions(response, canvas);
 }
 
 function calculateCanvasImagePositions(response, canvas) {
