@@ -1,13 +1,13 @@
 
 var http = require('http'),
-url = require('url'),
-qs = require('querystring'),
-exec = require('child_process').exec,
-MongoClient = require('mongodb').MongoClient,
-assert = require('assert'),
-fs = require('fs-extra'),
-users = require('./usersHandlers'),
-canvases = require('./canvasesHandlers');
+	url = require('url'),
+	qs = require('querystring'),
+	exec = require('child_process').exec,
+	MongoClient = require('mongodb').MongoClient,
+	assert = require('assert'),
+	fs = require('fs-extra'),
+	users = require('./usersHandlers'),
+	canvases = require('./canvasesHandlers');
 /*
 var outward_ip = '127.0.0.1';
 var outward_port = 1337;
@@ -15,7 +15,6 @@ var outward_port = 1337;
 var outward_ip = '129.22.50.175';
 var outward_port = 8080;
 var location = '129.22.59.175:';
-// var sql_ip = '';
 
 var database_ip = "mongodb://localhost:27017/test";
 
@@ -53,10 +52,6 @@ http.createServer(function (incoming_request, our_response) {
 		our_response.end();
 	}
 	// handle each case - TODO: eventually change to switch-case
-	/*
-	if (incoming_request.method == 'GET') {
-		handleGETrequest(incoming_request, our_response);
-	} else */
 }).listen(outward_port, outward_ip);
 
 console.log('Server running at http://' + outward_ip + ":" + outward_port + '/');
