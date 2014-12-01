@@ -10,6 +10,9 @@ function openUsersDB(res, data, database_ip) {
 				case "register": 
 					insertUser(res, data.body, users, db);
 					break;
+				default:
+					res.response.writeHead(400, {'Content-Type':'text/plain'});
+					res.end();
 			}
 		});
 	});
