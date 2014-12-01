@@ -1,0 +1,95 @@
+commit b9a3ca51c9e75206f20b14646122362ef639046a
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:55:35 2014 -0500
+
+    added update_canvas method
+
+commit 28a4d3b1a8358b873fbb94246b2f5d03ea8dbb54
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:42:33 2014 -0500
+
+    added insert_canvas method
+
+commit 73e63e5682a01912a992b3bb929f8cd4f59405ee
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:38:23 2014 -0500
+
+    ){ --> ) {
+
+commit a7fddef296a2688b58fbfb12fd6bb4088381903d
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:36:47 2014 -0500
+
+    added register_user method
+
+commit 564ec7b608daa8c7d587c970ad0ef55b167ca7f3
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:13:19 2014 -0500
+
+    improved readability by reordering functions
+
+commit 071c29f6d8dda1868d3fea5fa155e104bcef4316
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 01:02:32 2014 -0500
+
+    improved readability by reordering functions and adding comments, added TODOs
+
+commit 27982008b65650edcba68dad55f9e8091906dffe
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 00:59:15 2014 -0500
+
+    fixed race conditions with callbacks, refactored as well
+
+commit 470705164bd027afaba718f7d02b4b2539f4a20c
+Author: ishaantaylor <ist2@case.edu>
+Date:   Thu Nov 20 00:12:15 2014 -0500
+
+    removed broken code
+
+commit 9395c742f5e4df6d73b65674a83a5d26c40b5dd7
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:54:30 2014 -0500
+
+    small readability improvements and refactoring
+
+commit e8142753ca7da49ccc65269d79c3fffc0f913436
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:43:55 2014 -0500
+
+    activeFlag comparator from undefined to null as per /canvas/DBEvent.java line 16
+
+commit e611310da579152a0cb19708b72c21fca5465a2a
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:38:41 2014 -0500
+
+    bit o refactoring
+
+commit 025e3610242cb46a1242f8242938f307a292d50a
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:24:50 2014 -0500
+
+    insert_canvas code moved to query.. was in incorrect spot
+
+commit f213f6e419bff7e90c673ca3c45d7fca5c3e7dd0
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:23:04 2014 -0500
+
+    minor changes to insert_canvas
+
+commit fe223a85a828ebd7439dd7798c80b5015d2d2d9e
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 23:02:26 2014 -0500
+
+    added login action
+
+commit f24ba5e70d337b4ad1a1f84cbd0d688a4ff923ac
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 19 16:36:22 2014 -0500
+
+    added mongodb database, completed connection from request to database (keeping track of all incoming requests), added all server events possible, whittled down all request possibilitiies to simply POST request for sake of time (while trying to keep it RESTful)
+
+commit fd522f6bd6554f96fe8dc82bd075a6258881b279
+Author: ishaantaylor <ist2@case.edu>
+Date:   Wed Nov 5 18:23:02 2014 -0500
+
+    hub.js supports posting and getting json to and from server
