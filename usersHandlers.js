@@ -14,6 +14,7 @@ function openUsersDB(res, data, database_ip) {
 		});
 	});
 }
+
 function loginUser(res, data, users, db) {
 	var query = {
 		user_id 	: data.user_id,
