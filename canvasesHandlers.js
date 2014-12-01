@@ -18,8 +18,8 @@ function openCanvasesDB(response, payload, database_ip) {
 				case "query":
 					queryCanvas(response, payload.body, canvases, db);
 					break;
-				case "generate":
-					image.create(database_ip, response, payload.body, canvases, db);
+				case "get_image":
+					getImage(response, payload.body, canvases, db);
 					break;
 				default:
 					response.writeHead(422, {'Content-Type':'text/plain'});
@@ -127,6 +127,19 @@ function queryCanvas(response, payload, canvases, db) {
 		response.writeHead(200, {'Content-Type':'application/json'});
 		response.write(JSON.stringify(docs, 0, 4));
 		
+		response.end(); 
+		db.close();
+	});
+}
+
+function getImage(response, payload, canvases, db) {
+	var query = { 	
+		title 	: payload.title, 
+		author 	: payload.author 
+	};
+	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
+		fs.open(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", 'r', function(err, fd){});
+		response.writeHead(200, {'Content-Type':'application/json'});		
 		response.end(); 
 		db.close();
 	});
