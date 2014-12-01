@@ -43,6 +43,7 @@ function loginUser(res, data, users, db) {
 		}
 	);
 }
+
 function insertUser(res, data, users, db) {
 	users.insert(
 		data, 
