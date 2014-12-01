@@ -56,12 +56,25 @@ function updateCanvas(response, payload, canvases, db) {
 		author 	: payload.author 
 	};
 
-	var active 			= gameLogic.isGameActive(payload),
-		nextScript 		= gameLogic.nextScript(payload),
-		nextUser 		= gameLogic.nextUser(payload),
-		nextDirection 	= gameLogic.nextDirection(payload),
-		nextAlign 		= gameLogic.nextAlign(payload),
+	var active = undefined,
+		nextScript,
+		nextUser,
+		nextDirection,
+		nextAlign,
+		nextTurn;
+	
+	try {
+		active 			= gameLogic.isGameActive(payload);
+		nextScript 		= gameLogic.nextScript(payload);
+		nextUser 		= gameLogic.nextUser(payload);
+		nextDirection 	= gameLogic.nextDirection(payload);
+		nextAlign 		= gameLogic.nextAlign(payload);
 		nextTurn 		= payload.current_turn + 1;
+	} catch (error) {
+		console.log("gameLogic error: " + error);
+	}
+	
+	// if theres an error in gameLogic, game shuts down
 	if (!active) {
 		nextScript 		= " , , ";
 		nextUser 		= 0;
