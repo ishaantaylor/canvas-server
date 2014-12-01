@@ -19,6 +19,7 @@ function openCanvasesDB(response, payload, database_ip) {
 				queryCanvas(response, payload.body, canvases, db);
 				break;
 				case "get_image":
+					console.log("Body Image");
 				getImage(response, payload.body, canvases, db);
 				break;
 				default:
