@@ -70,8 +70,10 @@ function updateCanvas(response, payload, canvases, db) {
 		nextDirection 	= gameLogic.nextDirection(payload);
 		nextAlign 		= gameLogic.nextAlign(payload);
 		nextTurn 		= payload.current_turn + 1;
+		console.log(payload.current_turn + " and " + nextTurn);
 	} catch (error) {
 		console.log("gameLogic error: " + error);
+		active = false;
 	}
 	
 	// if theres an error in gameLogic, game shuts down
@@ -82,7 +84,6 @@ function updateCanvas(response, payload, canvases, db) {
 		nextAlign 		= " ";
 		nextTurn 		= payload.max_turns;
 	}
-
 	var updateStatement = {
 		$push : {
 			script 		: nextScript,

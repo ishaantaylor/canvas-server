@@ -45,7 +45,7 @@ function calculateCanvasImagePositions(response, canvas) {
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
 	});
-	fs.writeFileSync(hardString + "/" + canvas.title + "/" + (canvas.current_turn - 1) +".html", html);
+	fs.writeFileSync(hardString + "/" + canvas.title + "/" + "image.html", html);
 
 	response.write(html);
 	response.writeHead(200, {'Content-Type':'application/json'});
