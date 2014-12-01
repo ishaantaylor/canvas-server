@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
-image 		= require('./imageCreator'),
-gameLogic	= require('./positionAlgorithm1'),
-fs 			= require('fs-extra');
+	image 		= require('./imageCreator'),
+	gameLogic	= require('./positionAlgorithm1'),
+	fs 			= require('fs-extra');
 
 var hardString = process.cwd() + "/images";
 
@@ -25,12 +25,11 @@ function openCanvasesDB(response, payload, database_ip) {
 					response.writeHead(422, {'Content-Type':'text/plain'});
 					response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 					break;
-				}
-			});
+			}
+		});
 	});
 }
 
-// TODO: figure out if we are using only one method of inserting canvas with indices and then stitching them or updating an entire canvas
 // supported
 function insertCanvas(response, payload, canvases, db) {
 	console.log(payload);
