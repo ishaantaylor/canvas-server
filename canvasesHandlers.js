@@ -96,7 +96,7 @@ function updateCanvas(response, payload, canvases, db) {
 			fs.exists(imageFileName, function(exists){
 				if(!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
-					image.create(database_ip, response, payload, canvases, db);
+					image.create(response, payload, canvases, db);
 
 				} else {
 					//TODO Resource already exists

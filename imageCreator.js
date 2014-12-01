@@ -23,7 +23,7 @@ var example = {
 var hardString = process.cwd() + "/images";
 
 
-function prepareCanvasForCreation(database_ip, response, payload, canvases, db) {
+function prepareCanvasForCreation(response, payload, canvases, db) {
 	//TODO:: Make this a call to fs for current working directory (cwd).
 	var canvasFolder = payload.title + "_" + payload.author;
 	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
@@ -36,8 +36,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		calculateCanvasImagePositions(
-			database_ip, 
+		calculateCanvasImagePositions( 
 			response, 
 			docs[0]);
 		db.close();
@@ -45,7 +44,7 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 
 }
 
-function calculateCanvasImagePositions(database_ip, response, canvas) {
+function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	var pos 		= algorithm1.initPos();
 	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
