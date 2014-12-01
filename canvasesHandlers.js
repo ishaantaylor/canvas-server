@@ -102,7 +102,7 @@ function updateCanvas(response, payload, canvases, db) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
 			fs.exists(imageFileName, function(exists) {
-				if(!exists) {
+				if (!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
 					image.create(response, payload, canvases, db);
 
@@ -112,7 +112,6 @@ function updateCanvas(response, payload, canvases, db) {
 					response.end(); 
 					db.close();
 				}
-
 			});
 		} else {
 			response.writeHead(404, {'Content-Type':'text/plain'});
