@@ -70,7 +70,7 @@ function updateCanvas(response, payload, canvases, db) {
 		nextDirection 	= gameLogic.nextDirection(payload);
 		nextAlign 		= gameLogic.nextAlign(payload);
 		nextTurn 		= payload.current_turn + 1;
-		console.log(payload.current_turn + " and " + nextTurn);
+		console.log(payload.current_user + " and " + nextUser + " and " + payload.users);
 	} catch (error) {
 		console.log("gameLogic error: " + error);
 		active = false;
