@@ -27,15 +27,17 @@ function loginUser(res, data, users, db) {
 			res.end(); 
 			users.update(
 				query,
-				{$set: {
-					short_arm 	: data.short_arm, 
-					long_arm	: data.long_arm
+				{ $set: {
+						short_arm 	: data.short_arm, 
+						long_arm	: data.long_arm
 						}
-				} , 
-				function(err){
+				}, 
+				function(err) {
 					db.close();
-			});
-		});
+				}
+			);
+		}
+	);
 }
 function insertUser(res, data, users, db) {
 	users.insert(
@@ -47,7 +49,8 @@ function insertUser(res, data, users, db) {
 				res.writeHead(418, {'Content-Type':'text/plain'});
 			res.end();
 			db.close();
-		});
+		}
+	);
 }
 
 exports.open 	= openUsersDB;
