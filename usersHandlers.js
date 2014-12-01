@@ -10,33 +10,39 @@ function openUsersDB(res, data, database_ip) {
 				case "register": 
 					insertUser(res, data.body, users, db);
 					break;
+				default:
+					res.response.writeHead(400, {'Content-Type':'text/plain'});
+					res.end();
 			}
 		});
 	});
 }
+
 function loginUser(res, data, users, db) {
 	var query = {
 		user_id 	: data.user_id,
 		password	: data.password
 	};
 	users.find(query).toArray(function(err, docs) {
-			if (docs.length == 0)
-				res.writeHead(401, {'Content-Type':'text/plain'});
-			else if (!err)
-				res.writeHead(200, {'Content-Type':'text/plain'});	
-			res.end(); 
-			users.update(
-				query,
-				{$set: {
+		if (docs.length == 0)
+			res.writeHead(401, {'Content-Type':'text/plain'});
+		else if (!err)
+			res.writeHead(200, {'Content-Type':'text/plain'});	
+		res.end(); 
+		users.update(
+			query,
+			{ $set: {
 					short_arm 	: data.short_arm, 
 					long_arm	: data.long_arm
-						}
-				} , 
-				function(err){
-					db.close();
-			});
-		});
+					}
+			}, 
+			function(err) {
+				db.close();
+			}
+		);
+	});
 }
+
 function insertUser(res, data, users, db) {
 	users.insert(
 		data, 
@@ -47,7 +53,8 @@ function insertUser(res, data, users, db) {
 				res.writeHead(418, {'Content-Type':'text/plain'});
 			res.end();
 			db.close();
-		});
+		}
+	);
 }
 
 exports.open 	= openUsersDB;
