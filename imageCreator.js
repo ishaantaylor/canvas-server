@@ -1,15 +1,32 @@
 var jade = require('jade'),
-	fs = require('fs'),
-	MongoClient = require('mongodb').MongoClient,
-	algorithm1 = require('./positionAlgorithm1');
+fs = require('fs'),
+MongoClient = require('mongodb').MongoClient,
+algorithm1 = require('./positionAlgorithm1');
 
+
+var example = {
+	srcPath: undefined,
+	srcData: null,
+	srcFormat: null,
+	dstPath: undefined,
+	quality: 0.8,
+	format: 'jpg',
+	progressive: false,
+	width: 0,
+	height: 0,
+	strip: true,
+	filter: 'Lagrange',
+	sharpening: 0.2,
+	customArgs: []
+}
+
+var hardString = process.cwd() + "/images";
 
 
 function prepareCanvasForCreation(database_ip, response, payload, canvases, db) {
 	//TODO:: Make this a call to fs for current working directory (cwd).
 	var canvasFolder = payload.title + "_" + payload.author;
 	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
-	var hardString = process.cwd() + "/images";
 	var hardPath =  hardString + "/" + canvasFolder;
 	var query = {
 		title 	: payload.title,
@@ -18,90 +35,49 @@ function prepareCanvasForCreation(database_ip, response, payload, canvases, db) 
 	console.log("In prepare ::: " + query);
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-	canvases.find(query).toArray(function(err, docs) {
-		var users = docs[0].users;
-		users.push(docs[0].current_user)
-		var images = docs[0].image_data;
-		var relativePaths = [];
-		makeDirectory(hardPath);
-
-
-		for (var i = 0; i < images.length; i++) {
-			var relativeFile = "_" + i + ".png";
-			var hardFile = hardPath + "/" + relativeFile;
-			relativePaths.push(relativeFile);
-			makeImage(hardFile, images[i]);
-		}
-
+	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
 		calculateCanvasImagePositions(
 			database_ip, 
 			response, 
-			users, 
-			docs[0].portrait, 
-			docs[0].script, 
-			relativePaths, 
-			hardPath);
-
+			docs[0]);
 		db.close();
 	});
-		
+
 }
 
-function calculateCanvasImagePositions(database_ip, response, users, isPortrait, script, filenames, folder){
-	MongoClient.connect(database_ip, function(err, db) {
-		db.collection('users', function(err, col) {
-			col.find(
-				{user_id : 
-					{ $in : users }
-				}).toArray(function(err, docs) {
-					if(err) {
-						console.log(err);
-						response.writeHead(200, {'Content-Type':'application/json'});
-						response.write(JSON.stringify(docs, 0, 4));
-					} else {
-						// BEGIN CALLBACK //
-						var usersNormed = createNormalizedUserObjects(docs, isPortrait);
-						var pos 		= algorithm1.getPositionJSON(usersNormed, script);
-						var posArray 	= convertPositionsToArray(pos, script, filenames);
-						var html  		= jade.renderFile('canvas.jade', {
-							"posArray" : posArray
-						});
-						makeTextFile(folder + "/" +"canvas.html", html);
-						console.log("Here's the html \n\n\t\t" + html);
-						
-						response.writeHead(200, {'Content-Type':'application/json'});
-						response.write(JSON.stringify(docs, 0, 4));
-					}
-					response.end(); 
-					db.close();
-			});
-		});
+function calculateCanvasImagePositions(database_ip, response, canvas) {
+	// BEGIN CALLBACK //
+	var pos 		= algorithm1.initPos();
+	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
+	var pos 		= algorithm1.getPositionJSON(users, canvas.script);
+	var html  		= jade.renderFile('canvas.jade', {
+		"posArray" : pos.arr,
+		"rotation" : (canvas.portrait ? 0 : 270)
 	});
-}
+	fs.writeFileSync(hardString + "/" + canvas.title + "/" + canvas.current_turn +".html", html);
 
-function convertPositionsToArray(pos, script, filenames) {
-	var posArray = [];
-	for(var i = 0; i < script.length; i++) {
-		pos[i].filename = filenames[i];
-		posArray.push(pos[i]);
-	}
-	return posArray;
+	response.write(html);
+	response.writeHead(200, {'Content-Type':'application/json'});
+	response.end(); 
+	db.close();
 }
 
 function createNormalizedUserObjects(usersList, isPortrait) {
 	console.log("Normalizing(usersList)" + usersList);
 	console.log("Normalizing(isPortrait)" + isPortrait);
-	var users = {};
+	var users = [];
+
 	for (var i = 0; i < usersList.length; i++) {
-		var userName = usersList[i].user_id;
-		users[userName] = {"vertical" : 0, "horizontal" : 0};
+		var user = usersList[i];
+		users.push({"y" : 0, "x" : 0});
 		if(isPortrait){
-			users[userName].vertical = usersList[i].long_arm;
-			users[userName].horizontal = usersList[i].short_arm;
+			users[i].y 	= usersList[i].long_arm;
+			users[i].x 	= usersList[i].short_arm;
 		} else {
-			users[userName].vertical = usersList[i].short_arm;
-			users[userName].horizontal = usersList[i].long_arm;
+			users[i].y 	= usersList[i].short_arm;
+			users[i].x 	= usersList[i].long_arm;
 		}
+		users[i].name = usersList[i].user_id;
 	}
 	return users;
 }
@@ -133,4 +109,8 @@ function makeFile(hardFile, data, isBase64) {
 	}
 }
 
-exports.create = prepareCanvasForCreation;
+exports.create    		= prepareCanvasForCreation;
+exports.makeImage 		= makeImage;
+exports.makeTextFile 	= makeTextFile;
+exports.makeDirectory 	= makeDirectory;
+exports.makeFile 		= makeFile;

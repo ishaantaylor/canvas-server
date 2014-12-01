@@ -1,6 +1,9 @@
 var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator'),
-	gameLogic	= require('./positionAlgorithm1');
+	gameLogic	= require('./positionAlgorithm1'),
+	fs 			= require('fs-extras');
+
+var hardString = process.cwd() + "/images";
 
 function openCanvasesDB(response, payload, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
@@ -39,11 +42,11 @@ function insertCanvas(response, payload, canvases, db) {
 		console.log("inserted: " + inserted);
 		if (!err) {
 			response.writeHead(201, {'Content-Type':'text/plain'});
+			fs.mkdirsSync(hardString + "/" + payload.title);
 		} else {
 			response.writeHead(418, {'Content-Type':'text/plain'});
 			console.log(err);
 		}
-		
 		response.end();
 		db.close();
 	});
@@ -89,13 +92,26 @@ function updateCanvas(response, payload, canvases, db) {
 	canvases.update(query, updateStatement, function(err) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});
+			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
+			fs.exists(imageFileName, function(exists){
+				if(!exists) {
+					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
+					image.create(database_ip, response, payload, canvases, db);
+
+				} else {
+					//TODO Resource already exists
+					response.writeHead(404, {'Content-Type':'text/plain'});
+					response.end(); 
+					db.close();
+				}
+
+			});
 		} else {
 			response.writeHead(404, {'Content-Type':'text/plain'});
 			console.log(err);
+			response.end(); 
+			db.close();
 		}
-
-		response.end(); 
-		db.close();
 	});
 }
 // not yet supported

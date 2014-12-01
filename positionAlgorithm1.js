@@ -1,37 +1,25 @@
-function calcPos(users, script) {
-	var intialUserName = script[0].split(",")[0];
-	var pos = {}; pos.horizontal = {}; pos.vertical = {};
-	console.log(intialUserName);
-	console.log(users);
-	console.log(users[intialUserName]);
-	pos.horizontal.size = users[intialUserName].horizontal;
-	pos.vertical.size = users[intialUserName].vertical;
-	pos.vertical.off = 0;
-	pos.horizontal.off = 0;
-	pos[0] = {};
-	pos[0].vertical = 0;
-	pos[0].horizontal = 0;
-	pos[0].user = users[intialUserName];
+function calcPos(pos, users, script) {
 	console.log("About to calculate positions \n" + JSON.stringify(pos, 0,4) + "\n\n\n\tAnd with users as \n" + JSON.stringify(users, 0,4));
-	for (var i = 1; i < script.length; i++) {
-		pos[i] = {};
-		var userDirAlign = script[i].split(",");
+	for (var i = 0; i < script.length; i++) {
+		var userDirAlign = script[i].split(","),
+			user_index 	= parseInt(userDirAlign[0]),
+			dir 		= userDirAlign[1],
+			align 		= userDirAlign[2];
 		var major = "", minor = "";
-		pos[i].user = users[userDirAlign[0]];
-		if (userDirAlign[1] == "U" || userDirAlign[1] == "D") {
-			major = "vertical"; minor = "horizontal";
-		} else {
-			major = "horizontal"; minor = "vertical";
-		}	
+
+		pos.arr.push({"u" : users[user_index]});
+		pos.arr[i].user = users[user_index];
+		if (dir == "U" || dir == "D") 	major = "y"; minor = "x";
+		else  							major = "x"; minor = "y";
 		calcPosHelper(pos, major, minor, 
-			users[userDirAlign[0]], userDirAlign[1], userDirAlign[2], i);
+			users[user_index], dir, align, i);
 	}
 	return pos;
 }
 
 function calcPosHelper(pos, major, minor, user, dir, align, i){
 	if(align == "n")
-		pos[i][minor] = 0;
+		pos.arr[i][minor] = 0;
 	else {
 		var difference = 0;
 		if(align == "m")
@@ -40,35 +28,30 @@ function calcPosHelper(pos, major, minor, user, dir, align, i){
 			difference = pos[minor].size - user[minor];
 
 		if(difference < 0) {
-			pos[i][minor] = 0;
+			pos.arr[i][minor] = 0;
 			pos[minor].off += -difference;
 		} 
 		else 
-			pos[i][minor] = difference;
+			pos.arr[i][minor] = difference;
 	}
 
-	if (dir == "D" || dir == "R") {
-		pos[i][major] = pos[major].size;
-	} else {
-		pos[i][major] = 0;
+	if (dir == "D" || dir == "R") 
+		pos.arr[i][major] = pos[major].size;
+	else {
+		pos.arr[i][major] = 0;
 		pos[major].off += user[major];
 	}
-
 	pos[major].size += user[major];
 	if(user[minor] > pos[minor].size) 
 		pos[minor].size = user[minor];
-	updateCurrentPositions(pos, i);
-}
 
-function updateCurrentPositions(pos, size) {
-	var offx = pos.horizontal.off;
-	var offy = pos.vertical.off;
-	for(var i = 0; i <= size; i++){
-		pos[i].horizontal += offx;
-		pos[i].vertical += offy;
+
+	for(var j = 0; j <= i - 1; j++){
+		pos.arr[i][major] += pos[major].off;
+		pos.arr[i][minor] += pos[minor].off;
 	}
-	pos.horizontal.off = 0;
-	pos.vertical.off = 0;
+	pos[major].off = 0;
+	pos[minor].off = 0;
 }
 
 
@@ -86,12 +69,20 @@ function getNextAlign(data) {
 
 function getNextScript(data) {
 	return data.current_user + "," 
-			+ data.next_direction + "," 
-			+ data.next_align;
+	+ data.next_direction + "," 
+	+ data.next_align;
 }
 
 function isCanvasComplete(data) {
 	return !((data.current_turn + 1) >= data.max_turns);
+}
+
+function initializePositionObject()/*()*/ {
+	var pos = {}; 
+	pos.x = {}; pos.x.size = 0; pos.x.off = 0;
+	pos.y = {}; pos.y.size = 0; pos.y.off = 0;
+	pos.arr = [];
+	return pos;
 }
 
 
@@ -101,3 +92,4 @@ exports.nextDirection 	=	getNextDirection;
 exports.nextAlign 		= 	getNextAlign;
 exports.nextScript 		=	getNextScript;
 exports.isGameActive 	= 	isCanvasComplete;
+exports.initPos 		=   initializePositionObject;
