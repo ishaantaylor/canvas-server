@@ -66,7 +66,7 @@ function updateCanvas(response, payload, canvases, db) {
 		nextTurn 		= payload.current_turn + 1;
 	if(!active) {
 		nextScript 		= " , , ";
-		nextUser 		= -1;
+		nextUser 		= 0;
 		nextDirection 	= " ";
 		nextAlign 		= " ";
 		nextTurn 		= payload.max_turns;

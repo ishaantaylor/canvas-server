@@ -7,7 +7,7 @@ function calcPos(pos, users, script) {
 			align 		= userDirAlign[2];
 		var major = "", minor = "";
 
-		pos.arr.push({"u" : users[user_index]});
+		pos.arr.push({"u" : users[user_index], "i" : i});
 		if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
 		else  							{major = "x"; minor = "y";}
 		calcPosHelper(pos, major, minor, 
