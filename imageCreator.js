@@ -49,6 +49,7 @@ function calculateCanvasImagePositions(response, canvas) {
 	var pos 		= algorithm1.initPos();
 	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
+	console.log("Positions determined : \n\n\t" + pos.arr);
 	var html  		= jade.renderFile('canvas.jade', {
 		"posArray" 	: pos.arr,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
