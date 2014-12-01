@@ -83,7 +83,6 @@ function updateCanvas(response, payload, canvases, db) {
 		nextTurn 		= payload.max_turns;
 	}
 
-
 	var updateStatement = {
 		$push : {
 			script 		: nextScript,
