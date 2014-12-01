@@ -5,7 +5,7 @@ qs = require('querystring'),
 exec = require('child_process').exec,
 MongoClient = require('mongodb').MongoClient,
 assert = require('assert'),
-fs = require('fs'),
+fs = require('fs-extra'),
 users = require('./usersHandlers'),
 canvases = require('./canvasesHandlers');
 /*

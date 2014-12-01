@@ -1,5 +1,5 @@
 var jade = require('jade'),
-fs = require('fs'),
+fs = require('fs-extra'),
 MongoClient = require('mongodb').MongoClient,
 algorithm1 = require('./positionAlgorithm1');
 

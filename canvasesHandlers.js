@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator'),
 	gameLogic	= require('./positionAlgorithm1'),
-	fs 			= require('fs-extras');
+	fs 			= require('fs-extra');
 
 var hardString = process.cwd() + "/images";
 
