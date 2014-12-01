@@ -28,19 +28,9 @@ function prepareCanvasForCreation(response, payload, canvases, db) {
 	var canvasFolder = payload.title + "_" + payload.author;
 	// var hardString = "/home/thugz/Documents/EECS/canvas-server/images/";
 	var hardPath =  hardString + "/" + canvasFolder;
-	var query = {
-		title 	: payload.title,
-		author 	: payload.author			
-	};
-	console.log("In prepare ::: " + query);
 
-	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
-	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		calculateCanvasImagePositions( 
-			response, 
-			docs[0]);
-		db.close();
-	});
+	calculateCanvasImagePositions(response, docs[0]);
+	db.close();
 
 }
 
@@ -82,35 +72,4 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 	return users;
 }
 
-function makeDirectory(filePrefix) {
-	fs.readdir(filePrefix, function(err, dirs) {
-		if(err)
-			fs.mkdir(filePrefix, function(err){ if(err) console.log("HAAAALP:::::"+err); });	
-	});
-}
-
-function makeImage(fileName, data){
-	makeFile(fileName, data, true);
-}
-
-function makeTextFile(fileName, data){
-	makeFile(fileName, data, false);
-}
-
-function makeFile(hardFile, data, isBase64) {
-	if(isBase64) {
-		var text = new Buffer(data, "base64");
-		fs.exists(hardFile, function(exists){
-			fs.writeFileSync(hardFile, text);
-		});
-	}
-	else {
-		fs.writeFile(hardFile, data, function(err) {if(err)console.log("HALP::::::::::::" + err);});
-	}
-}
-
 exports.create    		= prepareCanvasForCreation;
-exports.makeImage 		= makeImage;
-exports.makeTextFile 	= makeTextFile;
-exports.makeDirectory 	= makeDirectory;
-exports.makeFile 		= makeFile;

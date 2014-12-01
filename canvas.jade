@@ -3,5 +3,5 @@ html
   head
     title Canvas 		
     body
-      each val in posArray
+      each val in posArray 
         img(src=val.i, style='left:#{val.x}px;top:#{val.y}px;position:absolute;width:#{val.u.x}px;height:#{val.u.y}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')

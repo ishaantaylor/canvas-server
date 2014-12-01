@@ -10,20 +10,19 @@ function openCanvasesDB(response, payload, database_ip) {
 		db.collection('canvases', function(err, canvases) {
 			switch (payload.event) {
 				case "insert":
-				insertCanvas(response, payload.body, canvases, db);
-				break; 		
+					insertCanvas(response, payload.body, canvases, db);
+					break; 		
 				case "update":
-				updateCanvas(response, payload.body, canvases, db);
-				break;
+					updateCanvas(response, payload.body, canvases, db);
+					break;
 				case "query":
-				queryCanvas(response, payload.body, canvases, db);
-				break;
+					queryCanvas(response, payload.body, canvases, db);
+					break;
 				case "get_image":
-					console.log("Body Image");
-				getImage(response, payload.body, canvases, db);
-				break;
+					getImage(response, payload.body, canvases, db);
+					break;
 				default:
-				response.writeHead(422, {'Content-Type':'text/plain'});
+					response.writeHead(422, {'Content-Type':'text/plain'});
 					response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 					break;
 				}
@@ -58,13 +57,13 @@ function updateCanvas(response, payload, canvases, db) {
 		title 	: payload.title, 
 		author 	: payload.author 
 	};
-	console.log("AFTER PUSH " + payload.users);
+
 	var active 			= gameLogic.isGameActive(payload),
-	nextScript 		= gameLogic.nextScript(payload),
-	nextUser 		= gameLogic.nextUser(payload),
-	nextDirection 	= gameLogic.nextDirection(payload),
-	nextAlign 		= gameLogic.nextAlign(payload),
-	nextTurn 		= payload.current_turn + 1;
+		nextScript 		= gameLogic.nextScript(payload),
+		nextUser 		= gameLogic.nextUser(payload),
+		nextDirection 	= gameLogic.nextDirection(payload),
+		nextAlign 		= gameLogic.nextAlign(payload),
+		nextTurn 		= payload.current_turn + 1;
 	if(!active) {
 		nextScript 		= " , , ";
 		nextUser 		= 0;
@@ -72,10 +71,12 @@ function updateCanvas(response, payload, canvases, db) {
 		nextAlign 		= " ";
 		nextTurn 		= payload.max_turns;
 	}
+
+
 	var updateStatement = {
 		$push : {
-			script : nextScript,
-			image_data : payload.image_data
+			script 		: nextScript,
+			image_data 	: payload.image_data
 		}, 
 		$set : {
 			current_user		: nextUser,
@@ -86,8 +87,6 @@ function updateCanvas(response, payload, canvases, db) {
 		}
 	};
 	
-	console.log("UPDATE STATEMENT : " + JSON.stringify(updateStatement, 0, 4));
-	//console.log(" query: " + JSON.stringify(query, 0, 4));
 	// TODO: validate query
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.update(query, updateStatement, function(err) {
