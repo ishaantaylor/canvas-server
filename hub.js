@@ -8,14 +8,8 @@ assert = require('assert'),
 fs = require('fs-extra'),
 users = require('./usersHandlers'),
 canvases = require('./canvasesHandlers');
-
-
 var location = '129.22.59.175:';
 var database_ip = "mongodb://localhost:27017/test";
-
-
-
-
 /** 
  * A sample of an object that would be in ALL_DATA.canvases is below.
 
