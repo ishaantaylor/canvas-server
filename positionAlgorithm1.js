@@ -9,8 +9,8 @@ function calcPos(pos, users, script) {
 
 		pos.arr.push({"u" : users[user_index]});
 		pos.arr[i].user = users[user_index];
-		if (dir == "U" || dir == "D") 	major = "y"; minor = "x";
-		else  							major = "x"; minor = "y";
+		if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
+		else  							{major = "x"; minor = "y";}
 		calcPosHelper(pos, major, minor, 
 			users[user_index], dir, align, i);
 	}
