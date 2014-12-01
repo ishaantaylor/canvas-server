@@ -32,7 +32,7 @@ function prepareCanvasForCreation(response, canvas, db) {
 function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	var pos 		= algorithm1.initPos();
-	console.log("Positions intialized:::\n\t" + JSON.stringify(canvas));
+	console.log("Positions intialized:::\n\t" + JSON.stringify(pos));
 	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
 	console.log("Users Initialized   :::\n\t" + JSON.stringify(users));
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
@@ -50,8 +50,6 @@ function calculateCanvasImagePositions(response, canvas) {
 }
 
 function createNormalizedUserObjects(usersList, isPortrait) {
-	console.log("Normalizing(usersList)" + usersList);
-	console.log("Normalizing(isPortrait)" + isPortrait);
 	var users = [];
 
 	for (var i = 0; i < usersList.length; i++) {
