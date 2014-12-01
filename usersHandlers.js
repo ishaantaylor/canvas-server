@@ -24,24 +24,23 @@ function loginUser(res, data, users, db) {
 		password	: data.password
 	};
 	users.find(query).toArray(function(err, docs) {
-			if (docs.length == 0)
-				res.writeHead(401, {'Content-Type':'text/plain'});
-			else if (!err)
-				res.writeHead(200, {'Content-Type':'text/plain'});	
-			res.end(); 
-			users.update(
-				query,
-				{ $set: {
-						short_arm 	: data.short_arm, 
-						long_arm	: data.long_arm
-						}
-				}, 
-				function(err) {
-					db.close();
-				}
-			);
-		}
-	);
+		if (docs.length == 0)
+			res.writeHead(401, {'Content-Type':'text/plain'});
+		else if (!err)
+			res.writeHead(200, {'Content-Type':'text/plain'});	
+		res.end(); 
+		users.update(
+			query,
+			{ $set: {
+					short_arm 	: data.short_arm, 
+					long_arm	: data.long_arm
+					}
+			}, 
+			function(err) {
+				db.close();
+			}
+		);
+	});
 }
 
 function insertUser(res, data, users, db) {
