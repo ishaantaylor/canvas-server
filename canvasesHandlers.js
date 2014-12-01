@@ -139,7 +139,8 @@ function getImage(response, payload, canvases, db) {
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
 		fs.readFile(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", function(err, fd){
-			response.writeHead(200, {'Content-Type':'application/json'});		
+			response.writeHead(200, {'Content-Type':'application/json'});	
+			console.log(fd);	
 			response.write(fd);
 			response.end(); 
 			db.close();
