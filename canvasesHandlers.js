@@ -138,10 +138,13 @@ function getImage(response, payload, canvases, db) {
 		author 	: payload.author 
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		fs.open(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", 'r', function(err, fd){});
-		response.writeHead(200, {'Content-Type':'application/json'});		
-		response.end(); 
-		db.close();
+		fs.readFile(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", function(err, fd){
+			response.writeHead(200, {'Content-Type':'application/json'});		
+			response.write(fd);
+			response.end(); 
+			db.close();
+		});
+
 	});
 }
 
