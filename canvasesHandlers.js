@@ -139,7 +139,7 @@ function getImage(response, payload, canvases, db) {
 		author 	: payload.author 
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		fs.readFile(hardString + "/" + payload.title + "/" + docs[0].current_turn +".html", function(err, fd){
+		fs.readFile(hardString + "/" + payload.title + "/" + (docs[0].current_turn - 1) +".html", function(err, fd){
 			if(err){
 				response.writeHead(404, {'Content-Type':'text/plain'});
 				console.log(err);
