@@ -59,7 +59,6 @@ function calculateCanvasImagePositions(response, canvas) {
 	response.write(html);
 	response.writeHead(200, {'Content-Type':'application/json'});
 	response.end(); 
-	db.close();
 }
 
 function createNormalizedUserObjects(usersList, isPortrait) {

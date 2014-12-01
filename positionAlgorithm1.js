@@ -8,7 +8,6 @@ function calcPos(pos, users, script) {
 		var major = "", minor = "";
 
 		pos.arr.push({"u" : users[user_index]});
-		pos.arr[i].user = users[user_index];
 		if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
 		else  							{major = "x"; minor = "y";}
 		calcPosHelper(pos, major, minor, 
