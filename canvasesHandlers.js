@@ -1,5 +1,6 @@
 var MongoClient = require('mongodb').MongoClient,
 	image 		= require('./imageCreator'),
+	usersDb 	= require('./usersHandlers'),
 	gameLogic	= require('./positionAlgorithm1'),
 	fs 			= require('fs-extra');
 
@@ -103,7 +104,16 @@ function updateCanvas(response, payload, canvases, db) {
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
-					image.create(response, updatedCanvas);
+					usersDb.connect(database_ip, function(uDb, users){
+						users.find({$in : {user_id : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}.toArray(function(err,uDocs){
+							updatedCanvas.usersInfo = uDocs;
+							console.log(uDocs);
+							console.log(updateCanvas.users);
+							uDb.close();
+							image.create(response, updatedCanvas);
+						});
+					});
+
 					db.close();
 				} else {
 					//TODO Resource already exists
@@ -159,4 +169,3 @@ function getImage(response, payload, canvases, db) {
 }
 
 exports.open = openCanvasesDB;
-

@@ -1,5 +1,4 @@
 function calcPos(pos, users, script) {
-	console.log("About to calculate positions \n" + JSON.stringify(pos, 0,4) + "\n\n\n\tAnd with users as \n" + JSON.stringify(users, 0,4));
 	for (var i = 0; i < script.length; i++) {
 		var userDirAlign = script[i].split(","),
 			user_index 	= parseInt(userDirAlign[0]),

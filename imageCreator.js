@@ -23,7 +23,7 @@ var example = {
 var hardString = process.cwd() + "/images";
 
 
-function prepareCanvasForCreation(response, canvas, db) {
+function prepareCanvasForCreation(response, canvas) {
 	var canvasFolder = canvas.title + "_" + canvas.author;
 	var hardPath 	 = hardString + "/" + canvasFolder;
 	calculateCanvasImagePositions(response, canvas);
@@ -33,7 +33,7 @@ function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	var pos 		= algorithm1.initPos();
 	console.log("Positions intialized:::\n\t" + JSON.stringify(pos));
-	var users 		= createNormalizedUserObjects(canvas.users, canvas.portrait);
+	var users 		= createNormalizedUserObjects(canvas.usersExtra, canvas.portrait);
 	console.log("Users Initialized   :::\n\t" + JSON.stringify(users));
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
 	console.log("Positions determined:::\n\t" + JSON.stringify(pos));

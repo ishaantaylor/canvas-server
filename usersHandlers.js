@@ -1,18 +1,27 @@
 var MongoClient = require('mongodb').MongoClient;
 
 function openUsersDB(res, data, database_ip) {
+	getUsersConnection(database_ip, new function(db, users){
+		switch(data.event) {
+			case "login":
+				loginUser(res, data.body, users, db);
+				break;
+			case "register": 
+				insertUser(res, data.body, users, db);
+				break;
+			default:
+				res.response.writeHead(400, {'Content-Type':'text/plain'});
+				res.end();
+		}
+	});
+}
+
+function getUsersConnection(database_ip, callback) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, users) {
-			switch(data.event) {
-				case "login":
-					loginUser(res, data.body, users, db);
-					break;
-				case "register": 
-					insertUser(res, data.body, users, db);
-					break;
-				default:
-					res.response.writeHead(400, {'Content-Type':'text/plain'});
-					res.end();
+			if(!err) {
+				callback(db, users);
+			} else {
 			}
 		});
 	});
@@ -32,13 +41,13 @@ function loginUser(res, data, users, db) {
 		users.update(
 			query,
 			{ $set: {
-					short_arm 	: data.short_arm, 
-					long_arm	: data.long_arm
-					}
-			}, 
-			function(err) {
-				db.close();
+				short_arm 	: data.short_arm, 
+				long_arm	: data.long_arm
 			}
+		}, 
+		function(err) {
+			db.close();
+		}
 		);
 	});
 }
@@ -58,3 +67,4 @@ function insertUser(res, data, users, db) {
 }
 
 exports.open 	= openUsersDB;
+exports.connect = getUsersConnection;
