@@ -1,6 +1,7 @@
 function calcPos(pos, users, script) {
 	console.log("SCRIPT " + script);
-	for (var i = 0; i < script.length; i++) {
+	pos.arr.push({"u" : users[0], "i" : 0, "y" : 0, "x" : 0});
+	for (var i = 1; i < script.length; i++) {
 		var userDirAlign = script[i].split(","),
 			user_index 	= parseInt(userDirAlign[0]),
 			dir 		= userDirAlign[1],

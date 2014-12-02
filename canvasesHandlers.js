@@ -33,13 +33,11 @@ function openCanvasesDB(response, payload, database_ip) {
 }
 
 function insertCanvas(response, payload, canvases, db) {
-	console.log(payload);
-	payload.script = [];
+	payload.script = [payload.author +",I,i"];
 	payload.image_data = [];
 	payload.active = true;
 
 	canvases.insert(payload, function(err, inserted) {
-		console.log("inserted: " + JSON.stringify(inserted));
 		if (!err) {
 			response.writeHead(201, {'Content-Type':'text/plain'});
 			fs.mkdirsSync(hardString + "/" + payload.title);
