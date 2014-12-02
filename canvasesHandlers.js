@@ -98,7 +98,6 @@ function updateCanvas(response, payload, canvases, db) {
 			active 				: active
 		}
 	};
-	console.log("UPDATING " + JSON.stringify(updateStatement));
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
@@ -109,8 +108,6 @@ function updateCanvas(response, payload, canvases, db) {
 					usersDb.connect(db.IpAddress, function(uDb, users){
 						users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
 							updatedCanvas.usersInfo = uDocs;
-							console.log("UDCOS " + JSON.stringify(updatedCanvas));
-							console.log(updatedCanvas.users);
 							uDb.close();
 							image.create(response, updatedCanvas);
 						});
