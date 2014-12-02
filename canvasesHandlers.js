@@ -37,8 +37,9 @@ function insertCanvas(response, payload, canvases, db) {
 	payload.script = [];
 	payload.image_data = [];
 	payload.active = true;
+
 	canvases.insert(payload, function(err, inserted) {
-		console.log("inserted: " + inserted);
+		console.log("inserted: " + JSON.stringify(inserted));
 		if (!err) {
 			response.writeHead(201, {'Content-Type':'text/plain'});
 			fs.mkdirsSync(hardString + "/" + payload.title);
@@ -97,14 +98,13 @@ function updateCanvas(response, payload, canvases, db) {
 			active 				: active
 		}
 	};
-	console.log("UPDATING");
+	console.log("UPDATING " + JSON.stringify(updateStatement));
 	canvases.findAndModify(query, [['_id','asc']], updateStatement, function(err, updatedCanvas) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
-					console.log("trying to write");
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
 					usersDb.connect(db.IpAddress, function(uDb, users){
 						users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
