@@ -73,8 +73,8 @@ function getNextScript(data) {
 	+ data.next_align;
 }
 
-function isCanvasComplete(data) {
-	return data.current_turn > data.max_turns;
+function isCanvasActive(data) {
+	return !(data.current_turn > data.max_turns);
 }
 
 function initializePositionObject()/*()*/ {
@@ -91,5 +91,5 @@ exports.nextUser 		=	getNextUser;
 exports.nextDirection 	=	getNextDirection;
 exports.nextAlign 		= 	getNextAlign;
 exports.nextScript 		=	getNextScript;
-exports.isGameActive 	= 	isCanvasComplete;
+exports.isGameActive 	= 	isCanvasActive;
 exports.initPos 		=   initializePositionObject;
