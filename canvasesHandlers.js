@@ -109,7 +109,7 @@ function updateCanvas(response, payload, canvases, db) {
 					usersDb.connect(db.IpAddress, function(uDb, users){
 						users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
 							updatedCanvas.usersInfo = uDocs;
-							console.log("UDCOS " + uDocs);
+							console.log("UDCOS " + JSON.stringify(updatedCanvase));
 							console.log(updateCanvas.users);
 							uDb.close();
 							image.create(response, updatedCanvas);
