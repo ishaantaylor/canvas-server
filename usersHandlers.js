@@ -20,8 +20,10 @@ function getUsersConnection(database_ip, callback) {
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, users) {
 			if(!err) {
+				console.log("calling back");
 				callback(db, users);
 			} else {
+				console.log(err);
 			}
 		});
 	});
