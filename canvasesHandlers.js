@@ -103,6 +103,7 @@ function updateCanvas(response, payload, canvases, db) {
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
+					console.log("trying to write)");
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
 					usersDb.connect(database_ip, function(uDb, users){
 						users.find({$in : {user_id : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
