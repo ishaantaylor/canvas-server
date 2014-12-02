@@ -9,6 +9,7 @@ function calcPos(pos, users, script) {
 		var major = "", minor = "";
 
 		pos.arr.push({"u" : users[user_index], "i" : i});
+		console.log("Iterations = " + i + " \n\t" + JSON.stringify(pos));
 		if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
 		else  							{major = "x"; minor = "y";}
 		calcPosHelper(pos, major, minor, 
