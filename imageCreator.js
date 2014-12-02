@@ -33,7 +33,7 @@ function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	var pos 		= algorithm1.initPos();
 	console.log("Positions intialized:::\n\t" + JSON.stringify(pos));
-	var users 		= createNormalizedUserObjects(canvas.usersExtra, canvas.portrait);
+	var users 		= createNormalizedUserObjects(canvas.usersInfo, canvas.portrait);
 	console.log("Users Initialized   :::\n\t" + JSON.stringify(users));
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
 	console.log("Positions determined:::\n\t" + JSON.stringify(pos));

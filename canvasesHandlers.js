@@ -96,7 +96,7 @@ function updateCanvas(response, payload, canvases, db) {
 			active 				: active
 		}
 	};
-	
+	console.log("UPDATING");
 	canvases.findAndModify(query, [['_id','asc']], updateStatement, function(err, updatedCanvas) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
