@@ -107,7 +107,7 @@ function updateCanvas(response, payload, canvases, db) {
 					console.log("trying to write");
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
 					usersDb.connect(db.IpAddress, function(uDb, users){
-						users.find({$in : {user_id : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
+						users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
 							updatedCanvas.usersInfo = uDocs;
 							console.log("UDCOS " + uDocs);
 							console.log(updateCanvas.users);
