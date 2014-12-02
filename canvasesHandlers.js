@@ -99,7 +99,7 @@ function updateCanvas(response, payload, canvases, db) {
 		}
 	};
 	console.log("UPDATING " + JSON.stringify(updateStatement));
-	canvases.findAndModify({query : querie,update: updateStatement}, function(err, updatedCanvas) {
+	canvases.findAndModify({"query" : querie, "update": updateStatement}, function(err, updatedCanvas) {
 		if (!err) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
