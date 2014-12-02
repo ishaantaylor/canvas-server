@@ -25,7 +25,6 @@ var hardString = process.cwd() + "/images";
 
 function prepareCanvasForCreation(response, canvas) {
 	var canvasFolder = canvas.title + "_" + canvas.author;
-	var hardPath 	 = hardString + "/" + canvasFolder;
 	calculateCanvasImagePositions(response, canvas);
 }
 
