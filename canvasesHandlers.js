@@ -86,17 +86,17 @@ function updateCanvas(response, payload, canvases, db) {
 		nextTurn 		= payload.max_turns;
 	}
 	var updateStatement = {
-		{$push : {
+		$push : {
 			script 		: nextScript,
 			image_data 	: payload.image_data
-		}}, 
-		{$set : {
+		}, 
+		$set : {
 			current_user		: nextUser,
 			current_direction 	: nextDirection,
 			current_align		: nextAlign,
 			current_turn		: nextTurn,
 			active 				: active
-		}}
+		}
 	};
 	console.log("UPDATING " + JSON.stringify(updateStatement));
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, function(err, updatedCanvas) {
