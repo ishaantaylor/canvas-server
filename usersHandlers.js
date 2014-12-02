@@ -17,11 +17,9 @@ function openUsersDB(res, data, database_ip) {
 }
 
 function getUsersConnection(database_ip, callback) {
-	console.log("in database opener");
 	MongoClient.connect(database_ip, function(err, db) {
 		db.collection('users', function(err, users) {
 			if(!err) {
-				console.log("calling back");
 				callback(db, users);
 			} else {
 				console.log(err);
