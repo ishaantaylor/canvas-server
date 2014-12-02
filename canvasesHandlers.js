@@ -105,9 +105,8 @@ function updateCanvas(response, payload, canvases, db) {
 				next_align 			: ""
 			}
 		}
-	} else {
-
-	}
+	} 
+	console.log("Updating with " + JSON.stringify(updateStatement));
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
 		if (!err && updatedCanvas.active) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
