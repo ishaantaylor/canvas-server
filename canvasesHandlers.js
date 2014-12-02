@@ -4,7 +4,7 @@ var MongoClient = require('mongodb').MongoClient,
 	gameLogic	= require('./positionAlgorithm1'),
 	fs 			= require('fs-extra');
 
-var hardString = process.cwd() + "/images",
+var hardString = process.cwd() + "/images";
 
 function openCanvasesDB(response, payload, database_ip) {
 	MongoClient.connect(database_ip, function(err, db) {
