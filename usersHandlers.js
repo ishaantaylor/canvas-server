@@ -1,7 +1,7 @@
 var MongoClient = require('mongodb').MongoClient;
 
 function openUsersDB(res, data, database_ip) {
-	getUsersConnection(database_ip, new function(db, users){
+	getUsersConnection(database_ip, function(db, users){
 		switch(data.event) {
 			case "login":
 				loginUser(res, data.body, users, db);
