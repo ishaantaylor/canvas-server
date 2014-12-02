@@ -76,28 +76,40 @@ function updateCanvas(response, payload, canvases, db) {
 	}
 	
 	// if theres an error in gameLogic, game shuts down
-	if (!active) {
-		nextScript 		= " , , ";
-		nextUser 		= 0;
-		nextDirection 	= " ";
-		nextAlign 		= " ";
-		nextTurn 		= payload.max_turns;
-	}
 	var updateStatement = {
-		$push : {
-			script 		: nextScript,
-			image_data 	: payload.image_data
-		}, 
-		$set : {
-			current_user		: nextUser,
-			current_direction 	: nextDirection,
-			current_align		: nextAlign,
-			current_turn		: nextTurn,
-			active 				: active
+			$push : {
+				script 		: nextScript,
+				image_data 	: payload.image_data
+			}, 
+			$set : {
+				current_user		: nextUser,
+				current_direction 	: nextDirection,
+				current_align		: nextAlign,
+				current_turn		: nextTurn,
+				active 				: active
+			}
+		};
+	if (!active) {
+		nextUser 		= 0;
+		nextDirection 	= "fin";
+		nextAlign 		= "fin";
+		nextTurn 		= payload.max_turns + 1;
+		updateStatement = {
+			$set : {
+				current_user		: nextUser,
+				current_direction 	: nextDirection,
+				current_align		: nextAlign,
+				current_turn		: nextTurn,
+				active 				: active,
+				next_direction 		: "",
+				next_align 			: ""
+			}
 		}
-	};
+	} else {
+
+	}
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
-		if (!err) {
+		if (!err && updatedCanvas.active) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
 			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
 			fs.exists(imageFileName, function(exists) {
@@ -120,8 +132,12 @@ function updateCanvas(response, payload, canvases, db) {
 				}
 			});
 		} else {
-			response.writeHead(404, {'Content-Type':'text/plain'});
-			console.log(err);
+			if(err){
+				response.writeHead(404, {'Content-Type':'text/plain'});
+				console.log(err);
+			} else {
+				response.writeHead(213, {'Content-Type':'text/plain'});
+			}
 			response.end(); 
 			db.close();
 		}

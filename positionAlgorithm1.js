@@ -74,7 +74,7 @@ function getNextScript(data) {
 }
 
 function isCanvasComplete(data) {
-	return !((data.current_turn + 1) >= data.max_turns);
+	return data.current_turn > data.max_turns;
 }
 
 function initializePositionObject()/*()*/ {
