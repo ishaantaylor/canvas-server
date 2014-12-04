@@ -36,12 +36,16 @@ function calculateCanvasImagePositions(response, canvas) {
 	console.log("Users Initialized   :::\n\t" + JSON.stringify(users));
 	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
 	console.log("Positions determined:::\n\t" + JSON.stringify(pos));
+	// var baseURL 	= "";//getBaseURL(canvas);
+
+
 	var html  		= jade.renderFile('canvas.jade', {
+		// "baseURL"	: baseURL, 
 		"posArray" 	: pos.arr,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
 	});
-	fs.writeFileSync(hardString + "/" + canvas.title + "/" + "image.html", html);
+	fs.writeFileSync(getBaseURL(canvas) + "/image.html", html);
 
 	response.write(html);
 	response.writeHead(200, {'Content-Type':'application/json'});
@@ -66,4 +70,13 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 	return users;
 }
 
+function getAbsoluteURL(canvas){
+	return  getBaseURL(canvas);
+}
+
+function getBaseURL(canvas) {
+	 return hardString + "/" + canvas.title;
+}
+
 exports.create    		= prepareCanvasForCreation;
+exports.getBaseURL 		= getBaseURL;

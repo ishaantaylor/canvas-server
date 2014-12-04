@@ -179,5 +179,8 @@ function getImage(response, payload, canvases, db) {
 		});
 	});
 }
+function getImageFilename(canvas, image) {
+	hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
+}
 
 exports.open = openCanvasesDB;
