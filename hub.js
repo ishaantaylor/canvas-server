@@ -43,6 +43,7 @@ http.createServer(function (incoming_request, our_response) {
 			handlePOSTrequest(incoming_request, our_response, post_data);
 	});
 	if (incoming_request.method != "POST") {
+		console.log(request);
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
 	}
