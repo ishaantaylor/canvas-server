@@ -28,6 +28,7 @@ var database_ip = "mongodb://localhost:27017/test";
 
 // create a server 
 http.createServer(function (incoming_request, our_response) {
+	console.log("METHOD" + incoming_request.method);
 	var post_data = "";
 	incoming_request.on('data', function(chunk) {
 		post_data += chunk;
@@ -43,7 +44,7 @@ http.createServer(function (incoming_request, our_response) {
 			handlePOSTrequest(incoming_request, our_response, post_data);
 	});
 	if (incoming_request.method != "POST") {
-		console.log(request);
+		console.log(incoming_request);
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
 	}
