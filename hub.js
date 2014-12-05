@@ -50,7 +50,6 @@ http.createServer(function (incoming_request, our_response) {
 	}
 	if (incoming_request.method == "GET") {
 		console.log("GET: " + incoming_request);
-		console.log("URL parse: " + request);
 
 		if (incoming_request.url.split('.png').length == 1) {
 			var path = incoming_request.url.split('/');
