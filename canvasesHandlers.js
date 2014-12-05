@@ -110,7 +110,7 @@ function updateCanvas(response, payload, canvases, db) {
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
 		if (!err && updatedCanvas.active) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
-			var imageFileName = getImageFilename(updatedCanvas, updatedCanvas.current_turn);
+			var imageFileName = getImageFilename(updatedCanvas, payload.current_turn);
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
