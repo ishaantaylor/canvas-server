@@ -66,6 +66,20 @@ http.createServer(function (incoming_request, our_response) {
 					our_response.end();
 				}
 			});
+		} else if (incoming_request.url.split('.png').length > 1) {
+			var path = incoming_request.url.split('/');
+			var folder = path[path.length - 2];
+			var fileName = path[path.length -1];
+			fs.readFile(process.cwd() + "/images/" + folder + '/' + fileName, function(err, data) {
+				if (err) {
+					our_response.writeHead(404, {'Content-Type':'text/plain'});
+					our_response.end();
+				} else {
+					our_response.writeHead(200, {'Content-Type':'image/png'});
+					our_response.write(data);
+					our_response.end();
+				}
+			})
 		}
 	}
 	// handle each case - TODO: eventually change to switch-case
