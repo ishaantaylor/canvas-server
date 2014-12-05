@@ -41,7 +41,7 @@ function calculateCanvasImagePositions(response, canvas) {
 
 
 	var html  		= jade.renderFile('canvas.jade', {
-		// "baseURL"	: baseURL, 
+		"base"		: "/" + canvas.title + "_" + canvas.author; 
 		"posArray" 	: pos.arr,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
