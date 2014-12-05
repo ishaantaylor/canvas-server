@@ -79,7 +79,7 @@ http.createServer(function (incoming_request, our_response) {
 				} else {
 					our_response.writeHead(200, {'Content-Type':'image/png'});
 					our_response.write(data);
-					console.log("png DADA: " + data);
+					console.log("png DADA: we got");
 					our_response.end();
 				}
 			})
