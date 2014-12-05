@@ -49,8 +49,6 @@ http.createServer(function (incoming_request, our_response) {
 		our_response.end();
 	}
 	if (incoming_request.method == "GET") {
-		console.log("GET: " + incoming_request);
-
 		if (incoming_request.url.split('.png').length == 1) {
 			var path = incoming_request.url.split('/');
 			var folder = path[path.length -1];
