@@ -1,19 +1,20 @@
 function calcPos(pos, users, script) {
 	console.log("SCRIPT " + script);
 	pos.arr.push({"u" : users[0], "i" : 0, "y" : 0, "x" : 0});
-
-	for (var i = 0; i < script.length; i++) {
-		var userDirAlign = script[i].split(","),
+	if(script.length > 1){
+		for (var i = 0; i < script.length; i++) {
+			var userDirAlign = script[i].split(","),
 			user_index 	= parseInt(userDirAlign[0]),
 			dir 		= userDirAlign[1],
 			align 		= userDirAlign[2];
-		var major = "", minor = "";
+			var major = "", minor = "";
 
-		pos.arr.push({"u" : users[user_index], "i" : i + 1});
-		if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
-		else  							{major = "x"; minor = "y";}
-		calcPosHelper(pos, major, minor, 
-			users[user_index], dir, align, i);
+			pos.arr.push({"u" : users[user_index], "i" : i + 1});
+			if (dir == "U" || dir == "D") 	{major = "y"; minor = "x";}
+			else  							{major = "x"; minor = "y";}
+			calcPosHelper(pos, major, minor, 
+				users[user_index], dir, align, i);
+		}
 	}
 	return pos;
 }
