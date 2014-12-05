@@ -189,3 +189,4 @@ function getCanvasFolder(canvas) {
 
 exports.open = openCanvasesDB;
 exports.getImageFilename = getImageFilename;
+exports.getCanvasFolder = getCanvasFolder;
