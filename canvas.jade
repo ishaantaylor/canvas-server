@@ -4,4 +4,4 @@ html
     title Canvas 		
     body
       each val in posArray 
-        img(src="#{base}/#{val.i}.png", alt="Not Found Image", style='left:#{val.x}px;top:#{val.y}px;position:absolute;width:#{val.u.x}px;height:#{val.u.y}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')
+        img(src="#{base}/#{val.i}.png", alt="Not Found Image", style='left:#{val.x/2}px;top:#{val.y/2}px;position:absolute;width:#{val.u.x/2}px;height:#{val.u.y/2}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')
