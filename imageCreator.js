@@ -1,7 +1,8 @@
 var jade = require('jade'),
 fs = require('fs-extra'),
 MongoClient = require('mongodb').MongoClient,
-algorithm1 = require('./positionAlgorithm1');
+algorithm1 = require('./positionAlgorithm1'),
+canvasesExtra = require('./canvasesHandlers');
 
 
 var example = {
@@ -40,12 +41,12 @@ function calculateCanvasImagePositions(response, canvas) {
 
 
 	var html  		= jade.renderFile('canvas.jade', {
-		// "baseURL"	: baseURL, 
+		"base"		: "/" + canvas.title + "_" + canvas.author, 
 		"posArray" 	: pos.arr,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
 	});
-	fs.writeFileSync(getBaseURL(canvas) + "/image.html", html);
+	fs.writeFileSync(canvasesExtra.getCanvasFolder(canvas) + "/image.html", html);
 
 	response.write(html);
 	response.writeHead(200, {'Content-Type':'application/json'});
@@ -70,13 +71,4 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 	return users;
 }
 
-function getAbsoluteURL(canvas){
-	return  getBaseURL(canvas);
-}
-
-function getBaseURL(canvas) {
-	 return hardString + "/" + canvas.title;
-}
-
 exports.create    		= prepareCanvasForCreation;
-exports.getBaseURL 		= getBaseURL;

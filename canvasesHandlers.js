@@ -40,7 +40,7 @@ function insertCanvas(response, payload, canvases, db) {
 	canvases.insert(payload, function(err, inserted) {
 		if (!err) {
 			response.writeHead(201, {'Content-Type':'text/plain'});
-			fs.mkdirsSync(hardString + "/" + payload.title);
+			fs.mkdirsSync(getCanvasFolder(payload));
 		} else {
 			response.writeHead(418, {'Content-Type':'text/plain'});
 			console.log(err);
@@ -110,7 +110,7 @@ function updateCanvas(response, payload, canvases, db) {
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
 		if (!err && updatedCanvas.active) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
-			var imageFileName = hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
+			var imageFileName = getImageFilename(updatedCanvas, updatedCanvas.current_turn);
 			fs.exists(imageFileName, function(exists) {
 				if (!exists) {
 					fs.writeFileSync(imageFileName, new Buffer(payload.image_data, "base64"));
@@ -163,14 +163,14 @@ function getImage(response, payload, canvases, db) {
 		author 	: payload.author 
 	};
 	canvases.find(query, {image_data:0, _id:0}).toArray(function(err, docs) {
-		fs.readFile(hardString + "/" + payload.title + "/" + "image.html", function(err, fd) {
+		fs.readFile(getCanvasFolder(payload) + "/image.html", function(err, fd) {
 			if (err) {
 				response.writeHead(404, {'Content-Type':'text/html'});
 				console.log(err);
 				response.end(); 
 				db.close();
 			} else {
-				response.writeHead(200, {'Content-Type':'application/json'});	
+				response.writeHead(200, {'Content-Type':'text/html'});	
 				console.log("I GOT THIS HTML \n\t" + fd);	
 				response.write(fd);
 				response.end(); 
@@ -179,8 +179,14 @@ function getImage(response, payload, canvases, db) {
 		});
 	});
 }
-function getImageFilename(canvas, image) {
-	hardString + "/" + payload.title + "/" + payload.current_turn + ".png";
+
+function getImageFilename(canvas, image_number) {
+	return getCanvasFolder(canvas) + "/" + image_number + ".png";
+}
+function getCanvasFolder(canvas) {
+	return hardString + "/" + canvas.title + "_" + canvas.author;
 }
 
 exports.open = openCanvasesDB;
+exports.getImageFilename = getImageFilename;
+exports.getCanvasFolder = getCanvasFolder;
