@@ -33,8 +33,8 @@ function openCanvasesDB(response, payload, database_ip) {
 }
 
 function insertCanvas(response, payload, canvases, db) {
-	payload.script = [payload.author +",I,i"];
-	payload.image_data = [];
+	payload.script 		= []];
+	payload.image_data 	= [];
 	payload.active = true;
 
 	canvases.insert(payload, function(err, inserted) {
