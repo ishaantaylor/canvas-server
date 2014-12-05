@@ -47,7 +47,9 @@ http.createServer(function (incoming_request, our_response) {
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
 	}
+
 	if (incoming_request.method == "GET") {
+		// html
 		if (incoming_request.url.split('.png').length == 1) {
 			var path = incoming_request.url.split('/');
 			var folder = path[path.length -1];
@@ -58,9 +60,11 @@ http.createServer(function (incoming_request, our_response) {
 				} else {
 					our_response.writeHead(200, {'Content-Type':'text/html'});
 					our_response.write(data);
+					console.log("HTML DADA: " + data);
 					our_response.end();
 				}
 			});
+		// png
 		} else if (incoming_request.url.split('.png').length > 1) {
 			var path = incoming_request.url.split('/');
 			var folder = path[path.length - 2];
@@ -72,6 +76,7 @@ http.createServer(function (incoming_request, our_response) {
 				} else {
 					our_response.writeHead(200, {'Content-Type':'image/png'});
 					our_response.write(data);
+					console.log("png DADA: " + data);
 					our_response.end();
 				}
 			})
