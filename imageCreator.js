@@ -72,4 +72,3 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 exports.create    		= prepareCanvasForCreation;
-exports.getBaseURL 		= getBaseURL;
