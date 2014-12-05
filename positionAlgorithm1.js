@@ -2,11 +2,12 @@ function calcPos(pos, users, script) {
 	console.log("SCRIPT " + script);
 	pos.arr.push({"u" : users[0], "i" : 0, "y" : 0, "x" : 0});
 	if(script.length > 1){
-		for (var i = 0; i < script.length; i++) {
-			var userDirAlign = script[i].split(","),
-			user_index 	= parseInt(userDirAlign[0]),
-			dir 		= userDirAlign[1],
-			align 		= userDirAlign[2];
+		for (var i = 1; i < script.length; i++) {
+			var userDirAlignCurrent = script[i].split(","),
+			user_index 				= parseInt(userDirAlignCurrent[0]),
+			userDirAlignPrev 		= script[i - 1].split(","),
+			dir 					= userDirAlignPrev[1],
+			align 					= userDirAlignPrev[2];
 			var major = "", minor = "";
 
 			pos.arr.push({"u" : users[user_index], "i" : i + 1});
