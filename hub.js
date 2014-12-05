@@ -50,19 +50,19 @@ http.createServer(function (incoming_request, our_response) {
 
 	if (incoming_request.method == "GET") {
 		// html
-		console.log("URL: " + incoming_request.url);
+		// console.log("URL: " + incoming_request.url);
 		if (incoming_request.url.split('.png').length == 1) {
 			var path = incoming_request.url.split('/');
 			var folder = path[path.length -1];
 			fs.readFile(process.cwd() + "/images/" + folder + "/image.html", function(err, data) {
 				if (err) {
 					our_response.writeHead(404, {'Content-Type':'text/plain'});
-					console.log("error: " + err);
+					// console.log("error: " + err);
 					our_response.end();
 				} else {
 					our_response.writeHead(200, {'Content-Type':'text/html'});
 					our_response.write(data);
-					console.log("HTML DADA: " + data);
+					// console.log("HTML DADA: " + data);
 					our_response.end();
 				}
 			});
@@ -74,12 +74,12 @@ http.createServer(function (incoming_request, our_response) {
 			fs.readFile(process.cwd() + "/images/" + folder + '/' + fileName, function(err, data) {
 				if (err) {
 					our_response.writeHead(404, {'Content-Type':'text/plain'});
-					console.log("error: " + err);
+					// console.log("error: " + err);
 					our_response.end();
 				} else {
 					our_response.writeHead(200, {'Content-Type':'image/png'});
 					our_response.write(data);
-					console.log("png DADA: we got");
+					// console.log("png DADA: we got");
 					our_response.end();
 				}
 			})
