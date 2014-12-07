@@ -184,3 +184,8 @@ function PieceArray(scriptList, users) {
 		return this.scripts[index];
 	};
 }
+
+exports.User = User;
+exports.Piece = Piece;
+exports.PieceArray = PieceArray;
+exports.Pos = Pos;
