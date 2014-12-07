@@ -20,7 +20,7 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 
 	for (var i = 0; i < usersList.length; i++) {
 		var aUser = usersList[i];
-		users.push(new classes.User(aUser), isPortrait, i);
+		users.push(new classes.User(aUser, isPortrait, i));
 	}
 
 	return users;
