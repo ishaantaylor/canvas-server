@@ -9,8 +9,8 @@ function calcPos(unmodifiedUsers, scripts, isPortrait) {
 	pos.updateCorners();
 	for (var i = 1; i < scripts.length; i++) {
 		var piece = new classes.Piece(s.getPiece(i));
-		pos.addPiece(piece);
 		calcPosHelper(pos, piece);
+		pos.addPiece(piece);
 		pos.updateCorners();
 	}
 	return pos;

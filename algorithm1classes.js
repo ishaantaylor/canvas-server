@@ -183,7 +183,7 @@ function Piece(rUser, dir, align, index) {
 function PieceArray(scriptList, users) {
 	
     this.scripts = [];
-	for (var i = 0; i < scriptList.length; i++) {
+	for (var i = 1; i < scriptList.length; i++) {
 	    var pieces = scriptList[i].split(",");
 	    //var dUser = parseInt(pieces[0]);
 	    var rUser = parseInt(pieces[1]);
