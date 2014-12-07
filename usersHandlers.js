@@ -9,6 +9,8 @@ function openUsersDB(res, data, database_ip) {
 			case "register": 
 				insertUser(res, data.body, users, db);
 				break;
+			case "delete":
+				deleteUser(res, data.body, users, db);
 			default:
 				res.response.writeHead(400, {'Content-Type':'text/plain'});
 				res.end();
@@ -65,6 +67,10 @@ function insertUser(res, data, users, db) {
 			db.close();
 		}
 	);
+}
+
+function deleteUser(res, data, users, db) {
+	// TODO: implement
 }
 
 exports.open 	= openUsersDB;
