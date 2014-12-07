@@ -122,9 +122,9 @@ function User(aUser, isPortrait, index) {
     }
     this.getSize    = function(horizontal) {
             if (horizontal)
-                return this.size.y;
+                return this.y;
             else
-                return this.size.x;
+                return this.x;
             };
 }
 
