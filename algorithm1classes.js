@@ -10,6 +10,10 @@ function Pos(users){
 	this.DL = [0,0];
 	this.UR = [0,0];
 	this.DR = [0,0];
+	this.left = 0;
+	this.top = 0;
+	this.right = 0;
+	this.bottom = 0;
 	
 	this.addPiece = function(piece) {
 		this.pieces.push(piece);
@@ -85,14 +89,20 @@ function Pos(users){
     };
     this.getMiddle = function(dir) {
     	if(dir === "U") {
-    		return this.getPointObject((this.right - this.left)/2.0, this.top);
+    		return this.getPointObject(this.left + (this.right - this.left)/2.0, this.top);
     	} else if(dir === "L") {
-    		return this.getPointObject(this.left, (this.bottom - this.top)/2.0);
+    		return this.getPointObject(this.left, this.top + (this.bottom - this.top)/2.0);
     	} else if(dir === "B") {
-    		return this.getPointObject((this.right - this.left)/2.0, this.bottom);
+    		return this.getPointObject(this.left + (this.right - this.left)/2.0, this.bottom);
     	} else if(dir === "R") {
-    		return this.getPointObject(this.right, (this.bottom - this.top)/2.0);
+    		return this.getPointObject(this.right, this.top + (this.bottom - this.top)/2.0);
     	}
+    };
+    this.getWidth = function() {
+    	return this.right - this.left;
+    };
+    this.getHeight = function() {
+    	return this.bottom - this.top;
     };
 	
 }

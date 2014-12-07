@@ -5,12 +5,14 @@ function calcPos(unmodifiedUsers, scripts, isPortrait) {
     var pos 		= new classes.Pos(users);
 	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
-		for (var i = 1; i < scripts.length; i++) {
-		    var piece = new classes.Piece(s.getPiece(i));
-		    pos.addPiece(piece);
-			calcPosHelper(pos, piece);
-			pos.updateCorners();
-		}
+	pos.addPiece(new classes.Piece(users[0], "I", "i", 0));
+	pos.updateCorners();
+	for (var i = 1; i < scripts.length; i++) {
+		var piece = new classes.Piece(s.getPiece(i));
+		pos.addPiece(piece);
+		calcPosHelper(pos, piece);
+		pos.updateCorners();
+	}
 	return pos;
 }
 

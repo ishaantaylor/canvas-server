@@ -29,11 +29,11 @@ function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	//Get the positions for each user.
 	var pos 		= algorithm1.getPositionJSON(canvas.usersInfo, canvas.script, canvas.portrait);
-	console.log("Positions determined:::\n\t" + JSON.stringify(pos));
+	console.log("Positions determined:::\n\t" + JSON.stringify(pos, 0, 4));
 	//Create the html file using jade. If you didn't make the file indicated in the arguments, then do not touch this.
 	var html  		= jade.renderFile('canvas.jade', {
 		"base"		: "/" + canvas.title + "_" + canvas.author, 
-		"posArray" 	: pos.arr,
+		"pos" 		: pos,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
 	});

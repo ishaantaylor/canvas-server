@@ -42,7 +42,7 @@ function openCanvasesDB(response, payload, database_ip) {
 function insertCanvas(response, payload, canvases, db) {
 	if (isValidBaseCanvas(payload)) {
 		//Add fields that client app does not supply in the payload (at least shouldn't, throw error if it does).
-		payload.script 		= [];
+		payload.script 		= ["0,0,I,i"];
 		payload.image_data 	= [];
 		payload.active = true;
 
