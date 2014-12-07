@@ -32,7 +32,7 @@ function Pos(users){
     		top = 0;
     	for(var i = 0; i < this.pieces.length; i++) {
     		var piece = this.getPiece(i);
-    		console.log(JSON.stringfy(piece, 0, 4));
+    		console.log(JSON.stringify(piece, 0, 4));
     		if (piece.getLeft() < left){
     			left = piece.x;
     		} 
