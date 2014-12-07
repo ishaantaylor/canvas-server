@@ -1,8 +1,8 @@
 var jade = require('jade'),
-fs = require('fs-extra'),
-MongoClient = require('mongodb').MongoClient,
-algorithm1 = require('./positionAlgorithm1'),
-canvasesExtra = require('./canvasesHandlers');
+	fs = require('fs-extra'),
+	MongoClient = require('mongodb').MongoClient,
+	algorithm1 = require('./positionAlgorithm1'),
+	canvasesExtra = require('./canvasesHandlers');
 
 
 var example = {
@@ -21,54 +21,31 @@ var example = {
 	customArgs: []
 }
 
+//Get current working directory of server and append the images location to it.
 var hardString = process.cwd() + "/images";
 
-
-function prepareCanvasForCreation(response, canvas) {
-	var canvasFolder = canvas.title + "_" + canvas.author;
-	calculateCanvasImagePositions(response, canvas);
-}
-
+/* Calls the 'algorithm' to get position for each users canvas based on the script of the canvas.  */
 function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
-	var pos 		= algorithm1.initPos();
-	console.log("Positions intialized:::\n\t" + JSON.stringify(pos));
-	var users 		= createNormalizedUserObjects(canvas.usersInfo, canvas.portrait);
-	console.log("Users Initialized   :::\n\t" + JSON.stringify(users));
-	var pos 		= algorithm1.getPositionJSON(pos, users, canvas.script);
+	//Get the positions for each user.
+	var pos 		= algorithm1.getPositionJSON(canvas.userInfo, canvas.script, canvas.portrait);
 	console.log("Positions determined:::\n\t" + JSON.stringify(pos));
-	// var baseURL 	= "";//getBaseURL(canvas);
-
-
+	//Create the html file using jade. If you didn't make the file indicated in the arguments, then do not touch this.
 	var html  		= jade.renderFile('canvas.jade', {
 		"base"		: "/" + canvas.title + "_" + canvas.author, 
 		"posArray" 	: pos.arr,
 		"rotation" 	: (canvas.portrait ? 0 : 270),
 		"pretty"	: true
 	});
+
+	//Write to file system.
 	fs.writeFileSync(canvasesExtra.getCanvasFolder(canvas) + "/image.html", html);
 
+	//Respond as successful.
 	response.write(html);
 	response.writeHead(200, {'Content-Type':'application/json'});
 	response.end(); 
 }
 
-function createNormalizedUserObjects(usersList, isPortrait) {
-	var users = [];
 
-	for (var i = 0; i < usersList.length; i++) {
-		var user = usersList[i];
-		users.push({"y" : 0, "x" : 0});
-		if(isPortrait){
-			users[i].y 	= usersList[i].long_arm;
-			users[i].x 	= usersList[i].short_arm;
-		} else {
-			users[i].y 	= usersList[i].short_arm;
-			users[i].x 	= usersList[i].long_arm;
-		}
-		users[i].name = usersList[i].user_id;
-	}
-	return users;
-}
-
-exports.create    		= prepareCanvasForCreation;
+exports.create    		= calculateCanvasImagePositions;
