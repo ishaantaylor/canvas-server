@@ -77,4 +77,3 @@ exports.nextDirection 	=	getNextDirection;
 exports.nextAlign 		= 	getNextAlign;
 exports.nextScript 		=	getNextScript;
 exports.isGameActive 	= 	isCanvasActive;
-exports.initPos 		=   initializePositionObject;
