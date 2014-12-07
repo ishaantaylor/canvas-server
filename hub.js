@@ -42,48 +42,12 @@ http.createServer(function (incoming_request, our_response) {
 		}); 		// keep track of all requests
 		if (incoming_request.method == "POST")
 			handlePOSTrequest(incoming_request, our_response, post_data);
+		else if (incoming_request.method == "GET")
+			handleGETrequest(incoming_request, our_response, post_data);
 	});
 	if (incoming_request.method != "POST" && incoming_request.method != "GET") {
 		our_response.writeHead(405, {'Content-Type' : 'text/plain'});
 		our_response.end();
-	}
-
-	if (incoming_request.method == "GET") {
-		// html
-		// console.log("URL: " + incoming_request.url);
-		if (incoming_request.url.split('.png').length == 1) {
-			var path = incoming_request.url.split('/');
-			var folder = path[path.length -1];
-			fs.readFile(process.cwd() + "/images/" + folder + "/image.html", function(err, data) {
-				if (err) {
-					our_response.writeHead(404, {'Content-Type':'text/plain'});
-					// console.log("error: " + err);
-					our_response.end();
-				} else {
-					our_response.writeHead(200, {'Content-Type':'text/html'});
-					our_response.write(data);
-					// console.log("HTML DADA: " + data);
-					our_response.end();
-				}
-			});
-		// png
-		} else if (incoming_request.url.split('.png').length > 1) {
-			var path = incoming_request.url.split('/');
-			var folder = path[path.length - 2];
-			var fileName = path[path.length -1];
-			fs.readFile(process.cwd() + "/images/" + folder + '/' + fileName, function(err, data) {
-				if (err) {
-					our_response.writeHead(404, {'Content-Type':'text/plain'});
-					// console.log("error: " + err);
-					our_response.end();
-				} else {
-					our_response.writeHead(200, {'Content-Type':'image/png'});
-					our_response.write(data);
-					// console.log("png DADA: we got");
-					our_response.end();
-				}
-			})
-		}
 	}
 	// handle each case - TODO: eventually change to switch-case
 }).listen(outward_port, outward_ip);
@@ -91,6 +55,43 @@ http.createServer(function (incoming_request, our_response) {
 console.log('Server running at http://' + outward_ip + ":" + outward_port + '/');
 
 // main flow subfunctions
+function handleGETrequest(request, response, post_data) {
+	// for viewCanvas
+	//  return html
+	console.log("URL: " + request.url);
+	if (request.url.split('.png').length == 1) {
+		var path = request.url.split('/');
+		var folder = path[path.length -1];
+		fs.readFile(process.cwd() + "/images/" + folder + "/image.html", function(err, data) {
+			if (err) {
+				response.writeHead(404, {'Content-Type':'text/plain'});
+				console.log("error: " + err);
+				response.end();
+			} else {
+				response.writeHead(200, {'Content-Type':'text/html'});
+				response.write(data);
+				response.end();
+			}
+		});
+	//  return png
+	} else if (request.url.split('.png').length > 1) {
+		var path = request.url.split('/');
+		var folder = path[path.length - 2];
+		var fileName = path[path.length -1];
+		fs.readFile(process.cwd() + "/images/" + folder + '/' + fileName, function(err, data) {
+			if (err) {
+				response.writeHead(404, {'Content-Type':'text/plain'});
+				console.log("error: " + err);
+				response.end();
+			} else {
+				response.writeHead(200, {'Content-Type':'image/png'});
+				response.write(data);
+				response.end();
+			}
+		})
+	}
+}
+
 function handlePOSTrequest(request, response, post_data) {
 	// TODO: refactor this the make it flow.. first parse body, then decide where to route it 
 	var payload = {};
