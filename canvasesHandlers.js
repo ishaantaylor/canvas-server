@@ -33,8 +33,8 @@ function openCanvasesDB(response, payload, database_ip) {
 }
 
 function insertCanvas(response, payload, canvases, db) {
-	payload.script = [payload.author +",I,i"];
-	payload.image_data = [];
+	payload.script 		= [];
+	payload.image_data 	= [];
 	payload.active = true;
 
 	canvases.insert(payload, function(err, inserted) {
@@ -106,7 +106,7 @@ function updateCanvas(response, payload, canvases, db) {
 			}
 		}
 	} 
-	console.log("Updating with " + JSON.stringify(updateStatement));
+	//console.log("Updating with " + JSON.stringify(updateStatement));
 	canvases.findAndModify(querie, [['title', 1]], updateStatement, {new:true} ,function(err, updatedCanvas) {
 		if (!err && updatedCanvas.active) {
 			response.writeHead(200, {'Content-Type':'text/plain'});			// TODO: end response somewhere?
