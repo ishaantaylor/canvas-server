@@ -1,0 +1,73 @@
+{
+  "name": "sequelize",
+  "description": "Multi dialect ORM for Node.JS",
+  "version": "2.0.0-rc3",
+  "author": "Ishaan Taylor",
+  "contributors": [
+    {
+      "name": "Ishaan Taylor",
+      "email": "ishaan@case.edu"
+    },
+    {
+      "name": "Dan Hafly",
+      "email": "dch66@case.edu"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ishaantaylor/canvas-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ishaantaylor/canvas-server/issues"
+  },
+  "dependencies": {
+    "bluebird": "~2.3.11",
+    "dottie": "0.2.4",
+    "generic-pool": "2.1.1",
+    "inflection": "1.5.3",
+    "lodash": "~2.4.0",
+    "moment": "~2.8.0",
+    "node-uuid": "~1.4.1",
+    "pg-hstore": "^2.2.0",
+    "toposort-class": "~0.3.0",
+    "validator": "~3.22.1"
+  },
+  "devDependencies": {
+    "chai-as-promised": "^4.1.1",
+    "sqlite3": "~3.0.0",
+    "mysql": "~2.5.0",
+    "pg": "~3.6.0",
+    "watchr": "~2.4.11",
+    "chai": "~1.9.2",
+    "mocha": "~2.0.0",
+    "chai-datetime": "~1.3.0",
+    "sinon": "~1.11.0",
+    "mariasql": "~0.1.2",
+    "chai-spies": "~0.5.1",
+    "lcov-result-merger": "~1.0.0",
+    "istanbul": "~0.3.0",
+    "async": "~0.9.0",
+    "coffee-script": "~1.7.1",
+    "sinon-chai": "~2.6.0",
+    "dox": "0.5.0",
+    "jshint": ">=2.4.2"
+  },
+  "keywords": [
+    "mysql",
+    "sqlite",
+    "postgresql",
+    "postgres",
+    "orm",
+    "nodejs",
+    "object relational mapper"
+  ],
+  "main": "index",
+  "scripts": {
+    "test": "make all",
+    "docs": "node docs/docs-generator.js"
+  },
+  "engines": {
+    "node": ">=0.6.21"
+  },
+  "license": "MIT"
+}
