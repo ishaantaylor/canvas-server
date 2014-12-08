@@ -29,6 +29,8 @@ function openCanvasesDB(response, payload, database_ip) {
 			case "get_image":
 				getImage(response, payload.body, canvases, db);
 				break;
+			case "insert_favorite":
+				insertFavorite(response, payload, canvases, db);
 			default:
 				response.writeHead(422, {'Content-Type':'text/plain'});
 			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
@@ -201,8 +203,6 @@ function queryCanvas(response, payload, canvases, db) {
 	//Query and projection are determined by the requesting client.
 	var query 		= 	payload.query;
 	var projection 	=	payload.projection;
-	console.log("query: " + query);
-	console.log("projection: " + projection);
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query, projection).toArray(function(err, docs) {
@@ -210,6 +210,37 @@ function queryCanvas(response, payload, canvases, db) {
 		response.write(JSON.stringify(docs, 0, 4));
 
 		response.end(); 
+		db.close();
+	});
+}
+
+/* Inserts user into favorites field in canvas */
+function insertFavorite(response, payload, canvases, db) {
+	var user = payload.user_info['user_id'];
+	var canvas = payload.body['title'];
+	var author = payload.body['author'];
+	var availability = payload.body['private'];
+
+	// build query
+	var query = { 
+		"title":canvas, 
+		"author": author, 
+		"private": availability 
+	}
+	var projection = {
+		image_data:0,
+		_id:0
+	}
+	
+	// add user to favorites
+	canvases.find(query, projection).toArray(function(err, docs) {
+		// TODO: check if user already exists in favorites
+		console.log(docs);
+		for (int i = 0; i < docs.length; i++) {
+			docs[i].favorites.push(user);
+		}
+
+		response.end();
 		db.close();
 	});
 }
