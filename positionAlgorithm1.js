@@ -2,13 +2,21 @@ var classes = require('./algorithm1classes');
 
 function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 	console.log("users are seen as " + JSON.stringify(canvas.users, 0, 4));
+	var sortedUsers = [];
+	for(var i = 0; i < canvas.users.length; i++) {
+		for(var j = 0; j < unmodifiedUsers.length; j++) {
+			if(canvas.users[i] === unmodifiedUsers[j].user_id) {
+				sortedUsers.push(unmodifiedUsers[j]);
+			}
+		}
+	}
 	var bound = 0;
 	if(canvas.active) {
 		bound = scripts.length - 1;
 	} else {
-		bound = script.length;
+		bound = scripts.length;
 	}
-    var users       = createNormalizedUserObjects(unmodifiedUsers, isPortrait);
+    var users       = createNormalizedUserObjects(sortedUsers, isPortrait);
     var pos 		= new classes.Pos(users);
 	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
@@ -26,7 +34,6 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 //Creates normalized user objects.
 function createNormalizedUserObjects(usersList, isPortrait) {
 	var users = [];
-	console.log("Normalizing" + JSON.stringify(usersList, 0, 4));
 	for (var i = 0; i < usersList.length; i++) {
 		var aUser = usersList[i];
 		var u = 
