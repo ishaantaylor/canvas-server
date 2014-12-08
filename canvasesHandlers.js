@@ -246,7 +246,7 @@ function insertFavorite(response, payload, canvases, db) {
 		}
 
 		// add this new list to favorites
-		if (temp_docs.length = 1) {
+		if (temp_docs.length = 1 && temp_docs[0].favorites !== undefined) {
 			canvases.update(query, 
 				{
 					$set: {
