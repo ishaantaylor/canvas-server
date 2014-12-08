@@ -246,6 +246,7 @@ function insertFavorite(response, payload, canvases, db) {
 		}
 
 		// check if author's canvas can have favorites
+		// TODO: implement error handling properly
 		var error;
 		try {
 			if (temp_dpcs[0].favorites)
@@ -255,7 +256,7 @@ function insertFavorite(response, payload, canvases, db) {
 		}
 		
 		// add this new list to favorites
-		if (temp_docs.length = 1 && !error) {
+		if (temp_docs.length = 1) {
 			canvases.update(query, 
 				{
 					$set: {
