@@ -17,12 +17,9 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 	}
     var users       = createNormalizedUserObjects(sortedUsers, isPortrait);
     var pos 		= new classes.Pos(users);
-	console.log("SCRIPT : " + scripts);
 	var s = new classes.PieceArray(scripts, users);
-	console.log("PIECES : \n\t" + JSON.stringify(s, 0,4) );
 	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
-	console.log("BOUNDS : " + bound + " : : : " + scripts.length);
 	for (var i = 1; i < bound; i++) {
 		var piece = s.getPiece(i);
 		calcPosHelper(pos, piece);

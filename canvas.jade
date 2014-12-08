@@ -3,6 +3,6 @@ html
 	head
 		title Canvas 		
 		body
-			div(style="top:#{-pos.top}px;left:#{-pos.left}px;position:absolute")
+			div(style="top:#{-pos.top/2}px;left:#{-pos.left/2}px;position:absolute")
 				each val in pos.pieces
 					img(src="#{base}/#{val.pieceIndex}.png", alt="Not Found Image", style='left:#{val.x/2}px;top:#{val.y/2}px;position:absolute;width:#{val.user.x/2}px;height:#{val.user.y/2}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')
