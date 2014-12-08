@@ -97,7 +97,7 @@ function Pos(users){
     		return this.getPointObject(this.left + (this.right - this.left)/2.0, this.top);
     	} else if(dir === "L") {
     		return this.getPointObject(this.left, this.top + (this.bottom - this.top)/2.0);
-    	} else if(dir === "B") {
+    	} else if(dir === "D") {
     		return this.getPointObject(this.left + (this.right - this.left)/2.0, this.bottom);
     	} else if(dir === "R") {
     		return this.getPointObject(this.right, this.top + (this.bottom - this.top)/2.0);
