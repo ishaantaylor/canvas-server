@@ -32,7 +32,6 @@ function Pos(users){
     		top = 0;
     	for(var i = 0; i < this.pieces.length; i++) {
     		var piece = this.getPiece(i);
-    		console.log(JSON.stringify(piece, 0, 4));
     		if (piece.getLeft() < left){
     			left = piece.x;
     		} 
@@ -184,7 +183,8 @@ function Piece(rUser, dir, align, index) {
 function PieceArray(scriptList, users) {
 	
     this.scripts = [];
-	for (var i = 1; i < scriptList.length; i++) {
+	for (var i = 0; i < scriptList.length; i++) {
+		console.log(i + " : " + scriptList.length);
 	    var pieces = scriptList[i].split(",");
 	    //var dUser = parseInt(pieces[0]);
 	    var rUser = parseInt(pieces[1]);

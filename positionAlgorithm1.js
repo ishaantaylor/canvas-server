@@ -5,9 +5,8 @@ function calcPos(unmodifiedUsers, scripts, isPortrait) {
     var pos 		= new classes.Pos(users);
 	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
-	pos.addPiece(new classes.Piece(users[0], "I", "i", 0));
+	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
-	console.log(JSON.stringify(s, 0, 4));
 	for (var i = 0; i < s.scripts.length; i++) {
 		var piece = s.getPiece(i);
 		calcPosHelper(pos, piece);
@@ -31,7 +30,7 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 function calcPosHelper(pos, piece){
-	console.log(JSON.stringify(piece, 0, 4));
+//	console.log(JSON.stringify(piece, 0, 4));
 	if(piece.dir === "U" || piece.dir === "L"){
 		piece.setMajor(corner.getMajor(piece) - piece.getMajorSize());
 	} else {
