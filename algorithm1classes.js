@@ -72,6 +72,7 @@ function Pos(users){
     };
     
     this.getPointObject = function(x, y) {
+    	console.log("x:" + x + ", y:" + y);
     	return {x : x,
     			y : y,
     			getMajor : function(piece) {
