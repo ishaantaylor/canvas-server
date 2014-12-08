@@ -33,12 +33,12 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 
 function testPos(unmodifiedUsers, scrappydo, isPortrait, canvas) {
 	var sortedUsers = [{user_id : 'box1',long_arm: 100,short_arm: 50}, {user_id : 'box2',long_arm: 100,short_arm:50}, {user_id : 'box3',long_arm: 200,short_arm:100}];
-	var scripts = ["0,0,I,i", "0,1,U,m", "1,2,U,m", "2,0,I,i"];
+	var scripts = ["0,0,I,i", "0,1,U,m", "1,2,U,m"];
     var users       = createNormalizedUserObjects(sortedUsers, true);
     var s = new classes.PieceArray(scripts, users);
     var test0 = s.getPiece(1);
     console.log("piece 1 : \n" + JSON.stringify(test0, 0, 4));
-    console.log("Testing major function " + test0.is_LEFT_COORDINATE_STILL());
+    console.log("Testing major function : Is left/right coordinate still? : " + test0.is_LEFT_COORDINATE_STILL());
     console.log("\t" + " : " + test0.getStaticSideSize() + " : now getting minor size : " + test0.getMovingSideSize());
     console.log("\t\t" + " : " + test0.setStaticSideCoord(50) + " : now setting minor coords : " + test0.setMovingSideCoord(100));
     console.log("\t\t" + " : " + test0.y + " : now getting minor coords : " + test0.x);
