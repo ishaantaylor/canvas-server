@@ -143,22 +143,20 @@ function Piece(rUser, dir, align, index) {
     this.getSizeOf  = this.user.getSize;
     
     this.getTop 	= function() {
-		console.log("Piece TOP : " + this.y);
-		console.log(JSON.stringify(this.user, 0, 4));
     	return this.y;
     };
     this.getBottom  = function() {
-		console.log("Piece BOTTOM : " + (this.y + this.user.y));
+//		console.log("Piece BOTTOM : " + (this.y + this.user.y));
 
     	return this.y + this.user.y;
     };
     this.getLeft    = function() {
-		console.log("Piece LEFT : " + this.y);
+//		console.log("Piece LEFT : " + this.y);
 
     	return this.x;
     };
     this.getRight   = function() {
-		console.log("Piece RIGHT : " + (this.x + this.user.x));
+//		console.log("Piece RIGHT : " + (this.x + this.user.x));
 
     	return this.x + this.user.x;
     };
@@ -196,7 +194,6 @@ function Piece(rUser, dir, align, index) {
 function PieceArray(scriptList, users) {
 	
     this.scripts = [];
-    console.log(JSON.stringify(users, 0, 4));
 	for (var i = 0; i < scriptList.length; i++) {
 	    var pieces = scriptList[i].split(",");
 	    //var dUser = parseInt(pieces[0]);
