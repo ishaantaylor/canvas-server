@@ -31,13 +31,13 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 
 function calcPosHelper(pos, piece){
 //	console.log(JSON.stringify(piece, 0, 4));
+	var corner = pos.getCornerObject(piece.dir, piece.align);
 	if(piece.dir === "U" || piece.dir === "L"){
 		piece.setMajor(corner.getMajor(piece) - piece.getMajorSize());
 	} else {
 		piece.setMajor(corner.getMajor(piece));
 	}
 	if(piece.align !== "m") {
-		var corner = pos.getCornerObject(piece.dir, piece.align);
 	//If the piece is to be 'near' the variant axis:
 		if(piece.align === "f") {
 			piece.setMinor(corner.getMinor(piece) - piece.getMinor());
@@ -45,7 +45,7 @@ function calcPosHelper(pos, piece){
 			piece.setMinor(corner.getMinor(piece))
 		}
 	}else {
-		var midpoint = pos.getMiddle(piece.dir).getMinor(piece);
+		var midpoint = corner.getMinor(piece);
 		var distanceFromMidpointMinor = midpoint - piece.getMinorSize() / 2.0;
 		piece.setMinor(distanceFromMidpointMinor);
 	}

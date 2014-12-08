@@ -60,11 +60,14 @@ function Pos(users){
     		return [this.left, this.bottom];
     	} else if(dir === "D" && align === "f" || dir === "R" && align === "f") {
     		return [this.right, this.bottom];
-    	}
-    	return [0,0];
+    	} 
+    	return null;
     };
     this.getCornerObject = function(dir, align) {
     	var corner = this.getCorner(dir, align);
+    	if (corner === null) {
+    		return this.getMiddle(dir);
+    	} 
     	return this.getPointObject(corner[0], corner[1]);
     };
     
@@ -184,7 +187,6 @@ function PieceArray(scriptList, users) {
 	
     this.scripts = [];
 	for (var i = 0; i < scriptList.length; i++) {
-		console.log(i + " : " + scriptList.length);
 	    var pieces = scriptList[i].split(",");
 	    //var dUser = parseInt(pieces[0]);
 	    var rUser = parseInt(pieces[1]);
