@@ -190,6 +190,7 @@ function Piece(rUser, dir, align, index) {
 function PieceArray(scriptList, users) {
 	
     this.scripts = [];
+    console.log(JSON.stringify(users, 0, 4));
 	for (var i = 0; i < scriptList.length; i++) {
 	    var pieces = scriptList[i].split(",");
 	    //var dUser = parseInt(pieces[0]);

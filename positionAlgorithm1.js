@@ -1,13 +1,19 @@
 var classes = require('./algorithm1classes');
 
-function calcPos(unmodifiedUsers, scripts, isPortrait) {
+function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
+	var bound = 0;
+	if(canvas.active) {
+		bound = scripts.length - 1;
+	} else {
+		bound = script.length;
+	}
     var users       = createNormalizedUserObjects(unmodifiedUsers, isPortrait);
     var pos 		= new classes.Pos(users);
 	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
 	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
-	for (var i = 1; i < s.scripts.length; i++) {
+	for (var i = 1; i < bound; i++) {
 		var piece = s.getPiece(i);
 		calcPosHelper(pos, piece);
 		pos.addPiece(piece);

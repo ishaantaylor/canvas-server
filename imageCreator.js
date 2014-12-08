@@ -28,7 +28,7 @@ var hardString = process.cwd() + "/images";
 function calculateCanvasImagePositions(response, canvas) {
 	// BEGIN CALLBACK //
 	//Get the positions for each user.
-	var pos 		= algorithm1.getPositionJSON(canvas.usersInfo, canvas.script, canvas.portrait);
+	var pos 		= algorithm1.getPositionJSON(canvas.usersInfo, canvas.script, canvas.portrait, canvas);
 	console.log("Positions determined:::\n\t" + JSON.stringify(pos, 0, 4));
 	//Create the html file using jade. If you didn't make the file indicated in the arguments, then do not touch this.
 	var html  		= jade.renderFile('canvas.jade', {
