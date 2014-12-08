@@ -31,6 +31,7 @@ function openCanvasesDB(response, payload, database_ip) {
 					break;
 				case "insert_favorite":
 					insertFavorite(response, payload, canvases, db);
+					break;
 				default:
 					response.writeHead(422, {'Content-Type':'text/plain'});
 			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
