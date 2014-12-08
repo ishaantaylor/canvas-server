@@ -1,8 +1,8 @@
 doctype html
-html
- 	head
-		title Canvas 		
-		body
-    		div(style="width:#{pos.getWidth()};height:#{pos.getHeight()}")
-      			each val in pos.pieces
-        			img(src="#{base}/#{val.pieceIndex}.png", alt="Not Found Image", style='left:#{val.x/2}px;top:#{val.y/2}px;relative;width:#{val.u.x/2}px;height:#{val.u.y/2}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')
+	html
+ 		head
+			title Canvas 		
+			body
+    			div(style="width:#{pos.getWidth()};height:#{pos.getHeight()}")
+      				each val in pos.pieces
+        				img(src="#{base}/#{val.pieceIndex}.png", alt="Not Found Image", style='left:#{val.x/2}px;top:#{val.y/2}px;relative;width:#{val.u.x/2}px;height:#{val.u.y/2}px;-webkit-transform: rotate(#{rotation}deg);-moz-transform: rotate(#{rotation}deg);-ms-transform: rotate(#{rotation}deg);-o-transform: rotate(#{rotation}deg);transform: rotate(#{rotation}deg);')
