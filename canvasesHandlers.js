@@ -219,7 +219,7 @@ function insertFavorite(response, payload, canvases, db) {
 	var user = payload.user_info['user_id'];
 
 	// build query
-	var query = body.query;
+	var query = payload.body['query'];
 	var projection = {
 		image_data:0,
 		_id:0
