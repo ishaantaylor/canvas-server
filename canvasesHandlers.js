@@ -246,7 +246,7 @@ function insertFavorite(response, payload, canvases, db) {
 		}
 
 		// check if author's canvas can have favorites
-		// TODO: implement error handling properly
+		// TODO: implement error handling properly, right now if you type in improper author server crashes..
 		var error;
 		try {
 			if (temp_dpcs[0].favorites)
@@ -265,15 +265,13 @@ function insertFavorite(response, payload, canvases, db) {
 				}, {w: 1, multi:true},
 				function(err) {
 					if (err) {
-						console.log("error updating: " + err);
 						response.writeHead(400, {'Content-type':'text/plain'});
 						response.end();
 						db.close();
 					} else {
 						response.writeHead(200, {'Content-type':'text/plain'});
 						response.end();
-
-						console.log("check if worked");
+						db.close();
 					}
 				});
 		} else if (temp_docs.length > 1) {
