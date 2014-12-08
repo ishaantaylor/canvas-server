@@ -64,6 +64,7 @@ function Pos(users){
     	return null;
     };
     this.getCornerObject = function(dir, align) {
+    	console.log("here");
     	var corner = this.getCorner(dir, align);
     	if (corner === null) {
     		return this.getMiddle(dir);
