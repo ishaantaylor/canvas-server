@@ -229,15 +229,38 @@ function insertFavorite(response, payload, canvases, db) {
 	// add user to favorites
 	canvases.find(query, projection).toArray(function(err, docs) {
 		// TODO: check if user already exists in favorites
-		console.log(docs);
-		for (var i = 0; i < docs.length; i++) {
-			docs[i].favorites.push(user);
-			console.log(docs[i].favorites);
+		var temp_docs = [];
+		
+		// get current favorites
+		if (err) {
+			response.writeHead(404, 'Content-type':'text/plain');
+			response.end();
+			db.close();
+		} else {
+			// add user to favorites
+			for (var i = 0; i < docs.length; i++) {
+				docs[i].favorites.push(user);
+				// store this new list
+				temp_docs[i] = docs[i];
+			}			
 		}
-		console.log(docs);
 
-		response.end();
-		db.close();
+		// add this new list to favorites
+		if (temp_docs.length = 1) {
+			canvases.update(query, 
+				{
+					$set: {
+						favorites: temp_docs[0].favorites
+					}
+				});
+		} else if (temp_docs.length > 1) {
+			console.log("multiple canvases with same query result");
+			response.writeHead(409, 'Content-type':'text/plain');
+		} else {
+			response.writeHead(404, 'Content-type':'text/plain');
+			response.end();
+			db.close();
+		}
 	});
 }
 
