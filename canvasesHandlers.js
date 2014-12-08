@@ -232,7 +232,9 @@ function insertFavorite(response, payload, canvases, db) {
 		console.log(docs);
 		for (var i = 0; i < docs.length; i++) {
 			docs[i].favorites.push(user);
+			console.log(docs[i].favorites);
 		}
+		console.log(docs);
 
 		response.end();
 		db.close();
