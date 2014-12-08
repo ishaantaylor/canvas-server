@@ -210,7 +210,7 @@ function queryCanvas(response, payload, canvases, db) {
 		response.write(JSON.stringify(docs, 0, 4));
 
 		response.end(); 
-		db.close();	
+		db.close();
 	});
 }
 
