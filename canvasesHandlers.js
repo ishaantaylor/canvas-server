@@ -252,8 +252,11 @@ function insertFavorite(response, payload, canvases, db) {
 					$set: {
 						favorites: temp_docs[0].favorites
 					}
-				}, function(err) {
+				}, {w: 1, multi:true},
+				function(err) {
 					console.log("error updating: " + err);
+					response.end(400, {'Content-type':'text/plain'});
+					db.close();
 				});
 		} else if (temp_docs.length > 1) {
 			console.log("multiple canvases with same query result");
