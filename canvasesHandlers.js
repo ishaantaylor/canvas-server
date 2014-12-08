@@ -231,12 +231,12 @@ function insertFavorite(response, payload, canvases, db) {
 		image_data:0,
 		_id:0
 	}
-	
+
 	// add user to favorites
 	canvases.find(query, projection).toArray(function(err, docs) {
 		// TODO: check if user already exists in favorites
 		console.log(docs);
-		for (int i = 0; i < docs.length; i++) {
+		for (var i = 0; i < docs.length; i++) {
 			docs[i].favorites.push(user);
 		}
 
