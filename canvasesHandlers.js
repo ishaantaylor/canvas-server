@@ -259,6 +259,11 @@ function insertFavorite(response, payload, canvases, db) {
 						response.writeHead(400, {'Content-type':'text/plain'});
 						response.end();
 						db.close();
+					} else {
+						response.writeHead(200, {'Content-type':'text/plain'});
+						response.end();
+
+						console.log("check if worked");
 					}
 				});
 		} else if (temp_docs.length > 1) {
