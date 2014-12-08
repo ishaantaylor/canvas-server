@@ -25,7 +25,7 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 //Creates normalized user objects.
 function createNormalizedUserObjects(usersList, isPortrait) {
 	var users = [];
-	console.log(JSON.stringify(usersList, 0, 4));
+	console.log("Normalizing" + JSON.stringify(usersList, 0, 4));
 	for (var i = 0; i < usersList.length; i++) {
 		var aUser = usersList[i];
 		var u = 
