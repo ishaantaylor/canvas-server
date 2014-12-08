@@ -17,8 +17,9 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 	}
     var users       = createNormalizedUserObjects(sortedUsers, isPortrait);
     var pos 		= new classes.Pos(users);
-//	console.log("SCRIPT " + scripts);
+	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
+	console.log("PIECES : \n\t" + JSON.stringify(s, 0,4) );
 	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
 	
