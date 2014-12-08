@@ -201,6 +201,8 @@ function queryCanvas(response, payload, canvases, db) {
 	//Query and projection are determined by the requesting client.
 	var query 		= 	payload.query;
 	var projection 	=	payload.projection;
+	console.log("query: " + query);
+	console.log("projection: " + projection);
 
 	// TODO: convert this functionality to stream it instead of creating array of theoretically huge, memory-eating size
 	canvases.find(query, projection).toArray(function(err, docs) {
