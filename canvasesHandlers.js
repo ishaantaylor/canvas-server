@@ -1,8 +1,8 @@
 var MongoClient = require('mongodb').MongoClient,
-image 		= require('./imageCreator'),
-usersDb 	= require('./usersHandlers'),
-gameLogic	= require('./positionAlgorithm1'),
-fs 			= require('fs-extra');
+	image 		= require('./imageCreator'),
+	usersDb 	= require('./usersHandlers'),
+	gameLogic	= require('./positionAlgorithm1'),
+	fs 			= require('fs-extra');
 
 //Get the current working directory of the server. 
 var hardString = process.cwd() + "/images";
@@ -65,7 +65,7 @@ function insertCanvas(response, payload, canvases, db) {
 }
 
 function updateCanvas(response, payload, canvases, db) {
-	if(isValidBaseCanvas(payload)){ 
+	if (isValidBaseCanvas(payload)) { 
 		//Create primary key for update.
 		var querie = {title 	: payload.title, author 	: payload.author };
 
@@ -108,13 +108,13 @@ function updateCanvas(response, payload, canvases, db) {
 		};
 
 		//Alter variables and update if game is done.
-		if(lastTurn || !active) {
+		if (lastTurn || !active) {
 			nextUser 		= 0;
 			nextDirection 	= "fin";
 			nextAlign 		= "fin";
 			nextTurn 		= payload.max_turns + 1;
 		}
-		if(lastTurn) {
+		if (lastTurn) {
 			updateStatement = {
 					$push: {
 						image_data : payload.image_data
@@ -161,7 +161,7 @@ function updateCanvas(response, payload, canvases, db) {
 
 						//Prepare the creation of the HTML canvas by getting all user's data associated with this canvas (except for password).
 						usersDb.connect(db.IpAddress, function(uDb, users){
-							users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs){
+							users.find({user_id : {$in : updatedCanvas.users}}, {user_id:1, short_arm:1, long_arm:1}).toArray(function(err,uDocs) {
 								//Attach full user data to the canvas.
 								updatedCanvas.usersInfo = uDocs;
 								//No need for user database at this point. Needed it only momentarily.
@@ -180,12 +180,13 @@ function updateCanvas(response, payload, canvases, db) {
 					}	
 				});
 			} else {
-				if(err){
+				if (err) {
 					response.writeHead(404, {'Content-Type':'text/plain'});
 					console.log(err);
 				} else {
 					response.writeHead(213, {'Content-Type':'text/plain'});
 				}
+
 				response.end(); 
 				db.close();
 			}
@@ -222,12 +223,14 @@ function getImage(response, payload, canvases, db) {
 			if (err) {
 				response.writeHead(404, {'Content-Type':'text/html'});
 				console.log(err);
+				
 				response.end(); 
 				db.close();
 			} else {
 				response.writeHead(200, {'Content-Type':'text/html'});	
 				console.log("I GOT THIS HTML \n\t" + fd);	
 				response.write(fd);
+				
 				response.end(); 
 				db.close(); 
 			}
