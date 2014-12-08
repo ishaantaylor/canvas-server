@@ -17,7 +17,7 @@ function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 	}
     var users       = createNormalizedUserObjects(sortedUsers, isPortrait);
     var pos 		= new classes.Pos(users);
-	console.log("SCRIPT " + scripts);
+//	console.log("SCRIPT " + scripts);
 	var s = new classes.PieceArray(scripts, users);
 	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
@@ -113,7 +113,7 @@ function isCanvasActive(data) {
 	return !(data.current_turn + 1 > data.max_turns);
 }
 
-exports.getPositionJSON = 	testPos;
+exports.getPositionJSON = 	calcPos;
 exports.nextUser 		=	getNextUser;
 exports.nextDirection 	=	getNextDirection;
 exports.nextAlign 		= 	getNextAlign;
