@@ -1,6 +1,5 @@
 
 var http = require('http'),
-
 	url = require('url'),
 	qs = require('querystring'),
 	exec = require('child_process').exec,
@@ -88,7 +87,7 @@ function handleGETrequest(request, response, post_data) {
 				response.write(data);
 				response.end();
 			}
-		})
+		});
 	}
 }
 
@@ -102,9 +101,9 @@ function handlePOSTrequest(request, response, post_data) {
 		response.writeHead(422, {'Content-Type': 'text/plain'});
 		response.end();
 	}
-	if(payload.db == "users")
+	if (payload.db == "users")
 		users.open(response, payload, database_ip);
-	else if(payload.db == "canvases")
+	else if (payload.db == "canvases")
 		canvases.open(response, payload, database_ip);
 	else {
 		response.writeHead(420, {'Content-Type': 'text/plain'});

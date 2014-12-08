@@ -2,13 +2,14 @@ var classes = require('./algorithm1classes');
 
 function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
 	var sortedUsers = [];
-	for(var i = 0; i < canvas.users.length; i++) {
-		for(var j = 0; j < unmodifiedUsers.length; j++) {
+	for (var i = 0; i < canvas.users.length; i++) {
+		for (var j = 0; j < unmodifiedUsers.length; j++) {
 			if(canvas.users[i] === unmodifiedUsers[j].user_id) {
 				sortedUsers.push(unmodifiedUsers[j]);
 			}
 		}
 	}
+
 	var bound = 0;
 	if(canvas.current_turn < canvas.max_turns) {
 		bound = scripts.length - 1;
@@ -40,7 +41,7 @@ function testPos(unmodifiedUsers, scrappydo, isPortrait, canvas) {
     console.log("\t" + " : " + test0.getStaticSideSize() + " : now getting minor size : " + test0.getMovingSideSize());
     console.log("\t\t" + " : " + test0.setStaticSideCoord(50) + " : now setting minor coords : " + test0.setMovingSideCoord(100));
     console.log("\t\t" + " : " + test0.y + " : now getting minor coords : " + test0.x);
-    var pos 		= new classes.Pos(users);
+    var pos = new classes.Pos(users);
 	pos.addPiece(s.getPiece(0));
 	pos.updateCorners();
 	for (var i = 1; i < scripts.length; i++) {
@@ -49,6 +50,7 @@ function testPos(unmodifiedUsers, scrappydo, isPortrait, canvas) {
 		pos.addPiece(piece);
 		pos.updateCorners();
 	}
+
 	return pos;
 }
 
@@ -68,19 +70,19 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 function calcPosHelper(pos, piece){
 //	console.log(JSON.stringify(piece, 0, 4));
 	var corner = pos.getCornerObject(piece.dir, piece.align);
-	if(piece.dir === "U" || piece.dir === "L"){
+	if (piece.dir === "U" || piece.dir === "L") {
 		piece.setStaticSideCoord(corner.getStaticSide(piece) - piece.getStaticSideSize());
 	} else {
 		piece.setStaticSideCoord(corner.getStaticSide(piece));
 	}
-	if(piece.align !== "m") {
+	if (piece.align !== "m") {
 	//If the piece is to be 'near' the variant axis:
-		if(piece.align === "f") {
+		if (piece.align === "f") {
 			piece.setMovingSideCoord(corner.getMovingSide(piece) - piece.getMovingSideCoord());
 		} else {
-			piece.setMovingSideCoord(corner.getMovingSide(piece))
+			piece.setMovingSideCoord(corner.getMovingSide(piece));
 		}
-	}else {
+	} else {
 		var midpoint = corner.getMovingSide(piece);
 		var distanceFromMidpointMinor = midpoint - (piece.getMovingSideSize() / 2.0);
 		piece.setMovingSideCoord(distanceFromMidpointMinor);
