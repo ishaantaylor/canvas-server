@@ -64,7 +64,7 @@ function Pos(users){
     	return null;
     };
     this.getCornerObject = function(dir, align) {
-    	console.log("here");
+    	console.log("here" + dir + " : " + align);
     	var corner = this.getCorner(dir, align);
     	if (corner === null) {
     		return this.getMiddle(dir);
@@ -74,7 +74,7 @@ function Pos(users){
     
     this.getPointObject = function(x, y) {
     	console.log("x:" + x + ", y:" + y);
-    	return {x : x,
+    	var toReturn =  {x : x,
     			y : y,
     			getMajor : function(piece) {
     				if(piece.getMajor()) {
@@ -91,6 +91,8 @@ function Pos(users){
     				}
     			}
     	};
+    	console.log(JSON.stringify(toReturn, 0,4));
+    	return toReturn;
     };
     this.getMiddle = function(dir) {
     	if(dir === "U") {
