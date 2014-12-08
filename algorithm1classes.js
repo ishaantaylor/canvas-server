@@ -196,7 +196,6 @@ function PieceArray(scriptList, users) {
     this.scripts = [];
 	for (var i = 0; i < scriptList.length; i++) {
 	    var pieces = scriptList[i].split(",");
-	    //var dUser = parseInt(pieces[0]);
 	    var rUser = parseInt(pieces[1]);
 	    var ss = new Piece(users[rUser], pieces[2], pieces[3], i);
 	    this.scripts.push(ss);

@@ -74,7 +74,8 @@ function updateCanvas(response, payload, canvases, db) {
 		nextUser,
 		nextDirection,
 		nextAlign,
-		nextTurn;
+		nextTurn,
+		lastTurn;
 		try {
 			//Initialize as if game is still playing.
 			//Implementing game logic as its own module.
@@ -84,6 +85,7 @@ function updateCanvas(response, payload, canvases, db) {
 			nextDirection 	= gameLogic.nextDirection(payload);
 			nextAlign 		= gameLogic.nextAlign(payload);
 			nextTurn 		= payload.current_turn + 1;
+			lastTurn 		= (payload.current_turn + 1) === payload.max_turns;
 		} catch (error) {
 			// if theres an error in gameLogic, game shuts down
 			console.log("gameLogic error: " + error);
@@ -106,11 +108,28 @@ function updateCanvas(response, payload, canvases, db) {
 		};
 
 		//Alter variables and update if game is done.
-		if (!active) {
+		if(lastTurn || !active) {
 			nextUser 		= 0;
 			nextDirection 	= "fin";
 			nextAlign 		= "fin";
 			nextTurn 		= payload.max_turns + 1;
+		}
+		if(lastTurn) {
+			updateStatement = {
+					$push: {
+						image_data : payload.image_data
+					},
+					$set : {
+							current_user		: nextUser,
+							current_direction 	: nextDirection,
+							current_align		: nextAlign,
+							current_turn		: nextTurn,
+							active 				: active,
+							next_direction 		: "",
+							next_align 			: ""
+					}
+			};
+		} else if (!active) {
 			updateStatement = {
 					$set : {
 						current_user		: nextUser,
@@ -121,7 +140,7 @@ function updateCanvas(response, payload, canvases, db) {
 						next_direction 		: "",
 						next_align 			: ""
 					}
-			}
+			};
 		}
 		//Finds the document in question (canvas record) and updates it. Returns the updated canvas record. 
 		canvases.findAndModify(querie, [['title', 1]], updateStatement, {'new':true} ,function(err, updatedCanvas) {
