@@ -1,7 +1,6 @@
 var classes = require('./algorithm1classes');
 
 function calcPos(unmodifiedUsers, scripts, isPortrait, canvas) {
-	console.log("users are seen as " + JSON.stringify(canvas.users, 0, 4));
 	var sortedUsers = [];
 	for(var i = 0; i < canvas.users.length; i++) {
 		for(var j = 0; j < unmodifiedUsers.length; j++) {

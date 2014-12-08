@@ -33,22 +33,15 @@ function Pos(users){
     	for(var i = 0; i < this.pieces.length; i++) {
     		var piece = this.getPiece(i);
     		if (piece.getLeft() < left){
-    			console.log("Piece Left" + piece.pieceIndex + "\n\t" + piece.getLeft());
     			left = piece.x;
     		} 
     		if (piece.getRight() > right) {
-    			console.log("Piece Right" + piece.pieceIndex + "\n\t" + piece.getRight());
-
     			right = piece.getRight();
     		}
     		if (piece.getTop() < top) {
-    			console.log("Piece Top" + piece.pieceIndex + "\n\t" + piece.getTop());
-
     			top = piece.getTop();
     		}
     		if (piece.getBottom() > bottom) {
-    			console.log("Piece Bottom" + piece.pieceIndex + "\n\t" + piece.getBottom());
-
     			bottom = piece.getBottom();
     		}
     	}
@@ -150,15 +143,22 @@ function Piece(rUser, dir, align, index) {
     this.getSizeOf  = this.user.getSize;
     
     this.getTop 	= function() {
+		console.log("Piece TOP : " + this.y);
     	return this.y;
     };
     this.getBottom  = function() {
+		console.log("Piece BOTTOM : " + (this.y + this.getSizeOf(true)));
+
     	return this.y + this.getSizeOf(true);
     };
     this.getLeft    = function() {
+		console.log("Piece LEFT : " + this.y);
+
     	return this.x;
     };
     this.getRight   = function() {
+		console.log("Piece RIGHT : " + (this.x + this.getSizeOf(false)));
+
     	return this.x + this.getSizeOf(false);
     };
 
