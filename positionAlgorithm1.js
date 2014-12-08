@@ -30,6 +30,7 @@ function createNormalizedUserObjects(usersList, isPortrait) {
 }
 
 function calcPosHelper(pos, piece){
+	console.log(JSON.stringify(piece, 0, 4));
 	if(piece.dir === "U" || piece.dir === "L"){
 		piece.setMajor(corner.getMajor(piece) - piece.getMajorSize());
 	} else {
