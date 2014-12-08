@@ -33,15 +33,22 @@ function Pos(users){
     	for(var i = 0; i < this.pieces.length; i++) {
     		var piece = this.getPiece(i);
     		if (piece.getLeft() < left){
+    			console.log("Piece Left" + piece.pieceIndex + "\n\t" + piece.getLeft());
     			left = piece.x;
     		} 
     		if (piece.getRight() > right) {
+    			console.log("Piece Right" + piece.pieceIndex + "\n\t" + piece.getRight());
+
     			right = piece.getRight();
     		}
     		if (piece.getTop() < top) {
+    			console.log("Piece Top" + piece.pieceIndex + "\n\t" + piece.getTop());
+
     			top = piece.getTop();
     		}
     		if (piece.getBottom() > bottom) {
+    			console.log("Piece Bottom" + piece.pieceIndex + "\n\t" + piece.getBottom());
+
     			bottom = piece.getBottom();
     		}
     	}
@@ -64,7 +71,6 @@ function Pos(users){
     	return null;
     };
     this.getCornerObject = function(dir, align) {
-    	console.log("here" + dir + " : " + align);
     	var corner = this.getCorner(dir, align);
     	if (corner === null) {
     		return this.getMiddle(dir);
@@ -73,7 +79,6 @@ function Pos(users){
     };
     
     this.getPointObject = function(x, y) {
-    	console.log("x:" + x + ", y:" + y);
     	var toReturn =  {x : x,
     			y : y,
     			getMajor : function(piece) {

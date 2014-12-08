@@ -63,6 +63,7 @@ function calcPosHelper(pos, piece){
 		var midpoint = corner.getMinor(piece);
 		var distanceFromMidpointMinor = midpoint - piece.getMinorSize() / 2.0;
 		piece.setMinor(distanceFromMidpointMinor);
+		console.log("set midpoint");
 	}
 }
 
