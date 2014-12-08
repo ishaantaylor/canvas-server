@@ -254,9 +254,12 @@ function insertFavorite(response, payload, canvases, db) {
 					}
 				}, {w: 1, multi:true},
 				function(err) {
-					console.log("error updating: " + err);
-					response.end(400, {'Content-type':'text/plain'});
-					db.close();
+					if (err) {
+						console.log("error updating: " + err);
+						response.writeHead(400, {'Content-type':'text/plain'});
+						response.end();
+						db.close();
+					}
 				});
 		} else if (temp_docs.length > 1) {
 			console.log("multiple canvases with same query result");
