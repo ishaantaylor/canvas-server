@@ -112,7 +112,7 @@ function isCanvasActive(data) {
 	return !(data.current_turn + 1 > data.max_turns);
 }
 
-exports.getPositionJSON = 	calcPos;
+exports.getPositionJSON = 	testPos;
 exports.nextUser 		=	getNextUser;
 exports.nextDirection 	=	getNextDirection;
 exports.nextAlign 		= 	getNextAlign;
