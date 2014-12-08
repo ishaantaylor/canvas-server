@@ -45,6 +45,7 @@ function insertCanvas(response, payload, canvases, db) {
 		payload.script 		= ["0,0,I,i"];
 		payload.image_data 	= [];
 		payload.active = true;
+		console.log(JSON.stringify(payload.users, 0 ,4));
 
 		canvases.insert(payload, function(err, inserted) {
 			if (!err) {
