@@ -17,22 +17,22 @@ function openCanvasesDB(response, payload, database_ip) {
 			db.IpAddress = database_ip;
 
 			switch (payload.event) {
-			case "insert":
-				insertCanvas(response, payload.body, canvases, db);
-				break; 		
-			case "update":
-				updateCanvas(response, payload.body, canvases, db);
-				break;
-			case "query":
-				queryCanvas(response, payload.body, canvases, db);
-				break;
-			case "get_image":
-				getImage(response, payload.body, canvases, db);
-				break;
-			case "insert_favorite":
-				insertFavorite(response, payload, canvases, db);
-			default:
-				response.writeHead(422, {'Content-Type':'text/plain'});
+				case "insert":
+					insertCanvas(response, payload.body, canvases, db);
+					break; 		
+				case "update":
+					updateCanvas(response, payload.body, canvases, db);
+					break;
+				case "query":
+					queryCanvas(response, payload.body, canvases, db);
+					break;
+				case "get_image":
+					getImage(response, payload.body, canvases, db);
+					break;
+				case "insert_favorite":
+					insertFavorite(response, payload, canvases, db);
+				default:
+					response.writeHead(422, {'Content-Type':'text/plain'});
 			response.end();  // "Unknown event directive", {'Content-Type':'text/plain'}
 			break;
 			}
