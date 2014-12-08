@@ -217,16 +217,9 @@ function queryCanvas(response, payload, canvases, db) {
 /* Inserts user into favorites field in canvas */
 function insertFavorite(response, payload, canvases, db) {
 	var user = payload.user_info['user_id'];
-	var canvas = payload.body['title'];
-	var author = payload.body['author'];
-	var availability = payload.body['private'];
 
 	// build query
-	var query = { 
-		"title":canvas, 
-		"author": author, 
-		"private": availability 
-	}
+	var query = body.query;
 	var projection = {
 		image_data:0,
 		_id:0
