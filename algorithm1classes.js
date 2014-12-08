@@ -119,7 +119,7 @@ function User(aUser, isPortrait, index) {
     this.index      = index;
     if(isPortrait){
     	this.y 	= aUser.long_arm;
-    	this.x	    = aUser.short_arm;
+    	this.x	= aUser.short_arm;
     } else {
     	this.y 	= aUser.short_arm;
     	this.x 	= aUser.long_arm;
@@ -144,12 +144,13 @@ function Piece(rUser, dir, align, index) {
     
     this.getTop 	= function() {
 		console.log("Piece TOP : " + this.y);
+		console.log(JSON.stringify(this.user, 0, 4));
     	return this.y;
     };
     this.getBottom  = function() {
-		console.log("Piece BOTTOM : " + (this.y + this.getSizeOf(true)));
+		console.log("Piece BOTTOM : " + (this.y + this.user.y));
 
-    	return this.y + this.getSizeOf(true);
+    	return this.y + this.user.y;
     };
     this.getLeft    = function() {
 		console.log("Piece LEFT : " + this.y);
@@ -157,9 +158,9 @@ function Piece(rUser, dir, align, index) {
     	return this.x;
     };
     this.getRight   = function() {
-		console.log("Piece RIGHT : " + (this.x + this.getSizeOf(false)));
+		console.log("Piece RIGHT : " + (this.x + this.user.x));
 
-    	return this.x + this.getSizeOf(false);
+    	return this.x + this.user.x;
     };
 
     this.getMajor  = function() {
