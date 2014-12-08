@@ -37,6 +37,7 @@ function testPos(unmodifiedUsers, scrappydo, isPortrait, canvas) {
     var users       = createNormalizedUserObjects(sortedUsers, true);
     var s = new classes.PieceArray(scripts, users);
     var test0 = s.getPiece(1);
+    console.log("piece 1 : \n" + JSON.stringify(test0, 0, 4));
     console.log("Testing major function " + test0.getMajor());
     console.log("\t" + " : " + test0.getMajorSize() + " : now getting minor size : " + test0.getMinorSize());
     console.log("\t\t" + " : " + test0.setMajor(50) + " : now setting minor coords : " + test0.setMinor(100));
