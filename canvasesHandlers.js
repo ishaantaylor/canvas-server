@@ -233,7 +233,7 @@ function insertFavorite(response, payload, canvases, db) {
 		
 		// get current favorites
 		if (err) {
-			response.writeHead(404, 'Content-type':'text/plain');
+			response.writeHead(404, {'Content-type':'text/plain'});
 			response.end();
 			db.close();
 		} else {
@@ -255,9 +255,9 @@ function insertFavorite(response, payload, canvases, db) {
 				});
 		} else if (temp_docs.length > 1) {
 			console.log("multiple canvases with same query result");
-			response.writeHead(409, 'Content-type':'text/plain');
+			response.writeHead(409, {'Content-type':'text/plain'});
 		} else {
-			response.writeHead(404, 'Content-type':'text/plain');
+			response.writeHead(404, {'Content-type':'text/plain'});
 			response.end();
 			db.close();
 		}
