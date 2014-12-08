@@ -72,20 +72,21 @@ function Pos(users){
     };
     
     this.getPointObject = function(x, y) {
-    	var toReturn =  {x : x,
+    	var toReturn =  {
+    			x : x,
     			y : y,
-    			getMajor : function(piece) {
-    				if(piece.getMajor()) {
-    					return this.y;
-    				} else {
+    			getStaticSide : function(piece) {
+    				if(piece.is_LEFT_COORDINATE_STILL()) {
     					return this.x;
+    				} else {
+    					return this.y;
     				}
     			}, 
-    			getMinor : function(piece) {
-    				if(piece.getMajor()){
-    					return this.x;
-    				} else {
+    			getMovingSide : function(piece) {
+    				if(piece.is_LEFT_COORDINATE_STILL()){
     					return this.y;
+    				} else {
+    					return this.x;
     				}
     			}
     	};
@@ -124,12 +125,6 @@ function User(aUser, isPortrait, index) {
     	this.y 	= aUser.short_arm;
     	this.x 	= aUser.long_arm;
     }
-    this.getSize    = function(horizontal) {
-            if (horizontal)
-                return this.y;
-            else
-                return this.x;
-            };
 }
 
 function Piece(rUser, dir, align, index) {
@@ -140,7 +135,6 @@ function Piece(rUser, dir, align, index) {
     this.align 		= align;
     this.x          = 0;
     this.y          = 0;
-    this.getSizeOf  = this.user.getSize;
     
     this.getTop 	= function() {
     	return this.y;
@@ -160,34 +154,36 @@ function Piece(rUser, dir, align, index) {
 
     	return this.x + this.user.x;
     };
-
-    this.getMajor  = function() {
-    	//If vertically invariant
-    	if (this.dir === "U" || this.dir === "D") {
-    		return false;
-    	//Else horizontally invariant
+    
+    this.is_LEFT_COORDINATE_STILL = function() {
+    	return this.dir === "L" || this.dir === "R";
+    };
+    this.getStaticSideSize  = function() {
+    	if(this.is_LEFT_COORDINATE_STILL()){
+    		return this.user.x;
     	} else {
-    		return true;
+    		return this.user.y;
     	}
     };
-    this.getMajorSize	= function() {
-    	return this.getSizeOf(this.getMajor());
-    };
-    this.getMinorSize   = function() {
-    	return this.getSizeOf(!this.getMajor());
-    };
-    this.setMajor  = function(value) {
-    	if(this.getMajor()){
-    		this.y = value;
+    this.getMovingSideSize = function() {
+    	if(this.is_LEFT_COORDINATE_STILL()){
+    		return this.user.y;
     	} else {
-    		this.x = value;
+    		return this.user.x;
     	}
     };
-    this.setMinor  = function(value) {
-    	if(this.getMajor()) {
+    this.setStaticSideCoord = function(value) {
+    	if(this.is_LEFT_COORDINATE_STILL()){
     		this.x = value;
     	} else {
     		this.y = value;
+    	}
+    };
+    this.setMovingSideCoord = function(value) {
+    	if(this.is_LEFT_COORDINATE_STILL()) {
+    		this.y = value;
+    	} else {
+    		this.x = value;
     	}
     };
 }

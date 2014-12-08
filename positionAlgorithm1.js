@@ -38,9 +38,9 @@ function testPos(unmodifiedUsers, scrappydo, isPortrait, canvas) {
     var s = new classes.PieceArray(scripts, users);
     var test0 = s.getPiece(1);
     console.log("piece 1 : \n" + JSON.stringify(test0, 0, 4));
-    console.log("Testing major function " + test0.getMajor());
-    console.log("\t" + " : " + test0.getMajorSize() + " : now getting minor size : " + test0.getMinorSize());
-    console.log("\t\t" + " : " + test0.setMajor(50) + " : now setting minor coords : " + test0.setMinor(100));
+    console.log("Testing major function " + test0.is_LEFT_COORDINATE_STILL());
+    console.log("\t" + " : " + test0.getStaticSideSize() + " : now getting minor size : " + test0.getMovingSideSize());
+    console.log("\t\t" + " : " + test0.setStaticSideCoord(50) + " : now setting minor coords : " + test0.setMovingSideCoord(100));
     console.log("\t\t" + " : " + test0.y + " : now getting minor coords : " + test0.x);
     var pos 		= new classes.Pos(users);
 	pos.addPiece(s.getPiece(0));
@@ -71,21 +71,21 @@ function calcPosHelper(pos, piece){
 //	console.log(JSON.stringify(piece, 0, 4));
 	var corner = pos.getCornerObject(piece.dir, piece.align);
 	if(piece.dir === "U" || piece.dir === "L"){
-		piece.setMajor(corner.getMajor(piece) - piece.getMajorSize());
+		piece.setStaticSideCoord(corner.getStaticSide(piece) - piece.getStaticSideSize());
 	} else {
-		piece.setMajor(corner.getMajor(piece));
+		piece.setStaticSideCoord(corner.getStaticSide(piece));
 	}
 	if(piece.align !== "m") {
 	//If the piece is to be 'near' the variant axis:
 		if(piece.align === "f") {
-			piece.setMinor(corner.getMinor(piece) - piece.getMinor());
+			piece.setMovingSideCoord(corner.getMovingSide(piece) - piece.getMovingSideCoord());
 		} else {
-			piece.setMinor(corner.getMinor(piece))
+			piece.setMovingSideCoord(corner.getMovingSide(piece))
 		}
 	}else {
-		var midpoint = corner.getMinor(piece);
-		var distanceFromMidpointMinor = midpoint - piece.getMinorSize() / 2.0;
-		piece.setMinor(distanceFromMidpointMinor);
+		var midpoint = corner.getMovingSide(piece);
+		var distanceFromMidpointMinor = midpoint - (piece.getMovingSideSize() / 2.0);
+		piece.setMovingSideCoord(distanceFromMidpointMinor);
 	}
 }
 
