@@ -245,8 +245,17 @@ function insertFavorite(response, payload, canvases, db) {
 			}			
 		}
 
+		// check if author's canvas can have favorites
+		var error;
+		try {
+			if (temp_dpcs[0].favorites)
+				error = false;
+		} catch (e) {
+			error = true;
+		}
+		
 		// add this new list to favorites
-		if (temp_docs.length = 1 && temp_docs[0].favorites !== undefined) {
+		if (temp_docs.length = 1 && !error) {
 			canvases.update(query, 
 				{
 					$set: {
