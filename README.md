@@ -3,10 +3,10 @@ Canvas Server
 
 To Start Server: 
 ---------------------
-`ssh thugz@129.22.50.175`
-enter password
-`gcs`
-`scs`
+1. `ssh thugz@129.22.50.175`
+2. enter password
+3. `gcs`
+4. `scs`
 
 Commands:
 ---------------------
